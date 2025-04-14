@@ -26,8 +26,8 @@ Bakery_API.guard(function()
         key = "BakeryCharm"
     }
 
-    Bakery_API.Charm = SMODS.Center:extend{
-        required_params = {"key"},
+    Bakery_API.Charm = SMODS.Center:extend {
+        required_params = { "key" },
         unlocked = true,
         discovered = false,
         pos = {
@@ -39,7 +39,7 @@ Bakery_API.guard(function()
         consumeable = true,
         set = 'BakeryCharm',
         class_prefix = 'BakeryCharm',
-        pools = {"BakeryCharm"},
+        pools = { "BakeryCharm" },
         set_card_type_badge = function(self, card, badges)
             badges[#badges + 1] = create_badge(localize('k_Bakery_charm'), G.C.DARK_EDITION, G.C.WHITE, 1.2)
         end,
@@ -100,7 +100,7 @@ Bakery_API.guard(function()
         for i = 1, 5 do
             for j = 1, #G.your_collection do
                 local center = G.P_CENTER_POOLS.BakeryCharm[i + (j - 1) * 5 +
-                                   (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
+                (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
                 if not center then
                     break
                 end
@@ -120,21 +120,21 @@ Bakery_API.guard(function()
                 tally = tally + 1
             end
         end
-        return {UIBox_button {
+        return { UIBox_button {
             button = 'your_collection_Bakery_Charms',
             id = 'your_collection_Bakery_Charms',
-            label = {localize('k_Bakery_charms')},
+            label = { localize('k_Bakery_charms') },
             count = {
                 tally = tally,
                 of = #G.P_CENTER_POOLS.BakeryCharm
             },
             minw = 5
-        }}
+        } }
     end
     function G.FUNCS.your_collection_Bakery_Charms()
         G.SETTINGS.paused = true
         G.FUNCS.overlay_menu {
-            definition = SMODS.card_collection_UIBox(G.P_CENTER_POOLS.BakeryCharm, {5, 5}, {
+            definition = SMODS.card_collection_UIBox(G.P_CENTER_POOLS.BakeryCharm, { 5, 5 }, {
                 snap_back = true,
                 infotip = localize('k_BakeryCharmInfo'),
                 hide_single_page = true,
@@ -267,14 +267,14 @@ Bakery_API.guard(function()
                 button = 'Bakery_equip_from_shop',
                 hover = true
             },
-            nodes = {{
+            nodes = { {
                 n = G.UIT.T,
                 config = {
                     text = localize('b_Bakery_equip'),
                     colour = G.C.WHITE,
                     scale = 0.4
                 }
-            }}
+            } }
         }
     end
 
@@ -297,10 +297,10 @@ Bakery_API.guard(function()
 
         G.TAROT_INTERRUPT = G.STATE
         G.STATE = (G.STATE == G.STATES.TAROT_PACK and G.STATES.TAROT_PACK) or
-                      (G.STATE == G.STATES.PLANET_PACK and G.STATES.PLANET_PACK) or
-                      (G.STATE == G.STATES.SPECTRAL_PACK and G.STATES.SPECTRAL_PACK) or
-                      (G.STATE == G.STATES.STANDARD_PACK and G.STATES.STANDARD_PACK) or
-                      (G.STATE == G.STATES.BUFFOON_PACK and G.STATES.BUFFOON_PACK) or G.STATES.PLAY_TAROT
+            (G.STATE == G.STATES.PLANET_PACK and G.STATES.PLANET_PACK) or
+            (G.STATE == G.STATES.SPECTRAL_PACK and G.STATES.SPECTRAL_PACK) or
+            (G.STATE == G.STATES.STANDARD_PACK and G.STATES.STANDARD_PACK) or
+            (G.STATE == G.STATES.BUFFOON_PACK and G.STATES.BUFFOON_PACK) or G.STATES.PLAY_TAROT
 
         G.CONTROLLER.locks.use = true
 
@@ -441,7 +441,12 @@ Bakery_API.guard(function()
             if not next(_2) then
                 return {}
             end
-            return {SMODS.merge_lists(_2)}
+            return { SMODS.merge_lists(_2) }
         end
     }
+end)
+Bakery_API.guard(function()
+    function Bakery_API.maximus_full_house_compat(parts, val)
+        return val
+    end
 end)
