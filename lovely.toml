@@ -241,3 +241,42 @@ else
 end
 if true then return Bakery_API.maximus_full_house_compat(parts, val) end
 """
+
+# Mystes' Open Jokers Compatibility
+[[patches]]
+[patches.pattern]
+target = '=[SMODS MystesMod "MystesMod.lua"]'
+pattern = "function get_flush(hand)"
+position = "before"
+match_indent = true
+times = 1
+payload = "if false then -- Reimplemented by Bakery"
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS MystesMod "MystesMod.lua"]'
+pattern = "local add_to_deckref = Card.add_to_deck"
+position = "before"
+match_indent = true
+times = 1
+payload = "end"
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''local four_fingers = next(find_joker('Four Fingers'))'''
+position = "at"
+payload = '''local four_fingers = next(find_joker('Four Fingers')) or next(find_joker('Four Finger Discount'))'''
+match_indent = true
+overwrite = true
+times = 2
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''local can_skip = next(find_joker('Shortcut'))'''
+position = "at"
+payload = '''local can_skip = next(find_joker('Shortcut')) or next(find_joker('Four Finger Discount'))'''
+match_indent = true
+overwrite = true
+times = 1
