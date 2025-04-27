@@ -337,10 +337,12 @@ Bakery_API.guard(function()
             for i = 1, #G.GAME.tags do
                 if not G.GAME.tags[i].triggered then
                     for j = 1, #G.jokers.cards do
-                        handle(G.jokers.cards[j]:calculate_joker({
-                            Bakery_calculate_tags_late = true,
-                            tag = G.GAME.tags[i]
-                        }), G.GAME.tags[i])
+                        if not G.jokers.cards[j].debufffed then
+                            handle(G.jokers.cards[j]:calculate_joker({
+                                Bakery_calculate_tags_late = true,
+                                tag = G.GAME.tags[i]
+                            }), G.GAME.tags[i])
+                        end
                     end
                 end
                 handle(G.GAME.tags[i]:apply_to_run({
@@ -604,7 +606,7 @@ Bakery_API.guard(function()
         if context.cardarea == G.play and context.main_scoring then
             for i = 1, #G.GAME.tags do
                 local suffix = ''
-                while ret['tag' .. i ..suffix] do
+                while ret['tag' .. i .. suffix] do
                     suffix = suffix .. 'x'
                 end
                 ret['tag' .. i .. suffix] = G.GAME.tags[i]:apply_to_run({
