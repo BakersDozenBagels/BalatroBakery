@@ -9,6 +9,7 @@ function Bakery_API.guard(f)
         f()
     end
 end
+
 function Bakery_API.load(file)
     table.insert(Bakery_API.load_stack, file)
     local path = ''
@@ -31,6 +32,11 @@ Bakery_API.load('consumable')
 Bakery_API.load('enhancement')
 Bakery_API.load('edition')
 Bakery_API.load('charm')
+
+if Balatest then
+    assert(SMODS.load_file('test/joker_tests.lua'))()
+    assert(SMODS.load_file('test/blind_tests.lua'))()
+end
 
 Bakery_API.guard(function()
     SMODS.Atlas {
