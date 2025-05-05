@@ -622,20 +622,29 @@ Bakery_API.guard(function()
                 })
             end
         end
-
-        if context.repetition and not context.repetition_only then
-            for i = 1, #G.GAME.tags do
-                ret['tag' .. i] = G.GAME.tags[i]:apply_to_run({
-                    type = 'Bakery_add_repetitions_to_card',
-                    context = context
-                })
-            end
-        end
-
         return ret, trig
     end
 
     sendInfoMessage("eval_card() patched. Reason: Penny Tag", "Bakery")
+
+    local raw_SMODS_calculate_repetitions = SMODS.calculate_repetitions
+    SMODS.calculate_repetitions = function(card, context, reps, ...)
+        reps = raw_SMODS_calculate_repetitions(card, context, reps, ...)
+
+        for i = 1, #G.GAME.tags do
+            local eval = G.GAME.tags[i]:apply_to_run({
+                type = 'Bakery_add_repetitions_to_card',
+                context = context
+            })
+            if eval then
+                SMODS.insert_repetitions(reps, eval, G.GAME.tags[i])
+            end
+        end
+
+        return reps
+    end
+
+    sendInfoMessage("SMODS.calculate_repetitions() patched. Reason: Up Tag", "Bakery")
 
     function Bakery_API.credit(obj)
         local raw_obj_set_badges = obj.set_badges
