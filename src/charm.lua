@@ -170,10 +170,9 @@ Bakery_API.guard(function()
                 x = G.ASSET_ATLAS.Bakery_CharmsUtil.px,
                 y = G.ASSET_ATLAS.Bakery_CharmsUtil.py
             }
-            self.children.center.scale_mag = {
-                x = G.ASSET_ATLAS.Bakery_CharmsUtil.px / (self.children.center.VT.W or 1),
-                y = G.ASSET_ATLAS.Bakery_CharmsUtil.py / (self.children.center.VT.H or 1)
-            }
+            self.children.center.scale_mag = math.min(
+                G.ASSET_ATLAS.Bakery_CharmsUtil.px / (self.children.center.VT.W or 1),
+                G.ASSET_ATLAS.Bakery_CharmsUtil.py / (self.children.center.VT.H or 1))
             self.children.center:set_sprite_pos({
                 x = 0,
                 y = 0
