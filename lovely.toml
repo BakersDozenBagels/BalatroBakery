@@ -280,3 +280,17 @@ payload = '''local can_skip = next(find_joker('Shortcut')) or next(find_joker('F
 match_indent = true
 overwrite = true
 times = 1
+
+# SMODS > 1.0.0~BETA-0423c compat
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = '''SMODS.calculate_effect_table_key(effect_table, 'individual', card, ret)'''
+position = 'after'
+payload = '''
+for _, key in ipairs(Bakery_API.tag_effect_names) do
+    SMODS.calculate_effect_table_key(effect_table, key, card, ret)
+end
+'''
+match_indent = true
+times = 1

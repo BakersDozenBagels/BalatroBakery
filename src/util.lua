@@ -599,6 +599,9 @@ Bakery_API.guard(function()
         })
     end
 
+    Bakery_API.tag_effect_names = {}
+    Bakery_API.tag_effect_names_t = {}
+
     local raw_eval_card = eval_card
     function eval_card(card, context)
         local ret, trig = raw_eval_card(card, context)
@@ -608,6 +611,10 @@ Bakery_API.guard(function()
                 local suffix = ''
                 while ret['tag' .. i .. suffix] do
                     suffix = suffix .. 'x'
+                end
+                if not Bakery_API.tag_effect_names_t['tag' .. i .. suffix] then
+                    Bakery_API.tag_effect_names_t['tag' .. i .. suffix] = true
+                    Bakery_API.tag_effect_names[#Bakery_API.tag_effect_names + 1] = 'tag' .. i .. suffix
                 end
                 ret['tag' .. i .. suffix] = G.GAME.tags[i]:apply_to_run({
                     type = 'Bakery_score_card',
