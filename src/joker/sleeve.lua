@@ -7,13 +7,13 @@ Bakery_API.guard(function()
     Bakery_API.usable_jokers = setmetatable({}, {
         __newindex = function(t, k, v)
             sendWarnMessage("A mod is trying to set Bakery_API.usable_jokers." .. k ..
-                                ". This is no longer required, and the table will be removed in a future version of Bakery.",
+                ". This is no longer required, and the table will be removed in a future version of Bakery.",
                 "Bakery")
             raw_usable_jokers[k] = v
         end,
         __index = function(t, k)
             sendWarnMessage("A mod is trying to get Bakery_API.usable_jokers." .. k ..
-                                ". This table will be removed in a future version of Bakery.", "Bakery")
+                ". This table will be removed in a future version of Bakery.", "Bakery")
             return raw_usable_jokers[k]
         end
     })
@@ -28,7 +28,7 @@ Bakery_API.guard(function()
                 config = {
                     align = "cr"
                 },
-                nodes = {{
+                nodes = { {
                     n = G.UIT.C,
                     config = {
                         ref_table = card,
@@ -44,7 +44,7 @@ Bakery_API.guard(function()
                         button = 'Bakery_use_joker',
                         func = 'Bakery_can_use_joker'
                     },
-                    nodes = {{
+                    nodes = { {
                         n = G.UIT.B,
                         config = {
                             w = 0.1,
@@ -59,8 +59,8 @@ Bakery_API.guard(function()
                             scale = 0.55,
                             shadow = true
                         }
-                    }}
-                }}
+                    } }
+                } }
             }
         end
 
@@ -79,8 +79,8 @@ Bakery_API.guard(function()
 
     function Bakery_API.default_can_use(card)
         return card.area and card.area.config.type == 'joker' and
-                   not ((G.play and #G.play.cards > 0) or (G.CONTROLLER.locked) or
-                       (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
+            not ((G.play and #G.play.cards > 0) or (G.CONTROLLER.locked) or
+                (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
     end
 
     function G.FUNCS.Bakery_can_use_joker(node)
@@ -93,6 +93,7 @@ Bakery_API.guard(function()
             node.config.button = nil
         end
     end
+
     function G.FUNCS.Bakery_use_joker(node)
         local card = node.config.ref_table
         if card and card.config.center.Bakery_use_joker and
@@ -102,7 +103,7 @@ Bakery_API.guard(function()
     end
 
     function Bakery_API.get_highlighted()
-        local comb = {unpack(G.hand.highlighted)}
+        local comb = { unpack(G.hand.highlighted) }
         for k, v in ipairs(G.jokers.cards) do
             if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.key then
                 for k, c in ipairs((Bakery_API.sleevearea_for_key(v.ability.extra.key) or {

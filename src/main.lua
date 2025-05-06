@@ -41,6 +41,7 @@ if Balatest then
     assert(SMODS.load_file('test/consumable_tests.lua'))()
     assert(SMODS.load_file('test/enhancement_tests.lua'))()
     assert(SMODS.load_file('test/tag_tests.lua'))()
+    assert(SMODS.load_file('test/charm_tests.lua'))()
 end
 
 Bakery_API.guard(function()
