@@ -11,13 +11,13 @@
   "badge_colour": "EDD198",
   "badge_text_colour": "362708",
   "display_name": "Bakery (Lite)",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "dependencies": [
     "Steamodded (>=1.0.0~ALPHA-1304a)",
     "Lovely (>=0.6)"
   ],
   "conflicts": [],
   "provides": [
-    "Bakery (2.7.2)"
+    "Bakery (2.7.3)"
   ]
 }
