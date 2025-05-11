@@ -294,3 +294,17 @@ end
 '''
 match_indent = true
 times = 1
+
+# w/ Revo's Vault: Print Error Charm
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''local o, t = obj:calculate(self, context)'''
+position = 'after'
+payload = '''
+if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_PrintError' then
+    obj:calculate(self, context)
+end
+'''
+match_indent = true
+times = 1
