@@ -308,3 +308,12 @@ end
 '''
 match_indent = true
 times = 1
+
+[[patches]]
+[patches.regex]
+target = 'cardarea.lua'
+pattern = "ref_value = 'card_limit',"
+position = 'after'
+payload = " id = 'Bakery_card_limit_text',"
+times = 1
+root_capture = '0'
