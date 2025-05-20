@@ -279,7 +279,8 @@ Bakery_API.guard(function()
 
     local to_big = to_big or function(...) return ... end
     G.FUNCS.Bakery_can_equip = function(e)
-        if to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' or
+            to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at) then
             e.config.colour = G.C.UI.BACKGROUND_INACTIVE
             e.config.button = nil
         else

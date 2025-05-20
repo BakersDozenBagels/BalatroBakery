@@ -309,6 +309,7 @@ end
 match_indent = true
 times = 1
 
+# w/ MoreFluff: Posterization Charm
 [[patches]]
 [patches.regex]
 target = 'cardarea.lua'
@@ -317,3 +318,13 @@ position = 'after'
 payload = " id = 'Bakery_card_limit_text',"
 times = 1
 root_capture = '0'
+
+# w/ Cryptid: Marm Charm
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "lib/ascended.lua"]'
+pattern = '''["Pair"] = G.GAME.used_vouchers.v_cry_hyperspacetether and 2 or nil,'''
+position = 'at'
+payload = '''["Pair"] = (G.GAME.used_vouchers.v_cry_hyperspacetether or (G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Marm')) and 2 or nil,'''
+match_indent = true
+times = 1
