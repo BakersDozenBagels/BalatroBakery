@@ -399,10 +399,16 @@ Bakery_API.guard(function()
     }
 
     function Bakery_API.to_number(num) -- This shouldn't be necessary, but Talisman's __lt and __gt aren't working against numbers for whatever reason
+        sendWarnMessage("Bakery_API.to_number() is deprecated and will be removed in a future release of Bakery.",
+            "Bakery")
         if type(num) == "table" then
             return num:to_number()
         end
         return num
+    end
+
+    function Bakery_API.big(x)
+        return to_big and type(to_big) == "function" and to_big(x) or x
     end
 
     local raw_ease_dollars = ease_dollars
@@ -411,7 +417,7 @@ Bakery_API.guard(function()
             mod = math.min(G.GAME.modifiers.Bakery_Vagabond - G.GAME.dollars, mod)
         end
 
-        if Bakery_API.to_number(mod) <= 0 or
+        if mod == nil or Bakery_API.big(mod) <= Bakery_API.big(0) or
             (not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
                 not Bakery_API.no_money_decks[G.GAME.selected_sleeve]) then
             return raw_ease_dollars(mod, instant)
@@ -538,8 +544,8 @@ Bakery_API.guard(function()
     sendInfoMessage("Card:draw() patched. Reason: Werewolf rendering", "Bakery")
 
     local raw_G_FUNCS_evaluate_round = G.FUNCS.evaluate_round
-    function G.FUNCS.evaluate_round()
-        raw_G_FUNCS_evaluate_round()
+    function G.FUNCS.evaluate_round(...)
+        raw_G_FUNCS_evaluate_round(...)
 
         for i = 1, #G.jokers.cards do
             G.jokers.cards[i]:calculate_joker({
