@@ -744,7 +744,8 @@ Bakery_API.Joker {
         end
     end,
     Bakery_can_use = function(self, card)
-        return Bakery_API.default_can_use(card) and Bakery_API.big(card.ability.extra.cost) <= Bakery_API.big(G.GAME.dollars) +
+        return Bakery_API.default_can_use(card) and
+            Bakery_API.big(card.ability.extra.cost) <= Bakery_API.big(G.GAME.dollars) +
             Bakery_API.big(G.GAME.dollar_buffer or 0) - Bakery_API.big(G.GAME.bankrupt_at)
     end,
     Bakery_use_joker = function(self, card)
@@ -1122,3 +1123,44 @@ function Card:start_dissolve()
 end
 
 sendInfoMessage("Card:start_dissolve() patched. Reason: Glass Cannon shatters", "Bakery")
+
+Bakery_API.Joker {
+    key = "Estate",
+    pos = {
+        x = 4,
+        y = 3
+    },
+    coder = "Jack5",
+    rarity = 1,
+    cost = 2,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            chips = 10,
+            mult = 1,
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { card.ability.extra.chips, card.ability.extra.mult }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local joker_count = 1
+            for _, v in ipairs(G.jokers.cards) do
+                if v == card then
+                    break
+                else
+                    joker_count = joker_count + 1
+                end
+            end
+            return {
+                chips = card.ability.extra.chips * joker_count,
+                mult = card.ability.extra.mult * joker_count
+            }
+        end
+    end
+}

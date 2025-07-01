@@ -116,6 +116,14 @@ return {
                 name = "Glass Cannon",
                 text = { "{X:mult,C:white}X#1#{} Mult", "{C:red}Self-destructs{} if Mult is",
                     "{C:attention}at least #2#{} afterwards" }
+            },
+            j_Bakery_Estate = {
+                name = "Estate",
+                text = {
+                    "{C:chips}+#1#N{} Chips and {C:mult}+#2#N{} Mult",
+                    "where N is the number of Jokers",
+                    "to the left including this"
+                }
             }
         },
         Tag = {
