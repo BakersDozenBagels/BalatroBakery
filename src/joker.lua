@@ -1132,7 +1132,7 @@ Bakery_API.Joker {
     },
     coder = "Jack5",
     rarity = 1,
-    cost = 2,
+    cost = 5,
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
