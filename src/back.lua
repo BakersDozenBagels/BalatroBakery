@@ -26,20 +26,20 @@ local b_violet = SMODS.Back {
     locked_loc_vars = function(self, args)
         if G.P_BLINDS['bl_final_vessel'].discovered then
             return {
-                vars = {localize {
+                vars = { localize {
                     type = 'name_text',
                     key = 'bl_final_vessel',
                     set = "Blind"
-                }}
+                } }
             }
         end
         return {
-            vars = {localize('k_unknown')}
+            vars = { localize('k_unknown') }
         }
     end,
     loc_vars = function(self, info_queue, back)
         return {
-            vars = {self.config.extra.x_mult}
+            vars = { self.config.extra.x_mult }
         }
     end,
     calculate = function(self, back, args)
@@ -62,7 +62,7 @@ local b_violet = SMODS.Back {
                             text = localize {
                                 type = 'variable',
                                 key = 'a_xmult',
-                                vars = {self.config.extra.x_mult}
+                                vars = { self.config.extra.x_mult }
                             },
                             scale = 1.4,
                             hold = 2,
@@ -85,9 +85,9 @@ local b_violet = SMODS.Back {
 }
 
 local function is_double_house()
-    return G.GAME.selected_sleeve == 'sleeve_Bakery_House' and
-               ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key) ==
-               'b_Bakery_House'
+    return G.GAME.selected_sleeve == 'sleeve_Bakery_House' and (
+        (G.GAME.selected_back_key and G.GAME.selected_back_key.key) or
+        G.GAME.selected_back.key) == 'b_Bakery_House'
 end
 local b_house = SMODS.Back {
     key = "House",
@@ -110,21 +110,21 @@ local b_house = SMODS.Back {
     locked_loc_vars = function(self, back)
         if G.P_CENTERS['b_erratic'].discovered then
             return {
-                vars = {localize {
+                vars = { localize {
                     type = 'name_text',
                     key = 'b_erratic',
                     set = "Back"
-                }}
+                } }
             }
         end
         return {
-            vars = {localize('k_unknown')}
+            vars = { localize('k_unknown') }
         }
     end,
     loc_vars = function(self)
         return {
-            vars = {(G.GAME and G.GAME.probabilities.normal or 1) * (is_double_house() and 2 or 1),
-                    self.config.extra.odds_bottom}
+            vars = { (G.GAME and G.GAME.probabilities.normal or 1) * (is_double_house() and 2 or 1),
+                self.config.extra.odds_bottom }
         }
     end,
     calculate = function(self, back, args)
@@ -230,11 +230,13 @@ Bakery_API.guard(function()
     -- Items that, with the Credit Deck, can never be better than the same item doing absolutely nothing.
     -- For example, Egg is not on this list, since sell value can still matter for Swashbuckler or Ceremonial Dagger.
     -- Neither is Midas Mask, since it can feed Vampire or Driver's License.
-    Bakery_API.econ_only_items = {'j_delayed_grat', 'j_business', 'j_faceless', 'j_cloud_9', 'j_rocket',
-                                  'j_reserved_parking', 'j_mail', 'j_to_the_moon', 'j_golden', 'j_ticket',
-                                  'j_rough_gem', 'j_satellite', 'j_todo_list', 'j_Bakery_Auctioneer', 'v_seed_money',
-                                  'v_money_tree', 'c_hermit', 'c_temperance', 'tag_investment', 'tag_skip',
-                                  'tag_economy'}
+    Bakery_API.econ_only_items = {
+        'j_delayed_grat', 'j_business', 'j_faceless', 'j_cloud_9', 'j_rocket',
+        'j_reserved_parking', 'j_mail', 'j_to_the_moon', 'j_golden', 'j_ticket',
+        'j_rough_gem', 'j_satellite', 'j_todo_list', 'j_Bakery_Auctioneer',
+        'v_seed_money', 'v_money_tree', 'c_hermit', 'c_temperance', 'tag_investment',
+        'tag_skip', 'tag_economy'
+    }
 end)
 -- END_KEEP_LITE
 
@@ -272,7 +274,7 @@ local b_credit = SMODS.Back {
                         set = 'Stake',
                         key = 'stake_black'
                     },
-                    colours = {G.C.BLACK}
+                    colours = { G.C.BLACK }
                 }
             }
         end
@@ -284,13 +286,13 @@ local b_credit = SMODS.Back {
                     set = 'Stake',
                     key = 'stake_black'
                 },
-                colours = {G.C.BLACK}
+                colours = { G.C.BLACK }
             }
         }
     end,
     loc_vars = function(self, info_queue, back)
         return {
-            vars = {self.config.dollars}
+            vars = { self.config.dollars }
         }
     end,
     apply = function(self, back)
@@ -303,6 +305,87 @@ local b_credit = SMODS.Back {
         for _, k in ipairs(Bakery_API.econ_only_items) do
             G.GAME.banned_keys[k] = true
         end
+    end
+}
+
+SMODS.Back {
+    key = "Dominion",
+    name = "Dominion",
+    config = {
+        card_count = 7,
+        hand_size_penalty = 3,
+        joker_count = 3,
+        joker = "j_Bakery_Estate",
+        voucher = "v_illusion"
+    },
+    -- TODO: Create artwork
+    atlas = "Joker",
+    prefix_config = {
+        atlas = false
+    },
+    pos = {
+        x = 5,
+        y = 1
+    },
+    --[[
+    artist = "Jack5",
+    coder = "Jack5",
+    ]]
+    unlocked = true, -- TODO: Add unlock condition
+    discovered = true,
+    loc_vars = function(self, info_queue, back)
+        return {
+            vars = {
+                self.config.card_count,
+                self.config.hand_size_penalty,
+                self.config.joker_count,
+                localize {
+                    type = 'name_text', key = self.config.joker, set = 'Joker'
+                },
+                localize {
+                    type = 'name_text', key = self.config.voucher, set = 'Voucher'
+                }
+            }
+        }
+    end,
+    -- Start with 7 cards, -3 hand size, 3 Estate Jokers and Illusion Voucher
+    -- TODO: Add random destroyed card to deck at end of round
+    apply = function(self, back)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                local function contains(table, element)
+                    for _, value in pairs(table) do
+                        if value == element then
+                            return true
+                        end
+                    end
+                    return false
+                end
+                local keep_cards = {}
+                while #keep_cards < self.config.card_count do
+                    local keep_card = pseudorandom_element(
+                        G.playing_cards, pseudoseed("Nothin'ButCoppers")
+                    )
+                    if not contains(keep_cards, keep_card) then
+                        table.insert(keep_cards, keep_card)
+                    end
+                end
+                for _, card in pairs(G.playing_cards) do
+                    if not contains(keep_cards, card) then
+                        card:start_dissolve(nil)
+                    end
+                end
+                G.hand:change_size(-self.config.hand_size_penalty)
+                for i = 1, self.config.joker_count do
+                    local joker = create_card(
+                        "Joker", nil, nil, nil, nil, nil, self.config.joker
+                    )
+                    G.jokers:emplace(joker)
+                end
+                -- Voucher is handled by Balatro
+                return true
+            end
+        }))
     end
 }
 
@@ -386,7 +469,7 @@ if CardSleeves then
             end
             return {
                 key = key,
-                vars = {dollars}
+                vars = { dollars }
             }
         end,
         apply = function(self)

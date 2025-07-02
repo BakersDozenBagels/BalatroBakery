@@ -225,6 +225,15 @@ return {
                 name = "Credit Deck",
                 text = { "Start with extra {C:money}$#1#{}", "Earn {C:red}no money{}", "from any source" },
                 unlock = { "Win a run with", "{C:attention}#1#{}", "on at least", "{V:1}#2#{} difficulty" }
+            },
+            b_Bakery_Dominion = {
+                name = "Dominion Deck",
+                text = {
+                    "Start with {C:attention}#1#{} cards,",
+                    "{C:attention}-#2#{} hand size,",
+                    "{C:attention}#3# #4#{} Jokers",
+                    "and {C:attention}#5#{} Voucher"
+                }
             }
         },
         Sleeve = {
