@@ -1130,6 +1130,7 @@ Bakery_API.Joker {
         x = 4,
         y = 3
     },
+    artist = "Jack5",
     coder = "Jack5",
     rarity = 1,
     cost = 5,
