@@ -229,7 +229,7 @@ return {
             b_Bakery_Dominion = {
                 name = "Dominion Deck",
                 text = {
-                    "Start with {C:attention}-#1#{} hand size",
+                    "Start with {C:red}-#1#{} hand size",
                     "and {C:attention}#2# #3# Jokers{},",
                     "{C:attention}+#4#{} hand size",
                     "every {C:attention}#5#{} Antes"
@@ -265,10 +265,10 @@ return {
             sleeve_Bakery_Dominion = {
                 name = "Dominion Sleeve",
                 text = {
-                    "Start with {C:attention}-#1#{} hand size",
+                    "Start with {C:red}-#1#{} hand size",
                     "and {C:attention}#2# #3# Jokers{},",
                     "{C:attention}+#4#{} hand size",
-                    "every {C:attention}#5#{} Antes"
+                    "every {C:attention}#5# Antes"
                 },
                 unlock = {
                     "Have at least {C:attention}#1#",
@@ -278,9 +278,9 @@ return {
             sleeve_Bakery_Dominion_alt = {
                 name = "Dominion Sleeve",
                 text = {
-                    "Start with {C:attention}-#1#{} hand size,",
+                    "Start with {C:red}-#1#{} hand size,",
                     "{C:attention}#2# #3# Jokers{},",
-                    "{C:attention}#4#{} total cards and",
+                    "{C:red}#4#{} total cards and",
                     "{C:attention}#5# Voucher"
                 }
             }
