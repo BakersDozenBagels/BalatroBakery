@@ -327,6 +327,7 @@ local b_dominion = SMODS.Back {
         x = 2,
         y = 0
     },
+    artist = "Jack5",
     coder = "Jack5",
     idea = "Jack5",
     unlocked = false,
@@ -523,6 +524,7 @@ if CardSleeves then
             x = 3,
             y = 0
         },
+        artist = "Jack5",
         coder = "Jack5",
         idea = "Jack5",
         unlocked = false,
