@@ -106,3 +106,38 @@ Balatest.TestPlay {
         Balatest.assert_eq(G.GAME.dollars, 0)
     end
 }
+
+Balatest.TestPlay {
+    name = 'dominion',
+    category = { 'backs', 'dominion_deck' },
+
+    back = 'Dominion',
+    -- TODO: Test that hand size is 5
+    execute = function()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 3)
+        for _, card in ipairs(G.jokers.cards) do
+            Balatest.assert_eq(card.config.center.key, 'j_Bakery_Estate')
+        end
+    end
+}
+Balatest.TestPlay {
+    name = 'dominion_increase',
+    category = { 'backs', 'dominion_deck' },
+
+    back = 'Dominion',
+    execute = function()
+        for _ = 1, 6 do
+            Balatest.end_round()
+            Balatest.cash_out()
+            Balatest.exit_shop()
+            Balatest.start_round()
+        end
+    end,
+    assert = function()
+        -- TDOO: Test that hand size is 6 after entering Ante 3
+    end
+}
+-- TODO: Test Dominion Sleeve does the same thing
+-- TODO: Test Dominion Sleeve combo effect

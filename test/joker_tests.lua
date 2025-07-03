@@ -2036,3 +2036,63 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Estate
+Balatest.TestPlay {
+    name = 'estate',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_to_the_moon', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        local chips = 5
+        local mult = 1
+        for i = 2, 5 do
+            chips = chips + 10 * i
+            mult = mult + i
+        end
+        Balatest.assert_chips(chips * mult)
+    end
+}
+Balatest.TestPlay {
+    name = 'estate_debuff',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        -- TODO: Set each Estate Joker in turn as debuffed
+        Balatest.play_hand { '2D' }
+        Balatest.play_hand { '2D' }
+        Balatest.play_hand { '2D' }
+        Balatest.play_hand { '2D' }
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        local chips = 5
+        local mult = 1
+        for debuffed = 1, 5 do
+            for i = 1, 5 do
+                if i ~= debuffed then
+                    chips = chips + 10 * i
+                    mult = mult + i
+                end
+            end
+        end
+        Balatest.assert_chips(chips * mult)
+    end
+}
+--#endregion
