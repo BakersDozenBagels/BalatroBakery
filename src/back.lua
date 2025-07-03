@@ -308,81 +308,53 @@ local b_credit = SMODS.Back {
     end
 }
 
-SMODS.Back {
+local b_dominion = SMODS.Back {
     key = "Dominion",
     name = "Dominion",
     config = {
-        card_count = 7,
         hand_size_penalty = 3,
         joker_count = 3,
         joker = "j_Bakery_Estate",
-        voucher = "v_illusion"
+        hand_size_per_period = 1,
+        negative_joker_per_period = 1,
+        ante_period = 2,
     },
-    -- TODO: Create artwork
-    atlas = "Joker",
-    prefix_config = {
-        atlas = false
-    },
+    -- TODO: Improve artwork
+    atlas = "BakeryBack",
     pos = {
-        x = 5,
-        y = 1
+        x = 2,
+        y = 0
     },
-    --[[
-    artist = "Jack5",
     coder = "Jack5",
-    ]]
+    idea = "Jack5",
     unlocked = true, -- TODO: Add unlock condition
     discovered = true,
     loc_vars = function(self, info_queue, back)
         return {
             vars = {
-                self.config.card_count,
                 self.config.hand_size_penalty,
                 self.config.joker_count,
                 localize {
                     type = 'name_text', key = self.config.joker, set = 'Joker'
                 },
-                localize {
-                    type = 'name_text', key = self.config.voucher, set = 'Voucher'
-                }
+                self.config.hand_size_per_period,
+                self.config.negative_joker_per_period,
+                self.config.ante_period
             }
         }
     end,
-    -- Start with 7 cards, -3 hand size, 3 Estate Jokers and Illusion Voucher
-    -- TODO: Add random destroyed card to deck at end of round
+    -- Start with -3 hand size and 3 Estate Jokers, +1 hand size and 1 Estate Joker becomes Negative every 2 Antes
+    -- TODO: Increase hand size by 1 and make random Estate Joker negative every 2 Antes
     apply = function(self, back)
         G.E_MANAGER:add_event(Event({
             func = function()
-                local function contains(table, element)
-                    for _, value in pairs(table) do
-                        if value == element then
-                            return true
-                        end
-                    end
-                    return false
-                end
-                local keep_cards = {}
-                while #keep_cards < self.config.card_count do
-                    local keep_card = pseudorandom_element(
-                        G.playing_cards, pseudoseed("Nothin'ButCoppers")
-                    )
-                    if not contains(keep_cards, keep_card) then
-                        table.insert(keep_cards, keep_card)
-                    end
-                end
-                for _, card in pairs(G.playing_cards) do
-                    if not contains(keep_cards, card) then
-                        card:start_dissolve(nil)
-                    end
-                end
                 G.hand:change_size(-self.config.hand_size_penalty)
-                for i = 1, self.config.joker_count do
+                for _ = 1, self.config.joker_count do
                     local joker = create_card(
                         "Joker", nil, nil, nil, nil, nil, self.config.joker
                     )
                     G.jokers:emplace(joker)
                 end
-                -- Voucher is handled by Balatro
                 return true
             end
         }))
@@ -500,6 +472,71 @@ if CardSleeves then
                     end
                 }))
             end
+        end
+    }
+
+    CardSleeves.Sleeve {
+        key = "Dominion",
+        -- TODO: Improve artwork
+        atlas = "BakerySleeves",
+        pos = {
+            x = 3,
+            y = 0
+        },
+        coder = "Jack5",
+        idea = "Jack5",
+        unlocked = true, -- TODO: Add unlock condition
+        discovered = true,
+        config = {
+            voucher = "v_illusion",
+            cards_count = 7,
+            stored_cards = {},
+            stored_cards_per_blind = 1,
+        },
+        loc_vars = function(self, info_queue, back)
+            return {
+                vars = {
+                    localize {
+                        type = 'name_text', key = self.config.voucher, set = 'Voucher'
+                    },
+                    self.config.cards_count,
+                    self.config.stored_cards_per_blind
+                }
+            }
+        end,
+        -- Start with Illusion Voucher and all but 7 cards exiled, +1 card returned every defeated or skipped Blind
+        -- TODO: Add random destroyed card to deck on blind defeated or skipped
+        -- TODO: Add combo effect when combined with Dominion Deck
+        apply = function(self, back)
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    local keep_cards = {}
+                    while #keep_cards < self.config.cards_count do
+                        local keep_card = pseudorandom_element(
+                            G.playing_cards, pseudoseed("Nothin'ButCoppers")
+                        )
+                        if not contains(keep_cards, keep_card) then
+                            table.insert(keep_cards, keep_card)
+                        end
+                    end
+                    local function contains(table, element)
+                        for _, value in pairs(table) do
+                            if value == element then
+                                return true
+                            end
+                        end
+                        return false
+                    end
+                    for _, card in pairs(G.playing_cards) do
+                        if not contains(keep_cards, card) then
+                            -- TODO: Copy card into self.config.stored_cards
+                            card:start_dissolve(nil)
+                        end
+                    end
+                    -- Voucher is handled by Balatro
+                    return true
+                end
+            }))
         end
     }
 end

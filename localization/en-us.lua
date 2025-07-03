@@ -229,10 +229,11 @@ return {
             b_Bakery_Dominion = {
                 name = "Dominion Deck",
                 text = {
-                    "Start with {C:attention}#1#{} cards,",
-                    "{C:attention}-#2#{} hand size,",
-                    "{C:attention}#3# #4#{} Jokers",
-                    "and {C:attention}#5#{} Voucher"
+                    "Start with {C:attention}-#1#{} hand size",
+                    "and {C:attention}#2# #3# Jokers{},",
+                    "{C:attention}+#4#{} hand size and {C:attention}#5#",
+                    "{C:attention}#3# Joker{} becomes",
+                    "{C:dark_edition}Negative{} every {C:attention}#6#{} Antes"
                 }
             }
         },
@@ -257,6 +258,15 @@ return {
             sleeve_Bakery_Credit_alt = {
                 name = "Credit Sleeve",
                 text = { "Start with extra {C:money}$#1#{}", "Lose {C:red}$1{} per card played" }
+            },
+            sleeve_Bakery_Dominion = {
+                name = "Dominion Sleeve",
+                text = {
+                    "Start with {C:attention}#1# Voucher{} and",
+                    "all but {C:attention}#2#{} cards exiled,",
+                    "{C:attention}+#3#{} card returned every",
+                    "defeated or skipped {C:attention}Blind"
+                }
             }
         },
         Blind = {
