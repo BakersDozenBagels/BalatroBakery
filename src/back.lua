@@ -319,7 +319,7 @@ local b_dominion = SMODS.Back {
         negative_joker_per_period = 1,
         ante_period = 2,
         -- Dynamic variable, reset to 1 on loading game
-        highest_ante_yet = 1,
+        highest_ante_yet = 1
     },
     -- TODO: Improve artwork
     atlas = "BakeryBack",
@@ -329,8 +329,23 @@ local b_dominion = SMODS.Back {
     },
     coder = "Jack5",
     idea = "Jack5",
-    unlocked = true, -- TODO: Add unlock condition
-    discovered = true,
+    unlocked = false,
+    -- Have at least 3 of any one Joker
+    check_for_unlock = function(self, args)
+        if G.jokers and G.jokers.cards and #G.jokers.cards >= 3 then
+            local joker_key_counts = {}
+            for _, joker in ipairs(G.jokers.cards) do
+                joker_key_counts[joker.config.center.key] = (joker_key_counts[joker.config.center.key] or 0) + 1
+                if joker_key_counts[joker.config.center.key] >= 3 then
+                    return true
+                end
+            end
+        end
+        return false
+    end,
+    locked_loc_vars = function(self, args)
+        return { vars = 3 }
+    end,
     loc_vars = function(self, info_queue, back)
         return {
             vars = {
@@ -340,7 +355,6 @@ local b_dominion = SMODS.Back {
                     type = 'name_text', key = self.config.joker, set = 'Joker'
                 },
                 self.config.hand_size_per_period,
-                self.config.negative_joker_per_period,
                 self.config.ante_period
             }
         }
@@ -372,22 +386,6 @@ local b_dominion = SMODS.Back {
             end
             for _ = 1, period_triggers do
                 G.hand:change_size(self.config.hand_size_per_period)
-                for _ = 1, self.config.negative_joker_per_period do
-                    local estate_jokers = {}
-                    for _, joker in ipairs(G.jokers.cards) do
-                        if joker.config.center.key == "j_Bakery_Estate" then
-                            table.insert(estate_jokers, joker)
-                        end
-                    end
-                    if #estate_jokers >= 1 then
-                        local estate_to_negative = pseudorandom_element(
-                            estate_jokers, pseudoseed("ThatAin'tHowItWorks")
-                        )
-                        estate_to_negative:set_edition({ negative = true }, true)
-                    else
-                        sendDebugMessage("No Estate Jokers", "Bakery")
-                    end
-                end
             end
             self.config.highest_ante_yet = G.GAME.round_resets.ante
         end
@@ -527,34 +525,79 @@ if CardSleeves then
         },
         coder = "Jack5",
         idea = "Jack5",
-        unlocked = true, -- TODO: Add unlock condition
-        discovered = true,
+        unlocked = false,
         config = {
-            voucher = "v_illusion",
-            combo_cards_count = 7,
-            stored_cards = {},
-            stored_cards_per_blind = 1,
+            hand_size_penalty = 3,
+            joker_count = 3,
+            joker = "j_Bakery_Estate",
+            hand_size_per_period = 1,
+            ante_period = 2,
+            -- Dynamic variable, reset to 1 on loading game
+            highest_ante_yet = 1,
+            -- Combo effects
+            combo_voucher = "v_illusion",
+            combo_cards_count = 7
         },
+        -- Have at least 3 of any one Joker
+        check_for_unlock = function(self, args)
+            if G.jokers and G.jokers.cards and #G.jokers.cards >= 3 then
+                local joker_key_counts = {}
+                for _, joker in ipairs(G.jokers.cards) do
+                    joker_key_counts[joker.config.center.key] = (joker_key_counts[joker.config.center.key] or 0) + 1
+                    if joker_key_counts[joker.config.center.key] >= 3 then
+                        return true
+                    end
+                end
+            end
+            return false
+        end,
+        locked_loc_vars = function(self, args)
+            return { vars = 3 }
+        end,
         loc_vars = function(self, info_queue, back)
-            return {
-                vars = {
-                    localize {
-                        type = 'name_text', key = self.config.voucher, set = 'Voucher'
-                    },
-                    self.config.cards_count,
-                    self.config.stored_cards_per_blind
+            local key = self.key
+            local vars = {
+                self.config.hand_size_penalty,
+                self.config.joker_count,
+                localize {
+                    type = 'name_text', key = self.config.joker, set = 'Joker'
                 }
             }
+            if self.get_current_deck_key() ~= "b_Bakery_Dominion" then
+                table.insert(vars, self.config.hand_size_per_period)
+                table.insert(vars, self.config.ante_period)
+            else
+                key = key .. "_alt"
+                table.insert(vars, self.config.combo_cards_count)
+                table.insert(vars, localize {
+                    type = 'name_text', key = self.config.combo_voucher, set = 'Voucher'
+                })
+            end
+            return {
+                key = key,
+                vars = vars
+            }
         end,
-        -- Start with Illusion Voucher and all but 7 cards exiled, +1 card returned every defeated or skipped Blind
-        -- TODO: Add random destroyed card to deck on blind defeated or skipped
-        -- TODO: Add combo effect when combined with Dominion Deck
+        -- Start with -3 hand size and 3 Estate Jokers, +1 hand size and 1 Estate Joker becomes Negative every 2 Antes
+        -- Combo: Start with -3 hand size, 3 Estate Jokers, 7 total cards and Illusion Voucher
         apply = function(self, back)
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    if not get_current_deck_key() == "b_Bakery_Dominion" then
-                        -- Voucher is handled by Balatro
-                        -- TODO: Game is unplayable with so few cards and no benefits
+            -- Normal effects (copied from deck)
+            if self.get_current_deck_key() ~= "b_Bakery_Dominion" then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.hand:change_size(-self.config.hand_size_penalty)
+                        for _ = 1, self.config.joker_count do
+                            local joker = create_card(
+                                "Joker", nil, nil, nil, nil, nil, self.config.joker
+                            )
+                            G.jokers:emplace(joker)
+                        end
+                        return true
+                    end
+                }))
+            else -- Combo effects
+                G.E_MANAGER:add_event(Event({
+                    func = function()
                         local keep_cards = {}
                         while #keep_cards < self.config.combo_cards_count do
                             local keep_card = pseudorandom_element(
@@ -566,17 +609,61 @@ if CardSleeves then
                         end
                         for _, card in pairs(G.playing_cards) do
                             if not contains(keep_cards, card) then
-                                local exile_copy = copy_card(card, nil, nil, card)
-                                table.insert(self.config.stored_cards, exile_copy)
                                 card:start_dissolve(nil)
                             end
                         end
-                    else -- Also using Dominion Deck
-                        -- TODO: Add combo effect
+                        if not G.redeemed_vouchers_during_hand then
+                            G.redeemed_vouchers_during_hand = CardArea(
+                                G.play.T.x,
+                                G.play.T.y,
+                                G.play.T.w,
+                                G.play.T.h,
+                                { type = "play", card_limit = 5 }
+                            )
+                        end
+                        local voucher = create_card(
+                            "Voucher", G.redeemed_vouchers_during_hand,
+                            nil, nil, nil, nil, self.config.combo_voucher
+                        )
+                        voucher:start_materialize()
+                        G.redeemed_vouchers_during_hand:emplace(voucher)
+                        voucher.cost = 0
+                        voucher.shop_voucher = false
+                        voucher:redeem()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = "after",
+                            delay = 0,
+                            func = function()
+                                voucher:start_dissolve()
+                                return true
+                            end,
+                        }))
+                        return true
                     end
-                    return true
+                }))
+            end
+        end,
+        calculate = function(self, sleeve, context)
+            -- Normal effects (copied from deck)
+            if G.GAME.round_resets.ante > self.config.highest_ante_yet then
+                -- TODO: Prevent these triggers from running when loading a saved game
+                -- Ensure that this triggers for all Antes that haven't triggered yet
+                local period_triggers = 0
+                for i = self.config.highest_ante_yet + 1, G.GAME.round_resets.ante do
+                    if (i + 1) % self.config.ante_period == 0 then -- Starting from Ante 1
+                        period_triggers = period_triggers + 1
+                    end
                 end
-            }))
+                for _ = 1, period_triggers do
+                    -- Apply normal effect if not using Dominion Deck
+                    if self.get_current_deck_key() ~= "b_Bakery_Dominion" then
+                        G.hand:change_size(self.config.hand_size_per_period)
+                    else -- Negate normal effect if using Dominion Deck
+                        G.hand:change_size(-self.config.hand_size_per_period)
+                    end
+                end
+                self.config.highest_ante_yet = G.GAME.round_resets.ante
+            end
         end
     }
 end
