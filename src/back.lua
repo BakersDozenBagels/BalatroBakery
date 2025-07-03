@@ -318,6 +318,8 @@ local b_dominion = SMODS.Back {
         hand_size_per_period = 1,
         negative_joker_per_period = 1,
         ante_period = 2,
+        -- Dynamic variable, reset to 1 on loading game
+        highest_ante_yet = 1,
     },
     -- TODO: Improve artwork
     atlas = "BakeryBack",
@@ -344,7 +346,6 @@ local b_dominion = SMODS.Back {
         }
     end,
     -- Start with -3 hand size and 3 Estate Jokers, +1 hand size and 1 Estate Joker becomes Negative every 2 Antes
-    -- TODO: Increase hand size by 1 and make random Estate Joker negative every 2 Antes
     apply = function(self, back)
         G.E_MANAGER:add_event(Event({
             func = function()
@@ -358,6 +359,38 @@ local b_dominion = SMODS.Back {
                 return true
             end
         }))
+    end,
+    calculate = function(self, back, context)
+        if G.GAME.round_resets.ante > self.config.highest_ante_yet then
+            -- TODO: Prevent these triggers from running when loading a saved game
+            -- Ensure that this triggers for all Antes that haven't triggered yet
+            local period_triggers = 0
+            for i = self.config.highest_ante_yet + 1, G.GAME.round_resets.ante do
+                if (i + 1) % self.config.ante_period == 0 then -- Starting from Ante 1
+                    period_triggers = period_triggers + 1
+                end
+            end
+            for _ = 1, period_triggers do
+                G.hand:change_size(self.config.hand_size_per_period)
+                for _ = 1, self.config.negative_joker_per_period do
+                    local estate_jokers = {}
+                    for _, joker in ipairs(G.jokers.cards) do
+                        if joker.config.center.key == "j_Bakery_Estate" then
+                            table.insert(estate_jokers, joker)
+                        end
+                    end
+                    if #estate_jokers >= 1 then
+                        local estate_to_negative = pseudorandom_element(
+                            estate_jokers, pseudoseed("ThatAin'tHowItWorks")
+                        )
+                        estate_to_negative:set_edition({ negative = true }, true)
+                    else
+                        sendDebugMessage("No Estate Jokers", "Bakery")
+                    end
+                end
+            end
+            self.config.highest_ante_yet = G.GAME.round_resets.ante
+        end
     end
 }
 
@@ -475,6 +508,15 @@ if CardSleeves then
         end
     }
 
+    function contains(table, element)
+        for _, value in pairs(table) do
+            if value == element then
+                return true
+            end
+        end
+        return false
+    end
+
     CardSleeves.Sleeve {
         key = "Dominion",
         -- TODO: Improve artwork
@@ -489,7 +531,7 @@ if CardSleeves then
         discovered = true,
         config = {
             voucher = "v_illusion",
-            cards_count = 7,
+            combo_cards_count = 7,
             stored_cards = {},
             stored_cards_per_blind = 1,
         },
@@ -510,30 +552,28 @@ if CardSleeves then
         apply = function(self, back)
             G.E_MANAGER:add_event(Event({
                 func = function()
-                    local keep_cards = {}
-                    while #keep_cards < self.config.cards_count do
-                        local keep_card = pseudorandom_element(
-                            G.playing_cards, pseudoseed("Nothin'ButCoppers")
-                        )
-                        if not contains(keep_cards, keep_card) then
-                            table.insert(keep_cards, keep_card)
-                        end
-                    end
-                    local function contains(table, element)
-                        for _, value in pairs(table) do
-                            if value == element then
-                                return true
+                    if not get_current_deck_key() == "b_Bakery_Dominion" then
+                        -- Voucher is handled by Balatro
+                        -- TODO: Game is unplayable with so few cards and no benefits
+                        local keep_cards = {}
+                        while #keep_cards < self.config.combo_cards_count do
+                            local keep_card = pseudorandom_element(
+                                G.playing_cards, pseudoseed("Nothin'ButCoppers")
+                            )
+                            if not contains(keep_cards, keep_card) then
+                                table.insert(keep_cards, keep_card)
                             end
                         end
-                        return false
-                    end
-                    for _, card in pairs(G.playing_cards) do
-                        if not contains(keep_cards, card) then
-                            -- TODO: Copy card into self.config.stored_cards
-                            card:start_dissolve(nil)
+                        for _, card in pairs(G.playing_cards) do
+                            if not contains(keep_cards, card) then
+                                local exile_copy = copy_card(card, nil, nil, card)
+                                table.insert(self.config.stored_cards, exile_copy)
+                                card:start_dissolve(nil)
+                            end
                         end
+                    else -- Also using Dominion Deck
+                        -- TODO: Add combo effect
                     end
-                    -- Voucher is handled by Balatro
                     return true
                 end
             }))
