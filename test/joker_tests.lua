@@ -2077,26 +2077,29 @@ Balatest.TestPlay {
         G.GAME.blind.chips = math.huge -- Prevent round from ending
         for i = 1, #G.jokers.cards do
             Balatest.wait_for_input()
-            -- TODO: Fix subsequent debuffs not working
-            if i ~= 1 then
-                G.jokers.cards[i - 1]:set_debuff(false)
-            end
-            G.jokers.cards[i]:set_debuff(true)
+            Balatest.q(function()
+                if i ~= 1 then
+                    G.jokers.cards[i - 1]:set_debuff(false)
+                end
+                G.jokers.cards[i]:set_debuff(true)
+            end)
             Balatest.play_hand { '2D' }
         end
     end,
     assert = function()
-        local chips = 5
-        local mult = 1
+        local total = 0
         for debuffed = 1, #G.jokers.cards do
+            local chips = 5
+            local mult = 1
             for i = 1, #G.jokers.cards do
                 if i ~= debuffed then
                     chips = chips + 10 * i
                     mult = mult + i
                 end
             end
+            total = total + chips * mult
         end
-        Balatest.assert_chips(chips * mult)
+        Balatest.assert_chips(total)
     end
 }
 --#endregion
