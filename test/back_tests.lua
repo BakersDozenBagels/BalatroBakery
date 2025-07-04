@@ -112,14 +112,16 @@ Balatest.TestPlay {
     category = { 'backs', 'dominion_deck' },
 
     back = 'Dominion',
-    -- TODO: Test that hand size is 5
+    hand_size = 8,
     execute = function()
+        Balatest.wait_for_input()
     end,
     assert = function()
         Balatest.assert_eq(#G.jokers.cards, 3)
         for _, card in ipairs(G.jokers.cards) do
             Balatest.assert_eq(card.config.center.key, 'j_Bakery_Estate')
         end
+        Balatest.assert_eq(#G.hand.cards, 5)
     end
 }
 Balatest.TestPlay {
@@ -127,16 +129,39 @@ Balatest.TestPlay {
     category = { 'backs', 'dominion_deck' },
 
     back = 'Dominion',
+    deck = { cards = {
+        { r = 'A', s = 'D' }, -- How do you spell AC/DC?
+        { r = 'A', s = 'D' },
+        { r = 'A', s = 'C' },
+        { r = 'A', s = 'C' },
+        { r = 'A', s = 'H' },
+        { r = 'A', s = 'H' },
+        { r = 'A', s = 'S' },
+        { r = 'A', s = 'S' },
+    } },
+    hand_size = 8,
+    no_auto_start = true,
     execute = function()
-        for _ = 1, 6 do
-            Balatest.end_round()
+        for _ = 1, 2 do
+            Balatest.skip_blind 'tag_Bakery_BlankTag'
+            Balatest.skip_blind 'tag_Bakery_BlankTag'
+            Balatest.start_round()
+            Balatest.q(function()
+                for _, card in ipairs(G.hand.cards) do
+                    G.hand:add_to_highlighted(card, true)
+                end
+                G.hand:align_cards()
+                G.FUNCS.play_cards_from_highlighted()
+            end)
+            Balatest.wait_for_input()
             Balatest.cash_out()
             Balatest.exit_shop()
-            Balatest.start_round()
+            -- TODO: Fix Ante not increasing, Boss Blind is being ignored
         end
+        Balatest.start_round()
     end,
     assert = function()
-        -- TDOO: Test that hand size is 6 after entering Ante 3
+        Balatest.assert_eq(#G.hand.cards, 6)
     end
 }
 -- TODO: Test Dominion Sleeve does the same thing
