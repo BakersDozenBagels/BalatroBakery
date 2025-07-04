@@ -19,6 +19,11 @@ Bakery_API.guard(function()
             name = "Amy Weber",
             bg = HEX('60ADC4'),
             fg = G.C.UI.TEXT_DARK
+        },
+        Jack5 = {
+            name = "Jack5",
+            bg = HEX('ff4d00'),
+            fg = HEX('ffffff')
         }
     }
 end)

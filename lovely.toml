@@ -328,3 +328,15 @@ position = 'at'
 payload = '''["Pair"] = (G.GAME.used_vouchers.v_cry_hyperspacetether or (G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Marm')) and 2 or nil,'''
 match_indent = true
 times = 1
+
+# Debuff charms (The Stoic blind)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '--add new debuffs'
+position = 'after'
+payload = '''for _, v in ipairs(G.Bakery_charm_area.cards) do
+    self:debuff_card(v)
+end'''
+match_indent = true
+times = 1

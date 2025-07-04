@@ -652,16 +652,111 @@ Bakery_API.guard(function()
 
     sendInfoMessage("SMODS.calculate_repetitions() patched. Reason: Up Tag", "Bakery")
 
-    function Bakery_API.credit(obj)
-        local raw_obj_set_badges = obj.set_badges
-        obj.set_badges = function(self, card, badges)
-            if self.artist and (self.set == "Enhanced" or self.discovered or card.bypass_discovery_center) then
-                local artist = Bakery_API.contributors[self.artist]
-                badges[#badges + 1] = create_badge(localize {
+    local raw_Blind_set_text = Blind.set_text
+    function Blind:set_text(...)
+        raw_Blind_set_text(self, ...)
+        local blind = self.config.blind
+        if blind and (blind.artist or blind.coder or blind.idea) then
+            self.loc_debuff_lines[#self.loc_debuff_lines + 1] = ""
+            if blind.artist == blind.coder and blind.coder == blind.idea then
+                local creator = Bakery_API.contributors[blind.artist]
+                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                    type = 'variable',
+                    key = 'v_Bakery_by',
+                    vars = { creator.name }
+                }
+                return
+            end
+            if blind.artist then
+                local artist = Bakery_API.contributors[blind.artist]
+                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
                     type = 'variable',
                     key = 'v_Bakery_artist',
                     vars = { artist.name }
-                }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
+                }
+            end
+            if blind.coder then
+                local coder = Bakery_API.contributors[blind.coder]
+                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                    type = 'variable',
+                    key = 'v_Bakery_coder',
+                    vars = { coder.name }
+                }
+            end
+            if blind.idea then
+                local idea = Bakery_API.contributors[blind.idea]
+                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                    type = 'variable',
+                    key = 'v_Bakery_idea',
+                    vars = { idea.name }
+                }
+            end
+        end
+    end
+
+    local raw_create_UIBox_blind_popup = create_UIBox_blind_popup
+    function create_UIBox_blind_popup(blind, discovered, vars, ...)
+        local ret = raw_create_UIBox_blind_popup(blind, discovered, vars, ...)
+        local txt = ret.nodes[2].nodes[1].nodes[4]
+        if txt and (blind.artist or blind.coder or blind.idea) then
+            local function make(kind, contrib)
+                txt.nodes[#txt.nodes + 1] =
+                { n = G.UIT.R, config = { align = "cm" }, colour = contrib.bg, nodes = { { n = G.UIT.T, config = { text = localize { type = 'variable', key = kind, vars = { contrib.name } }, scale = 0.2, shadow = true, colour = contrib.fg } } } }
+            end
+            if blind.artist == blind.coder and blind.coder == blind.idea then
+                make("v_Bakery_by", Bakery_API.contributors[blind.artist])
+            else
+                if blind.artist then
+                    make("v_Bakery_artist", Bakery_API.contributors[blind.artist])
+                end
+                if blind.coder then
+                    make("v_Bakery_coder", Bakery_API.contributors[blind.coder])
+                end
+                if blind.idea then
+                    make("v_Bakery_idea", Bakery_API.contributors[blind.idea])
+                end
+            end
+        end
+        return ret
+    end
+
+    function Bakery_API.credit(obj)
+        local raw_obj_set_badges = obj.set_badges
+        obj.set_badges = function(self, card, badges)
+            if self.set == "Enhanced" or self.discovered or card.bypass_discovery_center then
+                if self.artist and self.artist == self.coder and self.coder == self.idea then
+                    local creator = Bakery_API.contributors[self.artist]
+                    badges[#badges + 1] = create_badge(localize {
+                        type = 'variable',
+                        key = 'v_Bakery_by',
+                        vars = { creator.name }
+                    }, creator.bg or G.C.RED, creator.fg or G.C.BLACK, 0.7)
+                else
+                    if self.artist then
+                        local artist = Bakery_API.contributors[self.artist]
+                        badges[#badges + 1] = create_badge(localize {
+                            type = 'variable',
+                            key = 'v_Bakery_artist',
+                            vars = { artist.name }
+                        }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
+                    end
+                    if self.coder then
+                        local coder = Bakery_API.contributors[self.coder]
+                        badges[#badges + 1] = create_badge(localize {
+                            type = 'variable',
+                            key = 'v_Bakery_coder',
+                            vars = { coder.name }
+                        }, coder.bg or G.C.RED, coder.fg or G.C.BLACK, 0.7)
+                    end
+                    if self.idea then
+                        local idea = Bakery_API.contributors[self.idea]
+                        badges[#badges + 1] = create_badge(localize {
+                            type = 'variable',
+                            key = 'v_Bakery_idea',
+                            vars = { idea.name }
+                        }, idea.bg or G.C.RED, idea.fg or G.C.BLACK, 0.7)
+                    end
+                end
             end
             if raw_obj_set_badges then
                 raw_obj_set_badges(self, card, badges)
