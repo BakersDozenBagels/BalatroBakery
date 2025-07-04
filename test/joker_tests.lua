@@ -2074,18 +2074,22 @@ Balatest.TestPlay {
         { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
     } },
     execute = function()
-        -- TODO: Set each Estate Joker in turn as debuffed
-        Balatest.play_hand { '2D' }
-        Balatest.play_hand { '2D' }
-        Balatest.play_hand { '2D' }
-        Balatest.play_hand { '2D' }
-        Balatest.play_hand { '2D' }
+        G.GAME.blind.chips = math.huge -- Prevent round from ending
+        for i = 1, #G.jokers.cards do
+            Balatest.wait_for_input()
+            -- TODO: Fix subsequent debuffs not working
+            if i ~= 1 then
+                G.jokers.cards[i - 1]:set_debuff(false)
+            end
+            G.jokers.cards[i]:set_debuff(true)
+            Balatest.play_hand { '2D' }
+        end
     end,
     assert = function()
         local chips = 5
         local mult = 1
-        for debuffed = 1, 5 do
-            for i = 1, 5 do
+        for debuffed = 1, #G.jokers.cards do
+            for i = 1, #G.jokers.cards do
                 if i ~= debuffed then
                     chips = chips + 10 * i
                     mult = mult + i
