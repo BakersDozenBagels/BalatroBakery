@@ -131,6 +131,10 @@ return {
                 name = "Glass Cannon",
                 text = { "{X:mult,C:white}X#1#{} Mult", "{C:red}Self-destructs{} if Mult is",
                     "{C:attention}at least #2#{} afterwards" }
+            },
+            j_Bakery_3So = {
+                name = "3 of Sō",
+                text = { "Gains {C:mult}+#1#{} Mult if played hand", "contains a {C:attention}#2#-card Straight", "{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)" }
             }
         },
         Tag = {

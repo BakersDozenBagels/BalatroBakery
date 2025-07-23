@@ -2036,3 +2036,60 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region 3 of So
+Balatest.TestPlay {
+    name = '3_of_so_no_straight',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '5S', '6S', '8S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 0)
+        Balatest.assert_chips(236)
+    end
+}
+Balatest.TestPlay {
+    name = '3_of_so_straight_unscoring',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '4S', '6S', '8H' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 0)
+        Balatest.assert_chips(13)
+    end
+}
+Balatest.TestPlay {
+    name = '3_of_so_straight',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '4S', '6S', '8S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 2)
+        Balatest.assert_chips(348)
+    end
+}
+Balatest.TestPlay {
+    name = '3_of_so_scaled',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '4S', '6S', '8S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 2)
+        Balatest.assert_chips(21)
+    end
+}
+--#endregion

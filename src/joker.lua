@@ -744,7 +744,8 @@ Bakery_API.Joker {
         end
     end,
     Bakery_can_use = function(self, card)
-        return Bakery_API.default_can_use(card) and Bakery_API.big(card.ability.extra.cost) <= Bakery_API.big(G.GAME.dollars) +
+        return Bakery_API.default_can_use(card) and
+            Bakery_API.big(card.ability.extra.cost) <= Bakery_API.big(G.GAME.dollars) +
             Bakery_API.big(G.GAME.dollar_buffer or 0) - Bakery_API.big(G.GAME.bankrupt_at)
     end,
     Bakery_use_joker = function(self, card)
@@ -1122,3 +1123,72 @@ function Card:start_dissolve()
 end
 
 sendInfoMessage("Card:start_dissolve() patched. Reason: Glass Cannon shatters", "Bakery")
+
+-- TODO: Update this once the SMODS straight calculation update happens
+local function has_straight(cards, len)
+    if #cards < len then return false end
+
+    local IDS = {}
+    for i = 1, #cards do
+        local id = cards[i]:get_id()
+        if id > 1 and id < 15 then
+            IDS[id] = true
+        end
+    end
+
+    local straight_length = 0
+    local can_skip = next(find_joker('Shortcut'))
+    local skipped_rank = false
+    for j = 1, 14 do
+        if IDS[j == 1 and 14 or j] then
+            straight_length = straight_length + 1
+            if straight_length >= len then return true end
+            skipped_rank = false
+        elseif can_skip and not skipped_rank and j ~= 14 then
+            skipped_rank = true
+        else
+            straight_length = 0
+            skipped_rank = false
+        end
+    end
+    return false
+end
+
+Bakery_API.Joker {
+    key = '3So',
+    pos = {
+        x = 4,
+        y = 3
+    },
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = false,
+    config = {
+        extra = {
+            mult = 0,
+            d_mult = 2,
+            len = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.d_mult, card.ability.extra.len, card.ability.extra.mult } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint and has_straight(context.scoring_hand, card.ability.extra.len) then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.d_mult
+            return {
+                message = '+' .. (card.ability.extra.d_mult),
+                colour = G.C.RED,
+                card = card
+            }
+        end
+
+        if context.joker_main and card.ability.extra.mult > 0 then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+    end
+}
