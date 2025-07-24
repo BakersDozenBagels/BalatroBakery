@@ -902,7 +902,7 @@ function Game:update_draw_to_hand(dt)
     raw_Game_update_draw_to_hand(self, dt)
 end
 
-sendInfoMessage("Game:update_draw_to_hand() patched. Reason: Discard zero Charms juice")
+sendInfoMessage("Game:update_draw_to_hand() patched. Reason: Discard zero Charms juice", "Bakery")
 
 Bakery_API.Charm {
     key = "Obsession",

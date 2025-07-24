@@ -218,7 +218,7 @@ Bakery_API.credit(SMODS.Blind {
     end
 })
 
-sendInfoMessage("Blind:set_blind() patched. Reason: Allow Charms to be debuffed")
+sendInfoMessage("Blind:set_blind() patched. Reason: Allow Charms to be debuffed", "Bakery")
 
 Bakery_API.credit(SMODS.Blind {
     key = "Lammed", -- The Stoic
