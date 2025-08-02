@@ -26,20 +26,20 @@ local b_violet = SMODS.Back {
     locked_loc_vars = function(self, args)
         if G.P_BLINDS['bl_final_vessel'].discovered then
             return {
-                vars = {localize {
+                vars = { localize {
                     type = 'name_text',
                     key = 'bl_final_vessel',
                     set = "Blind"
-                }}
+                } }
             }
         end
         return {
-            vars = {localize('k_unknown')}
+            vars = { localize('k_unknown') }
         }
     end,
     loc_vars = function(self, info_queue, back)
         return {
-            vars = {self.config.extra.x_mult}
+            vars = { self.config.extra.x_mult }
         }
     end,
     calculate = function(self, back, args)
@@ -62,7 +62,7 @@ local b_violet = SMODS.Back {
                             text = localize {
                                 type = 'variable',
                                 key = 'a_xmult',
-                                vars = {self.config.extra.x_mult}
+                                vars = { self.config.extra.x_mult }
                             },
                             scale = 1.4,
                             hold = 2,
@@ -86,8 +86,8 @@ local b_violet = SMODS.Back {
 
 local function is_double_house()
     return G.GAME.selected_sleeve == 'sleeve_Bakery_House' and
-               ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key) ==
-               'b_Bakery_House'
+        ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key) ==
+        'b_Bakery_House'
 end
 local b_house = SMODS.Back {
     key = "House",
@@ -110,21 +110,21 @@ local b_house = SMODS.Back {
     locked_loc_vars = function(self, back)
         if G.P_CENTERS['b_erratic'].discovered then
             return {
-                vars = {localize {
+                vars = { localize {
                     type = 'name_text',
                     key = 'b_erratic',
                     set = "Back"
-                }}
+                } }
             }
         end
         return {
-            vars = {localize('k_unknown')}
+            vars = { localize('k_unknown') }
         }
     end,
     loc_vars = function(self)
         return {
-            vars = {(G.GAME and G.GAME.probabilities.normal or 1) * (is_double_house() and 2 or 1),
-                    self.config.extra.odds_bottom}
+            vars = { (G.GAME and G.GAME.probabilities.normal or 1) * (is_double_house() and 2 or 1),
+                self.config.extra.odds_bottom }
         }
     end,
     calculate = function(self, back, args)
@@ -230,11 +230,11 @@ Bakery_API.guard(function()
     -- Items that, with the Credit Deck, can never be better than the same item doing absolutely nothing.
     -- For example, Egg is not on this list, since sell value can still matter for Swashbuckler or Ceremonial Dagger.
     -- Neither is Midas Mask, since it can feed Vampire or Driver's License.
-    Bakery_API.econ_only_items = {'j_delayed_grat', 'j_business', 'j_faceless', 'j_cloud_9', 'j_rocket',
-                                  'j_reserved_parking', 'j_mail', 'j_to_the_moon', 'j_golden', 'j_ticket',
-                                  'j_rough_gem', 'j_satellite', 'j_todo_list', 'j_Bakery_Auctioneer', 'v_seed_money',
-                                  'v_money_tree', 'c_hermit', 'c_temperance', 'tag_investment', 'tag_skip',
-                                  'tag_economy'}
+    Bakery_API.econ_only_items = { 'j_delayed_grat', 'j_business', 'j_faceless', 'j_cloud_9', 'j_rocket',
+        'j_reserved_parking', 'j_mail', 'j_to_the_moon', 'j_golden', 'j_ticket',
+        'j_rough_gem', 'j_satellite', 'j_todo_list', 'j_Bakery_Auctioneer', 'v_seed_money',
+        'v_money_tree', 'c_hermit', 'c_temperance', 'tag_investment', 'tag_skip',
+        'tag_economy' }
 end)
 -- END_KEEP_LITE
 
@@ -272,7 +272,7 @@ local b_credit = SMODS.Back {
                         set = 'Stake',
                         key = 'stake_black'
                     },
-                    colours = {G.C.BLACK}
+                    colours = { G.C.BLACK }
                 }
             }
         end
@@ -284,13 +284,13 @@ local b_credit = SMODS.Back {
                     set = 'Stake',
                     key = 'stake_black'
                 },
-                colours = {G.C.BLACK}
+                colours = { G.C.BLACK }
             }
         }
     end,
     loc_vars = function(self, info_queue, back)
         return {
-            vars = {self.config.dollars}
+            vars = { self.config.dollars }
         }
     end,
     apply = function(self, back)
@@ -305,6 +305,31 @@ local b_credit = SMODS.Back {
         end
     end
 }
+
+local b_dn = SMODS.Back {
+    key = "DN",
+    name = "DN",
+    atlas = "BakeryBack",
+    pos = {
+        x = 3,
+        y = 0
+    },
+    apply = function(self, back)
+        G.GAME.modifiers.Bakery_advantage = (G.GAME.modifiers.Bakery_advantage or 0) + 1
+    end
+}
+
+local raw_SMODS_pseudorandom_probability = SMODS.pseudorandom_probability
+function SMODS.pseudorandom_probability(...)
+    local advantage = G.GAME and G.GAME.modifiers and G.GAME.modifiers.Bakery_advantage or 0
+    local result = false
+    for _ = 1, advantage + 1 do
+        if raw_SMODS_pseudorandom_probability(...) then
+            result = true
+        end
+    end
+    return result
+end
 
 if CardSleeves then
     SMODS.Atlas {
@@ -386,7 +411,7 @@ if CardSleeves then
             end
             return {
                 key = key,
-                vars = {dollars}
+                vars = { dollars }
             }
         end,
         apply = function(self)
@@ -416,6 +441,28 @@ if CardSleeves then
                         return true
                     end
                 }))
+            end
+        end
+    }
+
+    CardSleeves.Sleeve {
+        key = "DN",
+        atlas = "BakerySleeves",
+        pos = {
+            x = 3,
+            y = 0
+        },
+        unlocked = false,
+        unlock_condition = {
+            deck = "b_Bakery_DN",
+            stake = "stake_white"
+        },
+        apply = b_dn.apply,
+        loc_vars = function(self)
+            if self.get_current_deck_key() == "b_Bakery_DN" then
+                return {
+                    key = self.key .. "_alt"
+                }
             end
         end
     }

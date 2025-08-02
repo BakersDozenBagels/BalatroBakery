@@ -254,6 +254,10 @@ return {
                 name = "Credit Deck",
                 text = { "Start with extra {C:money}$#1#{}", "Earn {C:red}no money{}", "from any source" },
                 unlock = { "Win a run with", "{C:attention}#1#{}", "on at least", "{V:1}#2#{} difficulty" }
+            },
+            b_Bakery_DN = {
+                name = "D & Deck",
+                text = { "All {C:green}probabilities{} are", "rolled with {C:attention}advantage", "{C:inactive}(Roll twice, keep the better result)" }
             }
         },
         Sleeve = {
@@ -277,6 +281,14 @@ return {
             sleeve_Bakery_Credit_alt = {
                 name = "Credit Sleeve",
                 text = { "Start with extra {C:money}$#1#{}", "Lose {C:red}$1{} per card played" }
+            },
+            sleeve_Bakery_DN = {
+                name = "D & Sleeve",
+                text = { "All {C:green}probabilities{} are", "rolled with {C:attention}advantage", "{C:inactive}(Roll twice, keep the better result)" }
+            },
+            sleeve_Bakery_DN_alt = {
+                name = "5eeve",
+                text = { "All {C:green}probabilities{} are", "rolled with {C:attention}double advantage", "{C:inactive}(Roll three times, keep the best result)" }
             }
         },
         Blind = {

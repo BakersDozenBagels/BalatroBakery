@@ -106,3 +106,46 @@ Balatest.TestPlay {
         Balatest.assert_eq(G.GAME.dollars, 0)
     end
 }
+
+Balatest.TestPlay {
+    name = 'dn_lucky_1',
+    category = { 'backs', 'dn_deck' },
+
+    back = 'DN',
+    deck = { cards = { { r = '2', s = 'S', e = 'm_lucky' }, { r = '3', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        local val = 0
+        Balatest.hook(_G, 'pseudorandom', function(orig, ...)
+            val = 1 - val
+            return val
+        end)
+
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(147)
+        Balatest.assert_eq(G.GAME.dollars, 20)
+    end
+}
+Balatest.TestPlay {
+    name = 'dn_lucky_2',
+    category = { 'backs', 'dn_deck' },
+
+    back = 'DN',
+    deck = { cards = { { r = '2', s = 'S', e = 'm_lucky' }, { r = '3', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        local val = 1
+        Balatest.hook(_G, 'pseudorandom', function(orig, ...)
+            val = 1 - val
+            return val
+        end)
+
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(147)
+        Balatest.assert_eq(G.GAME.dollars, 20)
+    end
+}

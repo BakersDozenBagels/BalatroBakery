@@ -9,8 +9,8 @@ Current contents:
 - 24 Jokers
 - 14 Charms (a new kind of thing in the shop)
 - 20 Tags
-- 3 Decks
-- 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
+- 4 Decks
+- 4 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 7 Blinds
 - 3 Challenges
 - 1 Tarot Card
