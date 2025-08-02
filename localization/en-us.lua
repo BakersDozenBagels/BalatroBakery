@@ -135,7 +135,21 @@ return {
             j_Bakery_3So = {
                 name = "3 of Sō",
                 text = { "Gains {C:mult}+#1#{} Mult if played hand", "contains a {C:attention}#2#-card Straight", "{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult)" }
-            }
+            },
+            j_Bakery_Weerewolf = {
+                name = 'Weerewolf (Day)',
+                text = {
+                    "{C:mult}+#1#{} Mult",
+                    "{C:attention}Transform{} this Joker",
+                    "at end of round if",
+                    "a {C:attention}2{} was scored"
+                }
+            },
+            j_Bakery_Weerewolf_Back = {
+                name = 'Weerewolf (Night)',
+                text = { "{X:mult,C:white}X#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
+                    "if no {C:attention}2s{} were scored" }
+            },
         },
         Tag = {
             tag_Bakery_RetriggerTag = {

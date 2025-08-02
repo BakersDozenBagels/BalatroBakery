@@ -564,7 +564,8 @@ Bakery_API.guard(function()
     -- `config.extra.flipped` will be indicate whether the card has been flipped with `Bakery_API.flip_double_sided(card)`.
     -- `config.extra.flipped` does NOT include effects like Amber Acorn.
     Bakery_API.double_sided_jokers = {
-        j_Bakery_Werewolf = true
+        j_Bakery_Werewolf = true,
+        j_Bakery_Weerewolf = true,
     }
 
     -- Flips a double-sided card.

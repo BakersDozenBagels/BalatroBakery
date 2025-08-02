@@ -1192,3 +1192,75 @@ Bakery_API.Joker {
         end
     end
 }
+
+Bakery_API.Joker {
+    key = "Weerewolf",
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    artist = "SadCube",
+    config = {
+        extra = {
+            flipped = false,
+            twos = false,
+            mult = 2,
+            x_mult = 2,
+            front_pos = {
+                x = 3,
+                y = 0
+            },
+            back_pos = {
+                x = 4,
+                y = 0
+            }
+        }
+    },
+    display_size = { h = 95 * 0.7, w = 71 * 0.7 },
+    loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return {
+                vars = {}
+            }
+        end
+        return {
+            vars = { self.key == "j_Bakery_Weerewolf_Back" and card.ability.extra.x_mult or card.ability.extra.mult }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Weerewolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Weerewolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() == 2 and not context.blueprint then
+            card.ability.extra.twos = true
+        end
+
+        if context.joker_main then
+            return card.ability.extra.flipped and
+                { x_mult = card.ability.extra.x_mult } or
+                { mult = card.ability.extra.mult }
+        end
+
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+            if card.ability.extra.flipped ~= card.ability.extra.twos then
+                Bakery_API.flip_double_sided(card)
+            end
+            card.ability.extra.twos = false
+        end
+    end
+}

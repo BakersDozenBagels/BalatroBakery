@@ -2093,3 +2093,87 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Weerewolf
+Balatest.TestPlay {
+    name = 'weerewolf_front',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(21)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_front_flips',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_front_does_not_flip',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.discard { '3S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_back',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(14)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_back_does_not_flip',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_back_flips',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.next_round()
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+--#endregion
