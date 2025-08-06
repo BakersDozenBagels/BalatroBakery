@@ -56,7 +56,7 @@ Balatest.TestPlay {
 --#region Anaglyph Lens
 Balatest.TestPlay {
     name = 'anaglyph_lens_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
         equip 'BakeryCharm_Bakery_AnaglyphLens'
@@ -70,7 +70,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_stone',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S', e = 'm_stone' } } },
     execute = function()
@@ -85,7 +85,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_four',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
         equip 'BakeryCharm_Bakery_AnaglyphLens'
@@ -99,7 +99,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_four_plus_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
         equip 'BakeryCharm_Bakery_AnaglyphLens'
@@ -113,7 +113,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_five',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H' }, { r = '2', s = 'C' }, { r = '2', s = 'D' } } },
     execute = function()
@@ -128,7 +128,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_four_plus_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'C' } } },
     execute = function()
@@ -143,7 +143,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_four_plus_one_alt',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'S' } } },
     execute = function()
@@ -158,7 +158,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_four_plus_one_alt2',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'C', e = 'm_stone' } } },
     execute = function()
@@ -173,7 +173,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_five',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' } } },
     execute = function()
@@ -188,7 +188,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_three_pair',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'C' }, { r = '4', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -203,7 +203,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_three_pair',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'S' }, { r = '4', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -218,7 +218,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_three_pair_alt',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'S' }, { r = '4', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -233,7 +233,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_two_triplets',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'D' }, { r = '9', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -248,7 +248,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_two_triplets',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -263,7 +263,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_mansion',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -278,7 +278,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_house',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -293,7 +293,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_house_plus_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -308,7 +308,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_house_plus_one_alt',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D', e = 'm_stone' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()

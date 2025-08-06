@@ -1124,34 +1124,8 @@ end
 
 sendInfoMessage("Card:start_dissolve() patched. Reason: Glass Cannon shatters", "Bakery")
 
--- TODO: Update this once the SMODS straight calculation update happens
 local function has_straight(cards, len)
-    if #cards < len then return false end
-
-    local IDS = {}
-    for i = 1, #cards do
-        local id = cards[i]:get_id()
-        if id > 1 and id < 15 then
-            IDS[id] = true
-        end
-    end
-
-    local straight_length = 0
-    local can_skip = next(find_joker('Shortcut'))
-    local skipped_rank = false
-    for j = 1, 14 do
-        if IDS[j == 1 and 14 or j] then
-            straight_length = straight_length + 1
-            if straight_length >= len then return true end
-            skipped_rank = false
-        elseif can_skip and not skipped_rank and j ~= 14 then
-            skipped_rank = true
-        else
-            straight_length = 0
-            skipped_rank = false
-        end
-    end
-    return false
+    return next(get_straight(cards, len, SMODS.shortcut(), SMODS.wrap_around_straight()))
 end
 
 Bakery_API.Joker {

@@ -603,6 +603,10 @@ SMODS.PokerHand:take_ownership("Two Pair", {
     end
 })
 
+local function default_straight(hand)
+    return get_straight(hand, SMODS.four_fingers(), SMODS.shortcut(), SMODS.wrap_around_straight())
+end
+
 local raw_Flush_House_evaluate = SMODS.PokerHands['Flush House'].evaluate
 local raw_flush_house_modify_display_text = SMODS.PokerHands['Flush House'].modify_display_text
 SMODS.PokerHand:take_ownership("Flush House", {
@@ -638,7 +642,7 @@ SMODS.PokerHand:take_ownership("Flush House", {
                 end
             end
         end
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(get_straight(scoring_hand)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(default_straight(scoring_hand)) then
             local royal = true
             for j = 1, #scoring_hand do
                 local rank = SMODS.Ranks[scoring_hand[j].base.value]
@@ -725,7 +729,7 @@ SMODS.PokerHand:take_ownership("Full House", {
             #get_X_same(2, scoring_hand, true) >= 2 then
             return "Bakery_StuffedHouse"
         end
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(get_straight(scoring_hand)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(default_straight(scoring_hand)) then
             return "Bakery_StraightHouse"
         end
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #get_X_same(3, scoring_hand, true) >= 1 and
