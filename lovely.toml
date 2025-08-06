@@ -242,6 +242,23 @@ end
 if true then return Bakery_API.maximus_full_house_compat(parts, val) end
 """
 
+[[patches]]
+[patches.pattern]
+target = '=[SMODS GSPhanta "items/Misc.lua"]'
+pattern = "if (#parts._3 < 1 and not (G.GAME.selected_partner == \"pnr_phanta_conspiracist\" and next(SMODS.find_card(\"j_phanta_conspiracist\")))) or #parts._2 < 2 then return {} end"
+position = "at"
+match_indent = true
+times = 1
+payload = """
+local val = {}
+if (#parts._3 < 1 and not (G.GAME.selected_partner == \"pnr_phanta_conspiracist\" and next(SMODS.find_card(\"j_phanta_conspiracist\")))) or #parts._2 < 2 then
+  val = {}
+else
+  val = parts._all_pairs
+end
+if true then return Bakery_API.maximus_full_house_compat(parts, val) end
+"""
+
 # Mystes' Open Jokers Compatibility
 [[patches]]
 [patches.pattern]
