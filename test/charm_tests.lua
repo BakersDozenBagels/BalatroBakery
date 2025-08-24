@@ -1209,6 +1209,12 @@ Balatest.TestPlay {
     category = { 'charms', 'memento_mori' },
 
     execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
         equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.q(function()
             G.GAME.joker_rate = 0
@@ -1233,6 +1239,12 @@ Balatest.TestPlay {
             end
             return orig(a, b, c, d, e, center, f, ...)
         end)
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
         equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.end_round()
         Balatest.cash_out()
@@ -1251,11 +1263,42 @@ Balatest.TestPlay {
     no_auto_start = true,
     jokers = { 'j_cartomancer' },
     execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
         equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.start_round()
     end,
     assert = function()
         Balatest.assert(G.consumeables.cards[1].config.center.key == 'c_death')
+    end
+}
+Balatest.TestPlay {
+    name = 'memento_mori_vagabond_stoic',
+    category = { 'charms', 'memento_mori', 'blinds', 'stoic' },
+
+    jokers = { 'j_vagabond' },
+    dollars = 0,
+    blind = 'bl_Bakery_Lammed',
+    no_auto_start = true,
+    execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+        Balatest.play_hand { '2H' }
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.key ~= 'c_death')
+        Balatest.assert(G.consumeables.cards[2].config.center.key ~= 'c_death')
     end
 }
 --#endregion
