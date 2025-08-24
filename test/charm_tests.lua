@@ -1202,3 +1202,60 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Memento Mori
+Balatest.TestPlay {
+    name = 'memento_mori_shop',
+    category = { 'charms', 'memento_mori' },
+
+    execute = function()
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.q(function()
+            G.GAME.joker_rate = 0
+            G.GAME.planet_rate = 0
+        end)
+        Balatest.end_round()
+        Balatest.cash_out()
+    end,
+    assert = function()
+        Balatest.assert(G.shop_jokers.cards[1].config.center.key == 'c_death')
+        Balatest.assert(G.shop_jokers.cards[2].config.center.key == 'c_death')
+    end
+}
+Balatest.TestPlay {
+    name = 'memento_mori_pack',
+    category = { 'charms', 'memento_mori' },
+
+    execute = function()
+        Balatest.hook(_G, 'Card', function(orig, a, b, c, d, e, center, f, ...)
+            if center.set == 'Booster' then
+                return orig(a, b, c, d, e, G.P_CENTERS.p_arcana_jumbo_1, f, ...)
+            end
+            return orig(a, b, c, d, e, center, f, ...)
+        end)
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[1] end)
+    end,
+    assert = function()
+        for i = 1, 5 do
+            Balatest.assert(G.pack_cards.cards[i].config.center.key == 'c_death')
+        end
+    end
+}
+Balatest.TestPlay {
+    name = 'memento_mori_cartomancer',
+    category = { 'charms', 'memento_mori' },
+
+    no_auto_start = true,
+    jokers = { 'j_cartomancer' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.key == 'c_death')
+    end
+}
+--#endregion

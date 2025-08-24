@@ -1141,6 +1141,56 @@ Bakery_API.Charm {
     end
 }
 
+Bakery_API.Charm {
+    key = 'MementoMori',
+    pos = { x = 4, y = 3 },
+    atlas = 'Charms',
+    unlocked = false,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.c_death
+        return {
+            vars = {
+                localize {
+                    type = 'name_text',
+                    key = 'c_death',
+                    set = "Tarot"
+                }
+            }
+        }
+    end,
+    check_for_unlock = function(self, args)
+        if not G.playing_cards or #G.playing_cards < 2 then return false end
+
+        local ignored = { played_this_ante = true, times_played = true, suit_nominal_original = true }
+        local function eq(a, b)
+            if type(a) ~= type(b) then return false end
+            if type(a) ~= "table" then return a == b end
+            for k, v in pairs(a) do
+                if not ignored[k] and not eq(v, b[k]) then return false end
+            end
+            return true
+        end
+
+        for _, card in pairs(G.playing_cards) do
+            if not eq(card.ability, G.playing_cards[1].ability) or
+                not eq(card.base, G.playing_cards[1].base) or
+                not eq(card.edition, G.playing_cards[1].edition) or
+                card.seal ~= G.playing_cards[1].seal then
+                return false
+            end
+        end
+        return true
+    end
+}
+
+local raw_create_card = create_card
+function create_card(_type, a, l, r, s, o, forced_key, ...)
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MementoMori' and _type == 'Tarot' then
+        return raw_create_card(_type, a, l, r, s, o, 'c_death', ...)
+    end
+    return raw_create_card(_type, a, l, r, s, o, forced_key, ...)
+end
+
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {
         key = "PrintError",

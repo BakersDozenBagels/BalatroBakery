@@ -478,6 +478,11 @@ return {
             BakeryCharm_Bakery_Fortuna = {
                 name = 'Fortuna',
                 text = { '{C:tarot}#1#{} never', 'adds {C:dark_edition}#2#{} or {C:dark_edition}#3#' }
+            },
+            BakeryCharm_Bakery_MementoMori = {
+                name = 'Memento Mori',
+                text = { 'All {C:tarot}Tarot{} cards', 'are {C:attention}#1#' },
+                unlock = { 'Have {C:attention}every{} card in', 'your {C:attention}full deck', 'be identical' }
             }
             -- KEEP_LITE
         },
