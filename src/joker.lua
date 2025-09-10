@@ -1241,7 +1241,7 @@ Bakery_API.Joker {
 
 Bakery_API.Joker {
     key = "Lua",
-    rarity = 3,
+    rarity = 2,
     cost = 8,
     pos = {
         x = 5,
