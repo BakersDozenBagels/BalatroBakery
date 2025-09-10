@@ -150,6 +150,10 @@ return {
                 text = { "{X:mult,C:white}X#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
                     "if no {C:attention}2s{} were scored" }
             },
+            j_Bakery_Lua = {
+                name = "Lua Joker",
+                text = { "{X:mult,C:white}X#1#{} Mult,", '{X:mult,C:white}.."#2#"{} Mult' }
+            }
         },
         Tag = {
             tag_Bakery_RetriggerTag = {

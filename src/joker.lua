@@ -1238,3 +1238,45 @@ Bakery_API.Joker {
         end
     end
 }
+
+Bakery_API.Joker {
+    key = "Lua",
+    rarity = 3,
+    cost = 8,
+    pos = {
+        x = 5,
+        y = 3
+    },
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            x_mult = 1.05,
+            concat_mult = "5",
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.x_mult, card.ability.extra.concat_mult } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                x_mult = card.ability.extra.x_mult,
+                func = function()
+                    mult = tostring(mult):gsub(",", "") .. card.ability.extra.concat_mult
+                    if Talisman then
+                        mult = to_big(mult)
+                    else
+                        mult = tonumber(mult)
+                    end
+                    mult = mod_mult(mult)
+
+                    update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
+                    card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
+                        { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"' })
+                end
+            }
+        end
+    end
+}
