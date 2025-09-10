@@ -1252,8 +1252,8 @@ Bakery_API.Joker {
     perishable_compat = true,
     config = {
         extra = {
-            x_mult = 1.05,
-            concat_mult = "5",
+            x_mult = 0.2,
+            concat_mult = "2",
         }
     },
     loc_vars = function(self, info_queue, card)
@@ -1264,7 +1264,7 @@ Bakery_API.Joker {
             return {
                 x_mult = card.ability.extra.x_mult,
                 func = function()
-                    mult = tostring(mult):gsub(",", "") .. card.ability.extra.concat_mult
+                    mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
                     if Talisman then
                         mult = to_big(mult)
                     else
