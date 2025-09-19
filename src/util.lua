@@ -366,37 +366,36 @@ Bakery_API.guard(function()
         Sprite.draw(self, overlay)
 
         self.ARGS.send_to_shader = self.ARGS.send_to_shader or {}
-        self.ARGS.send_to_shader[1] = math.min(self.VT.r * 3, 1) + G.TIMERS.REAL / (28) +
-            (self.juice and self.juice.r * 20 or 0) + self.tilt_var.amt
+        self.ARGS.send_to_shader[1] = math.min(self.VT.r * 3, 1) + G.TIMERS.REAL / (28) + self.tilt_var.amt
         self.ARGS.send_to_shader[2] = G.TIMERS.REAL
 
         self.tilt_var = self.tilt_var or {
             mx = 0,
             my = 0,
-            dx = self.tilt_var.dx or 0,
-            dy = self.tilt_var.dy or 0,
+            dx = 0,
+            dy = 0,
             amt = 0
         }
         local tilt_factor = 0.3
-        if self.states.focus.is then
-            self.tilt_var.mx, self.tilt_var.my = G.CONTROLLER.cursor_position.x + self.tilt_var.dx * self.T.w *
-                G.TILESCALE * G.TILESIZE, G.CONTROLLER.cursor_position.y +
-                self.tilt_var.dy * self.T.h * G.TILESCALE * G.TILESIZE
-            self.tilt_var.amt = math.abs(self.hover_offset.y + self.hover_offset.x - 1 + self.tilt_var.dx +
-                self.tilt_var.dy - 1) * tilt_factor
-        elseif self.states.hover.is then
+        if self.states.hover.is then
             self.tilt_var.mx, self.tilt_var.my = G.CONTROLLER.cursor_position.x, G.CONTROLLER.cursor_position.y
             self.tilt_var.amt = math.abs(self.hover_offset.y + self.hover_offset.x - 1) * tilt_factor
-        elseif self.ambient_tilt then
-            local tilt_angle = G.TIMERS.REAL * (1.56 + (self.ID / 1.14212) % 1) + self.ID / 1.35122
-            self.tilt_var.mx = ((0.5 + 0.5 * self.ambient_tilt * math.cos(tilt_angle)) * self.VT.w + self.VT.x +
-                G.ROOM.T.x) * G.TILESIZE * G.TILESCALE
-            self.tilt_var.my = ((0.5 + 0.5 * self.ambient_tilt * math.sin(tilt_angle)) * self.VT.h + self.VT.y +
-                G.ROOM.T.y) * G.TILESIZE * G.TILESCALE
-            self.tilt_var.amt = self.ambient_tilt * (0.5 + math.cos(tilt_angle)) * tilt_factor
         end
 
         self:draw_shader(self.shader, nil, self.ARGS.send_to_shader)
+    end
+
+    local raw_Sprite_draw = Sprite.draw
+    local stop = false
+    function Sprite:draw(...)
+        if not stop and getmetatable(self) == PolySprite then
+            stop = true
+            PolySprite.draw(self, ...)
+            stop = false
+            return
+        end
+
+        raw_Sprite_draw(self, ...)
     end
 
     local PolyTag = Tag:extend()
@@ -409,6 +408,7 @@ Bakery_API.guard(function()
             dy = 0,
             amt = 0
         }
+        tag_sprite.role.draw_major = nil
         setmetatable(tag_sprite, PolySprite)
         tag_sprite.shader = self.ability.shader
         return tag_sprite_tab, tag_sprite
