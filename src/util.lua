@@ -567,11 +567,13 @@ Bakery_API.guard(function()
         j_Bakery_Werewolf = true,
         j_Bakery_Weerewolf = true,
         j_Bakery_Awarewolf = true,
-        j_Bakery_Warewolf = true
+        j_Bakery_Warewolf = true,
+        j_Bakery_Wherewolf = true
     }
 
     -- Flips a double-sided card.
     function Bakery_API.flip_double_sided(card)
+        card.ability.extra.flipping = true
         G.E_MANAGER:add_event(Event {
             trigger = 'before',
             delay = 0.2,
@@ -589,6 +591,7 @@ Bakery_API.guard(function()
                 if card.VT.w <= 0 then
                     card.pinch.x = false
                     card.ability.extra.flipped = not card.ability.extra.flipped
+                    card.ability.extra.flipping = false
                     return true
                 end
                 return false

@@ -169,6 +169,14 @@ return {
             j_Bakery_Warewolf_Back = {
                 name = "Warewolf (Night)",
                 text = { "{C:red}Destroy{} a {C:attention}random consumable{} and", "earn {C:money}$#1#{} when {C:attention}Blind{} is selected", "{C:attention}Transform{} this Joker", "instead if none exist" }
+            },
+            j_Bakery_Wherewolf = {
+                name = "Wherewolf (Day)",
+                text = { "{C:attention}+#1#{} hand size", "First played {C:attention}#2#{} of {V:1}#3#", "{C:attention}Transforms{} this Joker", "{s:0.8}Card changes every round" }
+            },
+            j_Bakery_Wherewolf_Back = {
+                name = "Wherewolf (Night)",
+                text = { "Each played {C:attention}#2#{} of {V:1}#3#", "give {X:mult,C:white}X#4#{} Mult when scored", "{C:attention}Transform{} this Joker at end of round", "if no {C:attention}#2#{} of {V:1}#3#{} was scored", "{s:0.8}Card changes every round" }
             }
         },
         Tag = {

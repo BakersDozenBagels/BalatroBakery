@@ -7,6 +7,8 @@ SMODS.Atlas {
 
 -- KEEP_LITE
 Bakery_API.guard(function()
+    local resets = {}
+
     function Bakery_API.Joker(o)
         o.name = o.name or o.key
         o.atlas = o.atlas or 'Bakery'
@@ -14,7 +16,16 @@ Bakery_API.guard(function()
             x = 0.5,
             y = 0.5
         }
+        if o.reset_game_globals then
+            resets[#resets + 1] = o.reset_game_globals
+        end
         return Bakery_API.credit(SMODS.Joker(o))
+    end
+
+    function SMODS.current_mod.reset_game_globals(...)
+        for _, f in ipairs(resets) do
+            f(...)
+        end
     end
 end)
 -- END_KEEP_LITE
@@ -1518,6 +1529,103 @@ Bakery_API.Joker {
                     ease_dollars(card.ability.extra.dollars)
                 end
             end
+        end
+    end
+}
+
+Bakery_API.Joker {
+    key = "Wherewolf",
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        h_size = 1,
+        extra = {
+            flipped = false,
+            played_cards = false,
+            hands = 1,
+            x_mult = 2,
+            front_pos = {
+                x = 4,
+                y = 4
+            },
+            back_pos = {
+                x = 5,
+                y = 4
+            }
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        local c_card = G.GAME.current_round.Bakery_Wherewolf_card or { rank = 'Ace', suit = 'Spades' }
+        if not self or not card or not card.ability or not card.ability.extra then
+            return { vars = { nil, localize(c_card.rank, 'ranks'), localize(c_card.suit, 'suits_plural'), colours = { G.C.SUITS.Spades } } }
+        end
+        return {
+            vars = {
+                card.ability.extra.hands,
+                localize(c_card.rank, 'ranks'),
+                localize(c_card.suit, 'suits_plural'),
+                card.ability.extra.x_mult,
+                colours = { G.C.SUITS[c_card.suit] }
+            }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Wherewolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Wherewolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and
+            context.other_card:get_id() == G.GAME.current_round.Bakery_Wherewolf_card.id and
+            context.other_card:is_suit(G.GAME.current_round.Bakery_Wherewolf_card.suit) then
+            if not context.blueprint then card.ability.extra.played_cards = true end
+            if not card.ability.extra.flipped and not card.ability.extra.flipping and not context.blueprint then
+                G.hand:change_size(-card.ability.h_size)
+                card.ability.h_size = 0
+                Bakery_API.flip_double_sided(card)
+                return nil, true
+            elseif card.ability.extra.flipped or card.ability.extra.flipping then
+                return { xmult = card.ability.extra.x_mult }
+            end
+        end
+
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+            if (card.ability.extra.flipped and not card.ability.extra.played_cards) then
+                card.ability.h_size = card.ability.extra.hands
+                G.hand:change_size(card.ability.h_size)
+                Bakery_API.flip_double_sided(card)
+            end
+            card.ability.extra.played_cards = false
+        end
+    end,
+    reset_game_globals = function()
+        G.GAME.current_round.Bakery_Wherewolf_card = { rank = 'Ace', suit = 'Spades' }
+        local valid_idol_cards = {}
+        for _, playing_card in ipairs(G.playing_cards) do
+            if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+                valid_idol_cards[#valid_idol_cards + 1] = playing_card
+            end
+        end
+        local idol_card = pseudorandom_element(valid_idol_cards, 'Bakery_Wherewolf' .. G.GAME.round_resets.ante)
+        if idol_card then
+            G.GAME.current_round.Bakery_Wherewolf_card.rank = idol_card.base.value
+            G.GAME.current_round.Bakery_Wherewolf_card.suit = idol_card.base.suit
+            G.GAME.current_round.Bakery_Wherewolf_card.id = idol_card.base.id
         end
     end
 }
