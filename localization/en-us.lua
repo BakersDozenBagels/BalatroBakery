@@ -153,6 +153,14 @@ return {
             j_Bakery_Lua = {
                 name = "Lua Joker",
                 text = { "{X:mult,C:white}X#1#{} Mult,", '{X:mult,C:white}.."#2#"{} Mult' }
+            },
+            j_Bakery_Awarewolf = {
+                name = "Awarewolf (Day)",
+                text = { "{C:attention}+#1#{} hand size", "{C:attention}Transform{} this Joker", "at end of round if", "{C:attention}no discards{} were used" }
+            },
+            j_Bakery_Awarewolf_Back = {
+                name = "Awarewolf (Night)",
+                text = { "{C:attention}+#1#{} hand size", "{C:attention}Transform{} this Joker", "at end of round", "if {C:attention}2 or more", "{C:attention}discards{} were used" }
             }
         },
         Tag = {

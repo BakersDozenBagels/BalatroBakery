@@ -1241,18 +1241,18 @@ Bakery_API.Joker {
 
 -- from http://lua-users.org/wiki/SplitJoin
 function Split(str, delim)
-   if string.find(str, delim) == nil then return { str } end
-   local result = {}
-   local pat = "(.-)" .. delim .. "()"
-   local nb = 0
-   local lastPos
-   for part, pos in string.gfind(str, pat) do
-      nb = nb + 1
-      result[nb] = part
-      lastPos = pos
-   end
+    if string.find(str, delim) == nil then return { str } end
+    local result = {}
+    local pat = "(.-)" .. delim .. "()"
+    local nb = 0
+    local lastPos
+    for part, pos in string.gfind(str, pat) do
+        nb = nb + 1
+        result[nb] = part
+        lastPos = pos
+    end
     result[nb + 1] = string.sub(str, lastPos)
-   return result
+    return result
 end
 
 local MAX_NUM
@@ -1270,7 +1270,7 @@ function parse_hyper_e(num)
                 if i > 2 then val = val - 1 end
                 arr[i] = val
             elseif current_run == 2 then
-                local last = arr[i-1]
+                local last = arr[i - 1]
                 for _ = 1, val do
                     arr[i] = last
                     i = i + 1
@@ -1287,7 +1287,7 @@ function parse_hyper_e(num)
             end
         end
     end
-    return setmetatable({array = arr, sign = 1}, OmegaMeta)
+    return setmetatable({ array = arr, sign = 1 }, OmegaMeta)
 end
 
 MAX_NUM = parse_hyper_e("e10#10##10000")
@@ -1319,9 +1319,9 @@ Bakery_API.Joker {
                 func = function()
                     local too_big
                     if type(mult) == 'table' and (
-                        (mult.isFinite and not mult:isFinite())
-                        or (mult.is_naneinf and mult:is_naneinf())
-                    ) then 
+                            (mult.isFinite and not mult:isFinite())
+                            or (mult.is_naneinf and mult:is_naneinf())
+                        ) then
                         too_big = true
                     else
                         mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
@@ -1347,6 +1347,77 @@ Bakery_API.Joker {
                     end
                 end
             }
+        end
+    end
+}
+
+Bakery_API.Joker {
+    key = "Awarewolf",
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        h_size = 1,
+        extra = {
+            flipped = false,
+            discards = 0,
+            hands = 1,
+            back_hands = 2,
+            front_pos = {
+                x = 0,
+                y = 4
+            },
+            back_pos = {
+                x = 1,
+                y = 4
+            }
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return { vars = {} }
+        end
+        return {
+            vars = { self.key == "j_Bakery_Awarewolf_Back" and card.ability.extra.back_hands or card.ability.extra.hands }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Awarewolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Awarewolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.pre_discard and not context.blueprint and not context.retrigger_joker then
+            card.ability.extra.discards = card.ability.extra.discards + 1
+        end
+
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+            if (card.ability.extra.flipped and card.ability.extra.discards >= 2) or
+                (not card.ability.extra.flipped and card.ability.extra.discards == 0) then
+                G.hand:change_size(-card.ability.h_size)
+                if card.ability.extra.flipped then
+                    card.ability.h_size = card.ability.extra.hands
+                else
+                    card.ability.h_size = card.ability.extra.back_hands
+                end
+                G.hand:change_size(card.ability.h_size)
+                Bakery_API.flip_double_sided(card)
+            end
+            card.ability.extra.discards = 0
         end
     end
 }
