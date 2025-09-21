@@ -1358,6 +1358,7 @@ Bakery_API.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
+    artist = "SadCube",
     config = {
         h_size = 1,
         extra = {
@@ -1418,6 +1419,105 @@ Bakery_API.Joker {
                 Bakery_API.flip_double_sided(card)
             end
             card.ability.extra.discards = 0
+        end
+    end
+}
+
+Bakery_API.Joker {
+    key = "Warewolf",
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            flipped = false,
+            dollars = 8,
+            front_pos = {
+                x = 2,
+                y = 4
+            },
+            back_pos = {
+                x = 3,
+                y = 4
+            }
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return { vars = {} }
+        end
+        return {
+            vars = { self.key == "j_Bakery_Warewolf_Back" and card.ability.extra.dollars or nil }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Warewolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Warewolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.setting_blind and not card.getting_sliced and not context.blueprint then
+            if not card.ability.extra.flipped then
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = (function()
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    local card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil,
+                                        'j_Bakery_Warewolf')
+                                    card:add_to_deck()
+                                    G.consumeables:emplace(card)
+                                    G.GAME.consumeable_buffer = 0
+                                    return true
+                                end
+                            }))
+                            card_eval_status_text(card, 'extra', nil, nil, nil,
+                                { message = localize('k_plus_tarot'), colour = G.C.PURPLE })
+                            return true
+                        end)
+                    }))
+                    return nil, true
+                else
+                    Bakery_API.flip_double_sided(card)
+                end
+            else
+                local destructible_cards = {}
+                for i = 1, #G.consumeables.cards do
+                    local cons = G.consumeables.cards[i]
+                    if not SMODS.is_eternal(cons) and not cons.getting_sliced then
+                        destructible_cards[#destructible_cards + 1] = cons
+                    end
+                end
+                if #destructible_cards == 0 then
+                    Bakery_API.flip_double_sided(card)
+                else
+                    local destroyed = pseudorandom_element(destructible_cards, pseudoseed('j_Bakery_Warewolf_Back'))
+                    destroyed.getting_sliced = true
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            card:juice_up(0.8, 0.8)
+                            destroyed:start_dissolve({ G.C.RED }, nil, 1.6)
+                            return true
+                        end
+                    }))
+                    ease_dollars(card.ability.extra.dollars)
+                end
+            end
         end
     end
 }

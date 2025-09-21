@@ -161,6 +161,14 @@ return {
             j_Bakery_Awarewolf_Back = {
                 name = "Awarewolf (Night)",
                 text = { "{C:attention}+#1#{} hand size", "{C:attention}Transform{} this Joker", "at end of round", "if {C:attention}2 or more", "{C:attention}discards{} were used" }
+            },
+            j_Bakery_Warewolf = {
+                name = "Warewolf (Day)",
+                text = { "Create a {C:tarot}Tarot{} card", "when {C:attention}Blind{} is selected", "{C:attention}Transform{} this Joker", "instead if no room" }
+            },
+            j_Bakery_Warewolf_Back = {
+                name = "Warewolf (Night)",
+                text = { "{C:red}Destroy{} a {C:attention}random consumable{} and", "earn {C:money}$#1#{} when {C:attention}Blind{} is selected", "{C:attention}Transform{} this Joker", "instead if none exist" }
             }
         },
         Tag = {
