@@ -177,6 +177,14 @@ return {
             j_Bakery_Wherewolf_Back = {
                 name = "Wherewolf (Night)",
                 text = { "Each played {C:attention}#2#{} of {V:1}#3#", "give {X:mult,C:white}X#4#{} Mult when scored", "{C:attention}Transform{} this Joker at end of round", "if no {C:attention}#2#{} of {V:1}#3#{} was scored", "{s:0.8}Card changes every round" }
+            },
+            j_Bakery_Wearywolf = {
+                name = "Wearywolf (Day)",
+                text = { "{C:attention}Transforms{} after", "#1# rounds {C:inactive}[#2#]" }
+            },
+            j_Bakery_Wearywolf_Back = {
+                name = "Wearywolf (Night)",
+                text = { "Prevents Death", "if scored chips", "are at least {C:attention}#3#%", "of required chips", "{C:attention}Transforms" }
             }
         },
         Tag = {
@@ -547,6 +555,7 @@ return {
             k_Bakery_charm = "Charm",
             k_Bakery_charms = "Charms",
             b_Bakery_double_tags = "Double Tags",
+            ph_Bakery_Wearywolf = "Saved by Wearywolf",
             -- KEEP_LITE
             k_bakerycharm = "Charm",
             k_BakeryCharmInfo = { "Only one Charm may be equipped at a time.",

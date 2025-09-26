@@ -568,7 +568,8 @@ Bakery_API.guard(function()
         j_Bakery_Weerewolf = true,
         j_Bakery_Awarewolf = true,
         j_Bakery_Warewolf = true,
-        j_Bakery_Wherewolf = true
+        j_Bakery_Wherewolf = true,
+        j_Bakery_Wearywolf = true
     }
 
     -- Flips a double-sided card.

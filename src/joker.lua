@@ -1629,3 +1629,75 @@ Bakery_API.Joker {
         end
     end
 }
+
+Bakery_API.Joker {
+    key = "Wearywolf",
+    rarity = 2,
+    cost = 5,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            rounds = 3,
+            rounds_remaining = 3,
+            percent = 25,
+            flipped = false,
+            front_pos = {
+                x = 0,
+                y = 5
+            },
+            back_pos = {
+                x = 1,
+                y = 5
+            }
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return { vars = {} }
+        end
+        return {
+            vars = {
+                card.ability.extra.rounds,
+                card.ability.extra.rounds_remaining,
+                card.ability.extra.percent,
+            }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Wearywolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Wearywolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.game_over and context.main_eval and not context.blueprint and not card.ability.extra.flipped then
+            card.ability.extra.rounds_remaining = card.ability.extra.rounds_remaining - 1
+            if card.ability.extra.rounds_remaining == 0 then
+                card.ability.extra.rounds_remaining = card.ability.extra.rounds
+                Bakery_API.flip_double_sided(card)
+            end
+        end
+
+        if context.end_of_round and context.game_over and context.main_eval and card.ability.extra.flipped and G.GAME.chips / G.GAME.blind.chips * 100 >= Bakery_API.big(card.ability.extra.percent) then
+            Bakery_API.flip_double_sided(card)
+            return {
+                message = localize 'k_saved_ex',
+                saved = 'ph_Bakery_Wearywolf',
+                colour = G.C.RED
+            }
+        end
+    end,
+}
