@@ -1420,16 +1420,16 @@ Bakery_API.Joker {
         if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
             if (card.ability.extra.flipped and card.ability.extra.discards >= 2) or
                 (not card.ability.extra.flipped and card.ability.extra.discards == 0) then
-                G.hand:change_size(-card.ability.h_size)
-                if card.ability.extra.flipped then
-                    card.ability.h_size = card.ability.extra.hands
-                else
-                    card.ability.h_size = card.ability.extra.back_hands
-                end
-                G.hand:change_size(card.ability.h_size)
                 Bakery_API.flip_double_sided(card)
             end
             card.ability.extra.discards = 0
+        end
+    end,
+    on_flip = function(self, card, to_back)
+        local old_h = card.ability.h_size
+        card.ability.h_size = to_back and card.ability.extra.back_hands or card.ability.extra.hands
+        if card.area == G.jokers and not card.debuffed then
+            G.hand:change_size(-old_h + card.ability.h_size)
         end
     end
 }
@@ -1595,8 +1595,6 @@ Bakery_API.Joker {
             context.other_card:is_suit(G.GAME.current_round.Bakery_Wherewolf_card.suit) then
             if not context.blueprint then card.ability.extra.played_cards = true end
             if not card.ability.extra.flipped and not card.ability.extra.flipping and not context.blueprint then
-                G.hand:change_size(-card.ability.h_size)
-                card.ability.h_size = 0
                 Bakery_API.flip_double_sided(card)
                 return nil, true
             elseif card.ability.extra.flipped or card.ability.extra.flipping then
@@ -1606,11 +1604,16 @@ Bakery_API.Joker {
 
         if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
             if (card.ability.extra.flipped and not card.ability.extra.played_cards) then
-                card.ability.h_size = card.ability.extra.hands
-                G.hand:change_size(card.ability.h_size)
                 Bakery_API.flip_double_sided(card)
             end
             card.ability.extra.played_cards = false
+        end
+    end,
+    on_flip = function(self, card, to_back)
+        local old_h = card.ability.h_size
+        card.ability.h_size = to_back and 0 or card.ability.extra.hands
+        if card.area == G.jokers and not card.debuffed then
+            G.hand:change_size(-old_h + card.ability.h_size)
         end
     end,
     reset_game_globals = function()
@@ -1686,7 +1689,6 @@ Bakery_API.Joker {
         if context.end_of_round and not context.game_over and context.main_eval and not context.blueprint and not card.ability.extra.flipped then
             card.ability.extra.rounds_remaining = card.ability.extra.rounds_remaining - 1
             if card.ability.extra.rounds_remaining == 0 then
-                card.ability.extra.rounds_remaining = card.ability.extra.rounds
                 Bakery_API.flip_double_sided(card)
             end
         end
@@ -1700,4 +1702,9 @@ Bakery_API.Joker {
             }
         end
     end,
+    on_flip = function(self, card, to_back)
+        if to_back then
+            card.ability.extra.rounds_remaining = card.ability.extra.rounds
+        end
+    end
 }

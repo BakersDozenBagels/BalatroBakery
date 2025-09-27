@@ -1191,6 +1191,50 @@ function create_card(_type, a, l, r, s, o, forced_key, ...)
     return raw_create_card(_type, a, l, r, s, o, forced_key, ...)
 end
 
+Bakery_API.Charm {
+    key = 'FullMoon',
+    pos = { x = 0, y = 4 },
+    atlas = 'Charms',
+    unlocked = false,
+    config = { extra = false },
+    check_for_unlock = function(self, args)
+        if not G.jokers or #G.jokers.cards < 3 then return false end
+
+        local found = 0
+        for _, card in pairs(G.jokers.cards) do
+            if Bakery_API.werewolves[card.config.center.key] then
+                found = found + 1
+                if found >= 3 then
+                    return true
+                end
+            end
+        end
+        return false
+    end,
+    equip = function(self, charm)
+        charm.ability.extra = true
+        for _, card in pairs(G.jokers.cards) do
+            if Bakery_API.werewolves[card.config.center.key] and
+                not card.ability.extra.flipped and
+                not card.ability.extra.flipping then
+                Bakery_API.flip_double_sided(card)
+            end
+        end
+        charm.ability.extra = false
+    end
+}
+
+local raw_Card_set_ability = Card.set_ability
+function Card:set_ability(center, initial, ...)
+    raw_Card_set_ability(self, center, initial, ...)
+
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon' and Bakery_API.werewolves[center.key] then
+        G.Bakery_charm_area.cards[1].ability.extra = true
+        Bakery_API.flip_double_sided(self)
+        G.Bakery_charm_area.cards[1].ability.extra = false
+    end
+end
+
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {
         key = "PrintError",

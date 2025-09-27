@@ -519,6 +519,11 @@ return {
                 name = 'Memento Mori',
                 text = { 'All {C:tarot}Tarot{} cards', 'are {C:attention}#1#' },
                 unlock = { 'Have {C:attention}every{} card in', 'your {C:attention}full deck', 'be identical' }
+            },
+            BakeryCharm_Bakery_FullMoon = {
+                name = 'Full Moon',
+                text = { 'All {C:attention}Werewolves{} are', 'always on the night side' },
+                unlock = { 'Have {C:attention}3 Werewolves' }
             }
             -- KEEP_LITE
         },

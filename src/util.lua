@@ -571,9 +571,35 @@ Bakery_API.guard(function()
         j_Bakery_Wherewolf = true,
         j_Bakery_Wearywolf = true
     }
+    -- Cards affected by Full Moon
+    Bakery_API.werewolves = {
+        j_Bakery_Werewolf = true,
+        j_Bakery_Weerewolf = true,
+        j_Bakery_Awarewolf = true,
+        j_Bakery_Warewolf = true,
+        j_Bakery_Wherewolf = true,
+        j_Bakery_Wearywolf = true
+    }
 
     -- Flips a double-sided card.
     function Bakery_API.flip_double_sided(card)
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon' and not G.Bakery_charm_area.cards[1].ability.extra then
+            G.E_MANAGER:add_event(Event {
+                trigger = 'before',
+                delay = 0.2,
+                func = function()
+                    card:juice_up(0.3, 0.3)
+                    G.Bakery_charm_area.cards[1]:juice_up(0.3, 0.3)
+                    return true
+                end
+            })
+            return
+        end
+
+        if card.config.center.on_flip then
+            card.config.center:on_flip(card, not card.ability.extra.flipped)
+        end
+
         card.ability.extra.flipping = true
         G.E_MANAGER:add_event(Event {
             trigger = 'before',
