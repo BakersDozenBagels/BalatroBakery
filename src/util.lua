@@ -615,6 +615,7 @@ Bakery_API.guard(function()
         G.E_MANAGER:add_event(Event {
             trigger = 'immediate',
             func = function()
+                if card.REMOVED then return true end
                 if card.VT.w <= 0 then
                     card.pinch.x = false
                     card.ability.extra.flipped = not card.ability.extra.flipped
@@ -628,6 +629,7 @@ Bakery_API.guard(function()
             trigger = 'immediate',
             blocking = false,
             func = function()
+                if card.REMOVED then return true end
                 if card.VT.w >= card.T.w then
                     play_sound('tarot2')
                     card:juice_up(0.3, 0.3)
@@ -636,6 +638,26 @@ Bakery_API.guard(function()
                 return false
             end
         })
+    end
+
+    function Bakery_API.werewolf_ui(back_key)
+        return function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+            local key = self.key
+            if card and card.ability.extra.flipped then
+                self.key = back_key
+            end
+            SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+            info_queue[#info_queue + 1] = {
+                generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                    if not card or not card.ability.extra.flipped then
+                        self.key = back_key
+                    end
+                    SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                    self.key = key
+                end
+            }
+            self.key = key
+        end
     end
 
     local raw_Card_draw = Card.draw

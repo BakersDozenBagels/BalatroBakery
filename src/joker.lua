@@ -203,23 +203,7 @@ Bakery_API.Joker {
             vars = { self.key == "j_Bakery_Werewolf_Back" and card.ability.extra.back or card.ability.extra.front }
         }
     end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local key = self.key
-        if card and card.ability.extra.flipped then
-            self.key = "j_Bakery_Werewolf_Back"
-        end
-        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        info_queue[#info_queue + 1] = {
-            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                if not card or not card.ability.extra.flipped then
-                    self.key = "j_Bakery_Werewolf_Back"
-                end
-                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                self.key = key
-            end
-        }
-        self.key = key
-    end,
+    generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Werewolf_Back',
     calculate = function(self, card, context)
         if context.pre_discard and not context.blueprint and not context.retrigger_joker then
             card.ability.extra.discards = card.ability.extra.discards + 1
@@ -1213,23 +1197,7 @@ Bakery_API.Joker {
             vars = { self.key == "j_Bakery_Weerewolf_Back" and card.ability.extra.x_mult or card.ability.extra.mult }
         }
     end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local key = self.key
-        if card and card.ability.extra.flipped then
-            self.key = "j_Bakery_Weerewolf_Back"
-        end
-        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        info_queue[#info_queue + 1] = {
-            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                if not card or not card.ability.extra.flipped then
-                    self.key = "j_Bakery_Weerewolf_Back"
-                end
-                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                self.key = key
-            end
-        }
-        self.key = key
-    end,
+    generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Weerewolf_Back',
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play and context.other_card:get_id() == 2 and not context.blueprint then
             card.ability.extra.twos = true
@@ -1395,23 +1363,7 @@ Bakery_API.Joker {
             vars = { self.key == "j_Bakery_Awarewolf_Back" and card.ability.extra.back_hands or card.ability.extra.hands }
         }
     end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local key = self.key
-        if card and card.ability.extra.flipped then
-            self.key = "j_Bakery_Awarewolf_Back"
-        end
-        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        info_queue[#info_queue + 1] = {
-            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                if not card or not card.ability.extra.flipped then
-                    self.key = "j_Bakery_Awarewolf_Back"
-                end
-                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                self.key = key
-            end
-        }
-        self.key = key
-    end,
+    generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Awarewolf_Back',
     calculate = function(self, card, context)
         if context.pre_discard and not context.blueprint and not context.retrigger_joker then
             card.ability.extra.discards = card.ability.extra.discards + 1
@@ -1463,23 +1415,7 @@ Bakery_API.Joker {
             vars = { self.key == "j_Bakery_Warewolf_Back" and card.ability.extra.dollars or nil }
         }
     end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local key = self.key
-        if card and card.ability.extra.flipped then
-            self.key = "j_Bakery_Warewolf_Back"
-        end
-        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        info_queue[#info_queue + 1] = {
-            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                if not card or not card.ability.extra.flipped then
-                    self.key = "j_Bakery_Warewolf_Back"
-                end
-                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                self.key = key
-            end
-        }
-        self.key = key
-    end,
+    generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Warewolf_Back',
     calculate = function(self, card, context)
         if context.setting_blind and not card.getting_sliced and not context.blueprint then
             if not card.ability.extra.flipped then
@@ -1572,23 +1508,7 @@ Bakery_API.Joker {
             }
         }
     end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local key = self.key
-        if card and card.ability.extra.flipped then
-            self.key = "j_Bakery_Wherewolf_Back"
-        end
-        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        info_queue[#info_queue + 1] = {
-            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                if not card or not card.ability.extra.flipped then
-                    self.key = "j_Bakery_Wherewolf_Back"
-                end
-                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                self.key = key
-            end
-        }
-        self.key = key
-    end,
+    generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Wherewolf_Back',
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play and
             context.other_card:get_id() == G.GAME.current_round.Bakery_Wherewolf_card.id and
@@ -1668,23 +1588,7 @@ Bakery_API.Joker {
             }
         }
     end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local key = self.key
-        if card and card.ability.extra.flipped then
-            self.key = "j_Bakery_Wearywolf_Back"
-        end
-        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        info_queue[#info_queue + 1] = {
-            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                if not card or not card.ability.extra.flipped then
-                    self.key = "j_Bakery_Wearywolf_Back"
-                end
-                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-                self.key = key
-            end
-        }
-        self.key = key
-    end,
+    generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Wearywolf_Back',
     calculate = function(self, card, context)
         if context.end_of_round and not context.game_over and context.main_eval and not context.blueprint and not card.ability.extra.flipped then
             card.ability.extra.rounds_remaining = card.ability.extra.rounds_remaining - 1
