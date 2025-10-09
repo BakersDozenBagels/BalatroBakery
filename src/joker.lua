@@ -1393,6 +1393,7 @@ Bakery_API.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
+    artist = "GhostSalt",
     config = {
         extra = {
             flipped = false,
