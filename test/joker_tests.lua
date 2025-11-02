@@ -2037,6 +2037,147 @@ Balatest.TestPlay {
 }
 --#endregion
 
+--#region 3 of So
+Balatest.TestPlay {
+    name = '3_of_so_no_straight',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '5S', '6S', '8S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 0)
+        Balatest.assert_chips(236)
+    end
+}
+Balatest.TestPlay {
+    name = '3_of_so_straight_unscoring',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '4S', '6S', '8H' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 0)
+        Balatest.assert_chips(13)
+    end
+}
+Balatest.TestPlay {
+    name = '3_of_so_straight',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '4S', '6S', '8S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 2)
+        Balatest.assert_chips(348)
+    end
+}
+Balatest.TestPlay {
+    name = '3_of_so_scaled',
+    category = { 'jokers', '3_of_so' },
+
+    jokers = { 'j_Bakery_3So' },
+    execute = function()
+        Balatest.play_hand { '2S', '3S', '4S', '6S', '8S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 2)
+        Balatest.assert_chips(21)
+    end
+}
+--#endregion
+
+--#region Weerewolf
+Balatest.TestPlay {
+    name = 'weerewolf_front',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(21)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_front_flips',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_front_does_not_flip',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.discard { '3S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_back',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(14)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_back_does_not_flip',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'weerewolf_back_flips',
+    category = { 'jokers', 'weerewolf' },
+
+    jokers = { 'j_Bakery_Weerewolf' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+        Balatest.next_round()
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+--#endregion
+
 --#region Estate
 Balatest.TestPlay {
     name = 'estate',

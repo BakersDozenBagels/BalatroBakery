@@ -742,7 +742,7 @@ Balatest.TestPlay {
         Balatest.skip_blind 'tag_Bakery_TopTag'
     end,
     assert = function()
-        Balatest.assert_eq(G.GAME.dollars, 52)
+        Balatest.assert_eq(G.GAME.dollars, 26)
         Balatest.assert_eq(#G.GAME.tags, 0)
     end
 }
@@ -768,6 +768,21 @@ Balatest.TestPlay {
     no_auto_start = true,
     dollars = 0,
     deck = { cards = { { r = '2', s = 'S' } } },
+    execute = function()
+        Balatest.skip_blind 'tag_Bakery_TopTag'
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 0)
+        Balatest.assert_eq(#G.GAME.tags, 0)
+    end
+}
+Balatest.TestPlay {
+    name = 'top_tag_2',
+    category = { 'tags', 'top_tag' },
+
+    no_auto_start = true,
+    dollars = 0,
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' } } },
     execute = function()
         Balatest.skip_blind 'tag_Bakery_TopTag'
     end,

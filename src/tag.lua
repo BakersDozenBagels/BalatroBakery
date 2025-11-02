@@ -513,13 +513,13 @@ SMODS.Tag {
     min_ante = 4,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { G.deck and #G.deck.cards or 0 }
+            vars = { math.floor(G.deck and #G.deck.cards / 2 or 0) }
         }
     end,
     apply = function(self, tag, context)
         if not tag.triggered then
             tag.triggered = true
-            local amount = G.deck and #G.deck.cards or 0
+            local amount = math.floor(G.deck and #G.deck.cards / 2 or 0)
             tag:yep(localize('$') .. amount, G.C.MONEY, function()
                 ease_dollars(amount)
                 return true

@@ -558,8 +558,13 @@ end
 local raw_five_of_a_kind_modify_display_text = SMODS.PokerHands['Five of a Kind'].modify_display_text
 SMODS.PokerHand:take_ownership("Five of a Kind", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and next(get_X_same(5, scoring_hand, true)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens'
+            and next(get_X_same(5, scoring_hand, true)) then
             return "Bakery_SixOfAKind"
+        end
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree'
+            and #all_suits(3, scoring_hand) >= 1 and #all_suits(2, scoring_hand) >= 2 then
+            return "Bakery_FullFive"
         end
         if raw_five_of_a_kind_modify_display_text then
             return raw_five_of_a_kind_modify_display_text()
@@ -570,8 +575,13 @@ SMODS.PokerHand:take_ownership("Five of a Kind", {
 local raw_flush_five_modify_display_text = SMODS.PokerHands['Flush Five'].modify_display_text
 SMODS.PokerHand:take_ownership("Flush Five", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and next(get_X_same(5, scoring_hand, true)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens'
+            and next(get_X_same(5, scoring_hand, true)) then
             return "Bakery_FlushSix"
+        end
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree'
+            and #all_suits(3, scoring_hand) >= 1 and #all_suits(2, scoring_hand) >= 2 then
+            return "Bakery_FullFlushFive"
         end
         if raw_flush_five_modify_display_text then
             return raw_flush_five_modify_display_text()
@@ -582,7 +592,8 @@ SMODS.PokerHand:take_ownership("Flush Five", {
 local raw_two_pair_modify_display_text = SMODS.PokerHands['Two Pair'].modify_display_text
 SMODS.PokerHand:take_ownership("Two Pair", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #get_X_same(2, scoring_hand, true) >= 2 and
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens'
+            and #get_X_same(2, scoring_hand, true) >= 2 and
             #get_X_same(2, scoring_hand, true) >= 2 then
             return "Bakery_ThreePair"
         end
@@ -591,6 +602,10 @@ SMODS.PokerHand:take_ownership("Two Pair", {
         end
     end
 })
+
+local function default_straight(hand)
+    return get_straight(hand, SMODS.four_fingers(), SMODS.shortcut(), SMODS.wrap_around_straight())
+end
 
 local raw_Flush_House_evaluate = SMODS.PokerHands['Flush House'].evaluate
 local raw_flush_house_modify_display_text = SMODS.PokerHands['Flush House'].modify_display_text
@@ -627,7 +642,7 @@ SMODS.PokerHand:take_ownership("Flush House", {
                 end
             end
         end
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(get_straight(scoring_hand)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(default_straight(scoring_hand)) then
             local royal = true
             for j = 1, #scoring_hand do
                 local rank = SMODS.Ranks[scoring_hand[j].base.value]
@@ -649,7 +664,8 @@ SMODS.PokerHand:take_ownership("Flush House", {
 local raw_flush_modify_display_text = SMODS.PokerHands['Flush'].modify_display_text
 SMODS.PokerHand:take_ownership("Flush", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #scoring_hand == 5 and
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens'
+            and #scoring_hand == 5 and
             #get_X_same(2, scoring_hand, true) >= 2 and next(all_suits(5, scoring_hand)) then
             return "Bakery_FlushThreePair"
         end
@@ -692,7 +708,9 @@ Bakery_API.guard(function()
 end)
 -- END_KEEP_LITE
 function Bakery_API.maximus_full_house_compat(parts, val, flush)
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2 and #parts.Bakery_s_all_pairs[1] >= 5 and (not flush or next(parts._flush)) then
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree'
+        and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2
+        and #parts.Bakery_s_all_pairs[1] >= 5 and (not flush or next(parts._flush)) then
         val = { SMODS.merge_lists(val, parts.Bakery_s_all_pairs) }
     end
     return val
@@ -711,7 +729,7 @@ SMODS.PokerHand:take_ownership("Full House", {
             #get_X_same(2, scoring_hand, true) >= 2 then
             return "Bakery_StuffedHouse"
         end
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(get_straight(scoring_hand)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and next(default_straight(scoring_hand)) then
             return "Bakery_StraightHouse"
         end
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #get_X_same(3, scoring_hand, true) >= 1 and
@@ -733,10 +751,14 @@ Bakery_API.Charm {
     atlas = 'Charms'
 }
 
+local function can_discard_zero()
+    return G.GAME.current_round.discards_left > 0 and #G.hand.highlighted <= 0 and
+        (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Rune' or G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession')
+end
+
 local raw_G_FUNCS_can_discard = G.FUNCS.can_discard
 function G.FUNCS.can_discard(e)
-    if G.GAME.current_round.discards_left > 0 and #G.hand.highlighted <= 0 and
-        (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Rune' or G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession') then
+    if can_discard_zero() then
         e.config.colour = G.C.RED
         e.config.button = 'Bakery_discard_zero'
     else
@@ -747,6 +769,8 @@ end
 sendInfoMessage("G.FUNCS.can_discard() patched. Reason: Discarding zero cards", "Bakery")
 
 G.FUNCS.Bakery_discard_zero = function(e)
+    if not can_discard_zero() then return end
+
     stop_use()
     G.CONTROLLER.interrupt.focus = true
     G.CONTROLLER:save_cardarea_focus('hand')
@@ -816,7 +840,7 @@ Bakery_API.Charm {
         }
     end,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == 'unscored' then
+        if not card.debuff and context.individual and context.cardarea == 'unscored' then
             juice_card(card)
             return {
                 x_mult = card.ability.extra.xmult,
@@ -870,8 +894,9 @@ local juicing = false
 local raw_Game_update_draw_to_hand = Game.update_draw_to_hand
 function Game:update_draw_to_hand(dt)
     local function condition()
-        juicing = (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession' or G.GAME.Bakery_charm ==
-                'BakeryCharm_Bakery_Rune') and G.GAME.current_round and G.GAME.current_round.discards_left > 0 and
+        juicing = (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession' or G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Rune')
+            and G.GAME.current_round and
+            G.GAME.current_round.discards_left > 0 and
             G.STATE ~= G.STATES.ROUND_EVAL
         return juicing
     end
@@ -881,7 +906,7 @@ function Game:update_draw_to_hand(dt)
     raw_Game_update_draw_to_hand(self, dt)
 end
 
-sendInfoMessage("Game:update_draw_to_hand() patched. Reason: Discard zero Charms juice")
+sendInfoMessage("Game:update_draw_to_hand() patched. Reason: Discard zero Charms juice", "Bakery")
 
 Bakery_API.Charm {
     key = "Obsession",
@@ -1010,6 +1035,162 @@ Bakery_API.Charm {
     end
 }
 
+Bakery_API.Charm {
+    key = "PetriDish",
+    pos = { x = 0, y = 3 },
+    atlas = 'Charms',
+    unlocked = false,
+    config = {
+        extra = 2
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra } }
+    end,
+    locked_loc_vars = function()
+        return {
+            vars = {
+                G.P_CENTERS.j_perkeo.discovered and localize {
+                    type = 'name_text',
+                    key = 'j_perkeo',
+                    set = "Joker"
+                } or localize('k_unknown'),
+                G.P_CENTERS.c_Bakery_Scribe.discovered and localize {
+                    type = 'name_text',
+                    key = 'c_Bakery_Scribe',
+                    set = "Tarot"
+                } or localize('k_unknown')
+            }
+        }
+    end,
+    check_for_unlock = function(self, args)
+        return args.type == 'Bakery_Scribe_Joker' and args.key == 'j_perkeo'
+    end,
+    equip = function(self, card)
+        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra
+    end,
+    unequip = function(self, card)
+        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra
+    end
+}
+
+Bakery_API.Charm {
+    key = 'Cogwheel',
+    pos = { x = 1, y = 3 },
+    atlas = 'Charms',
+    unlocked = false,
+    config = { extra = { antes = 2, cards = 1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.antes, card.ability.extra.cards } }
+    end,
+    locked_loc_vars = function()
+        return { vars = { 16 } }
+    end,
+    check_for_unlock = function(self, args)
+        return G.GAME.round_resets.ante > 16
+    end,
+    equip = function(self, card)
+        ease_ante(-card.ability.extra.antes)
+        G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+        G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - card.ability.extra.antes
+        change_shop_size(-card.ability.extra.cards)
+    end,
+    unequip = function(self, card)
+        ease_ante(card.ability.extra.antes)
+        G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+        G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante + card.ability.extra.antes
+        change_shop_size(card.ability.extra.cards)
+    end
+}
+
+Bakery_API.Charm {
+    key = 'OopsAll20s',
+    pos = { x = 2, y = 3 },
+    atlas = 'Charms',
+    calculate = function(self, card, context)
+        if context.mod_probability then
+            return { numerator = context.numerator * 3 }
+        end
+    end,
+}
+
+Bakery_API.Charm {
+    key = 'Fortuna',
+    pos = { x = 3, y = 3 },
+    atlas = 'Charms',
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.c_wheel_of_fortune
+        return {
+            vars = {
+                localize {
+                    type = 'name_text',
+                    key = 'c_wheel_of_fortune',
+                    set = "Tarot"
+                },
+                localize {
+                    type = 'name_text',
+                    key = 'e_foil',
+                    set = "Edition"
+                },
+                localize {
+                    type = 'name_text',
+                    key = 'e_holo',
+                    set = "Edition"
+                },
+            }
+        }
+    end
+}
+
+Bakery_API.Charm {
+    key = 'MementoMori',
+    pos = { x = 4, y = 3 },
+    atlas = 'Charms',
+    unlocked = false,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.c_death
+        return {
+            vars = {
+                localize {
+                    type = 'name_text',
+                    key = 'c_death',
+                    set = "Tarot"
+                }
+            }
+        }
+    end,
+    check_for_unlock = function(self, args)
+        if not G.playing_cards or #G.playing_cards < 2 then return false end
+
+        local ignored = { played_this_ante = true, times_played = true, suit_nominal_original = true }
+        local function eq(a, b)
+            if type(a) ~= type(b) then return false end
+            if type(a) ~= "table" then return a == b end
+            for k, v in pairs(a) do
+                if not ignored[k] and not eq(v, b[k]) then return false end
+            end
+            return true
+        end
+
+        for _, card in pairs(G.playing_cards) do
+            if not eq(card.ability, G.playing_cards[1].ability) or
+                not eq(card.base, G.playing_cards[1].base) or
+                not eq(card.edition, G.playing_cards[1].edition) or
+                card.seal ~= G.playing_cards[1].seal then
+                return false
+            end
+        end
+        return true
+    end
+}
+
+local raw_create_card = create_card
+function create_card(_type, a, l, r, s, o, forced_key, ...)
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MementoMori' and _type == 'Tarot' then
+        return raw_create_card(_type, a, l, r, s, o, 'c_death', ...)
+    end
+    return raw_create_card(_type, a, l, r, s, o, forced_key, ...)
+end
+
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {
         key = "PrintError",
@@ -1090,7 +1271,8 @@ if next(SMODS.find_mod "MoreFluff") then
     local raw_CardArea_emplace = CardArea.emplace
     function CardArea:emplace(card, ...)
         local ret = { raw_CardArea_emplace(self, card, ...) }
-        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' and card and card.config.center and card.config.center.set == 'Colour' then
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization'
+            and card and card.config.center and card.config.center.set == 'Colour' then
             self.config.card_limit = self.config.card_limit + 0.5
         end
         return unpack(ret)
@@ -1099,7 +1281,8 @@ if next(SMODS.find_mod "MoreFluff") then
     local raw_CardArea_remove_card = CardArea.remove_card
     function CardArea:remove_card(card, ...)
         local ret = { raw_CardArea_remove_card(self, card, ...) }
-        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' and card and card.config.center and card.config.center.set == 'Colour' then
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization'
+            and card and card.config.center and card.config.center.set == 'Colour' then
             self.config.card_limit = self.config.card_limit - 0.5
         end
         return unpack(ret)
@@ -1122,7 +1305,8 @@ if next(SMODS.find_mod "MoreFluff") then
 
     local raw_CardArea_draw = CardArea.draw
     function CardArea:draw()
-        if self.children.area_uibox and G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' then
+        if self.children.area_uibox and G.GAME
+            and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' then
             local el = self.children.area_uibox:get_UIE_by_ID 'Bakery_card_limit_text'
             if el then el.config.ref_value = 'Bakery_visual_card_limit' end
             local x = 0
@@ -1198,6 +1382,62 @@ if next(SMODS.find_mod 'Cryptid') then
     SMODS.Rarity:take_ownership("Uncommon", {
         get_weight = function(...)
             return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
+        end
+    })
+end
+
+if next(SMODS.find_mod 'GARBPACK') then -- Garbshit
+    Bakery_API.credit(Bakery_API.Charm {
+        key = 'Virus',
+        pos = {
+            x = 4,
+            y = 2
+        },
+        atlas = 'Charms',
+        artist = 'Jack5',
+        coder = 'Jack5',
+        idea = 'Jack5',
+        unlocked = false,
+        loc_vars = function(self, info_queue, card)
+            info_queue[#info_queue + 1] = G.P_CENTERS['m_garb_infected']
+        end,
+        calculate = function(self, card, context)
+            if context.after and not card.debuff and #G.hand.cards >= 1 then
+                local uninfected_cards = {}
+                for i = 1, #G.hand.cards do
+                    if G.hand.cards[i].ability.name ~= 'm_garb_infected' then
+                        table.insert(uninfected_cards, G.hand.cards[i])
+                    end
+                end
+                if #uninfected_cards == 0 then
+                    return
+                end
+                local infect_card = pseudorandom_element(uninfected_cards, pseudoseed('TrashHumor'))
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0,
+                    func = function()
+                        infect_card:set_ability(G.P_CENTERS['m_garb_infected'])
+                        infect_card.justinfected = true -- Unused, also set by Garbshit
+                        play_sound('garb_infect', 0.9 + math.random() * 0.1, 0.8)
+                        G.Bakery_charm_area.cards[1]:juice_up(0.3, 0.4)
+                        infect_card:juice_up(0.3, 0.4)
+                        return true
+                    end
+                }))
+                delay(0.6)
+                return
+            end
+        end,
+        check_for_unlock = function(self, args)
+            if G.playing_cards and #G.playing_cards >= 1 then
+                for i = 1, #G.playing_cards do
+                    if G.playing_cards[i].ability.name ~= 'm_garb_infected' then
+                        return false
+                    end
+                end
+                return true
+            end
         end
     })
 end

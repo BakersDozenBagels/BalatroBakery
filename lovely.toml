@@ -241,6 +241,39 @@ else
 end
 if true then return Bakery_API.maximus_full_house_compat(parts, val) end
 """
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Maximus "items/jokers/perspective.lua"]'
+pattern = "if #parts._3 < 1 or #parts._2 < 2 or #hand < 5 then return {} end"
+position = "at"
+match_indent = true
+times = 1
+payload = """
+local val = {}
+if #parts._3 < 1 or #parts._2 < 2 or #hand < 5 then
+  val = {}
+else
+  val = parts._all_pairs
+end
+if true then return Bakery_API.maximus_full_house_compat(parts, val) end
+"""
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS GSPhanta "items/Misc.lua"]'
+pattern = "if (#parts._3 < 1 and not (G.GAME.selected_partner == \"pnr_phanta_conspiracist\" and next(SMODS.find_card(\"j_phanta_conspiracist\")))) or #parts._2 < 2 then return {} end"
+position = "at"
+match_indent = true
+times = 1
+payload = """
+local val = {}
+if (#parts._3 < 1 and not (G.GAME.selected_partner == \"pnr_phanta_conspiracist\" and next(SMODS.find_card(\"j_phanta_conspiracist\")))) or #parts._2 < 2 then
+  val = {}
+else
+  val = parts._all_pairs
+end
+if true then return Bakery_API.maximus_full_house_compat(parts, val) end
+"""
 
 # Mystes' Open Jokers Compatibility
 [[patches]]
@@ -326,5 +359,27 @@ target = '=[SMODS Cryptid "lib/ascended.lua"]'
 pattern = '''["Pair"] = G.GAME.used_vouchers.v_cry_hyperspacetether and 2 or nil,'''
 position = 'at'
 payload = '''["Pair"] = (G.GAME.used_vouchers.v_cry_hyperspacetether or (G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Marm')) and 2 or nil,'''
+match_indent = true
+times = 1
+
+# Debuff charms (The Stoic blind)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '--add new debuffs'
+position = 'after'
+payload = '''for _, v in ipairs(G.Bakery_charm_area.cards) do
+    self:debuff_card(v)
+end'''
+match_indent = true
+times = 1
+
+# Oops! All 20s
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = "_options = { 'e_negative', 'e_polychrome', 'e_holo', 'e_foil' }"
+position = 'after'
+payload = "if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Fortuna' then _options = { 'e_negative', 'e_polychrome' } end"
 match_indent = true
 times = 1

@@ -632,7 +632,7 @@ Bakery_API.Joker {
     },
     blueprint_compat = true,
     eternal_compat = true,
-    perishable_compat = true,
+    perishable_compat = false,
     loc_vars = function(self, info_queue, card)
         return {
             vars = { card.ability.extra.mult_gain, card.ability.extra.mult }
@@ -1123,6 +1123,163 @@ function Card:start_dissolve()
 end
 
 sendInfoMessage("Card:start_dissolve() patched. Reason: Glass Cannon shatters", "Bakery")
+
+local function has_straight(cards, len)
+    return next(get_straight(cards, len, SMODS.shortcut(), SMODS.wrap_around_straight()))
+end
+
+Bakery_API.Joker {
+    key = '3So',
+    pos = {
+        x = 4,
+        y = 3
+    },
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = false,
+    config = {
+        extra = {
+            mult = 0,
+            d_mult = 2,
+            len = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.d_mult, card.ability.extra.len, card.ability.extra.mult } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint and has_straight(context.scoring_hand, card.ability.extra.len) then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.d_mult
+            return {
+                message = '+' .. (card.ability.extra.d_mult),
+                colour = G.C.RED,
+                card = card
+            }
+        end
+
+        if context.joker_main and card.ability.extra.mult > 0 then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+    end
+}
+
+Bakery_API.Joker {
+    key = "Weerewolf",
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    artist = "SadCube",
+    config = {
+        extra = {
+            flipped = false,
+            twos = false,
+            mult = 2,
+            x_mult = 2,
+            front_pos = {
+                x = 3,
+                y = 0
+            },
+            back_pos = {
+                x = 4,
+                y = 0
+            }
+        }
+    },
+    display_size = { h = 95 * 0.7, w = 71 * 0.7 },
+    loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return {
+                vars = {}
+            }
+        end
+        return {
+            vars = { self.key == "j_Bakery_Weerewolf_Back" and card.ability.extra.x_mult or card.ability.extra.mult }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Weerewolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Weerewolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() == 2 and not context.blueprint then
+            card.ability.extra.twos = true
+        end
+
+        if context.joker_main then
+            return card.ability.extra.flipped and
+                { x_mult = card.ability.extra.x_mult } or
+                { mult = card.ability.extra.mult }
+        end
+
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+            if card.ability.extra.flipped ~= card.ability.extra.twos then
+                Bakery_API.flip_double_sided(card)
+            end
+            card.ability.extra.twos = false
+        end
+    end
+}
+
+Bakery_API.Joker {
+    key = "Lua",
+    rarity = 2,
+    cost = 8,
+    pos = {
+        x = 5,
+        y = 3
+    },
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            x_mult = 0.2,
+            concat_mult = "2",
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.x_mult, card.ability.extra.concat_mult } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                x_mult = card.ability.extra.x_mult,
+                func = function()
+                    mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
+                    if Talisman then
+                        mult = to_big(mult)
+                    else
+                        mult = tonumber(mult)
+                    end
+                    mult = mod_mult(mult)
+
+                    update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
+                    card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
+                        { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"' })
+                end
+            }
+        end
+    end
+}
 
 Bakery_API.Joker {
     key = "Estate",

@@ -56,7 +56,7 @@ Balatest.TestPlay {
 --#region Anaglyph Lens
 Balatest.TestPlay {
     name = 'anaglyph_lens_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
         equip 'BakeryCharm_Bakery_AnaglyphLens'
@@ -70,7 +70,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_stone',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S', e = 'm_stone' } } },
     execute = function()
@@ -85,7 +85,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_four',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
         equip 'BakeryCharm_Bakery_AnaglyphLens'
@@ -99,7 +99,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_four_plus_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
         equip 'BakeryCharm_Bakery_AnaglyphLens'
@@ -113,7 +113,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_five',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H' }, { r = '2', s = 'C' }, { r = '2', s = 'D' } } },
     execute = function()
@@ -128,7 +128,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_four_plus_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'C' } } },
     execute = function()
@@ -143,7 +143,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_four_plus_one_alt',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'S' } } },
     execute = function()
@@ -158,7 +158,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_four_plus_one_alt2',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'C', e = 'm_stone' } } },
     execute = function()
@@ -173,7 +173,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_five',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' } } },
     execute = function()
@@ -188,7 +188,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_three_pair',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'C' }, { r = '4', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -203,7 +203,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_three_pair',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'S' }, { r = '4', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -218,7 +218,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_three_pair_alt',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'S' }, { r = '4', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -233,7 +233,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_two_triplets',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'D' }, { r = '9', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -248,7 +248,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_two_triplets',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -263,7 +263,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_mansion',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -278,7 +278,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_house',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -293,7 +293,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_house_plus_one',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -308,7 +308,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
     name = 'anaglyph_lens_flush_house_plus_one_alt',
-    category = { 'charms', 'anaglyph lens' },
+    category = { 'charms', 'anaglyph_lens' },
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D', e = 'm_stone' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
@@ -425,6 +425,36 @@ Balatest.TestPlay {
         local _, _, _, scoring_hand, hand_name = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
         Balatest.assert_eq(#scoring_hand, 5)
         Balatest.assert(hand_name == 'Bakery_RoyalFlushHouse')
+    end
+}
+Balatest.TestPlay {
+    name = 'pedigree_full_five',
+    category = { 'charms', 'pedigree' },
+
+    deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H' }, { r = '2', s = 'H' }, { r = '2', s = 'H' } } },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Pedigree'
+        Balatest.highlight { '2S', '2S', '2H', '2H', '2H' }
+    end,
+    assert = function()
+        local _, _, _, scoring_hand, hand_name = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+        Balatest.assert_eq(#scoring_hand, 5)
+        Balatest.assert(hand_name == 'Bakery_FullFive')
+    end
+}
+Balatest.TestPlay {
+    name = 'pedigree_full_flush_five',
+    category = { 'charms', 'pedigree' },
+
+    deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H', e = 'm_wild' }, { r = '2', s = 'H', e = 'm_wild' }, { r = '2', s = 'H', e = 'm_wild' } } },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Pedigree'
+        Balatest.highlight { '2S', '2S', '2H', '2H', '2H' }
+    end,
+    assert = function()
+        local _, _, _, scoring_hand, hand_name = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+        Balatest.assert_eq(#scoring_hand, 5)
+        Balatest.assert(hand_name == 'Bakery_FullFlushFive')
     end
 }
 --#endregion
@@ -918,3 +948,357 @@ if next(SMODS.find_mod 'Cryptid') then
     }
     --#endregion
 end
+
+if next(SMODS.find_mod 'GARBPACK') then -- Garbshit
+    --#region Virus
+    Balatest.TestPlay {
+        name = 'virus',
+        category = { 'charms', 'virus', 'garbshit' },
+
+        deck = { cards = {
+            { r = '5', s = 'D' },
+            { r = 'A', s = 'S' }
+        } },
+        execute = function()
+            equip 'BakeryCharm_Bakery_Virus'
+            Balatest.play_hand { '5D' }
+            Balatest.wait_for_input()
+        end,
+        assert = function()
+            Balatest.assert_eq(#G.hand.cards, 1)
+            Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
+        end
+    }
+    Balatest.TestPlay {
+        name = 'virus_enhanced',
+        category = { 'charms', 'virus', 'garbshit' },
+
+        deck = { cards = {
+            { r = '5', s = 'D', e = 'm_wild' },
+            { r = 'A', s = 'S', e = 'm_wild' }
+        } },
+        execute = function()
+            equip 'BakeryCharm_Bakery_Virus'
+            Balatest.play_hand { '5D' }
+            Balatest.wait_for_input()
+        end,
+        assert = function()
+            Balatest.assert_eq(#G.hand.cards, 1)
+            Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
+        end
+    }
+    Balatest.TestPlay {
+        name = 'virus_infected',
+        category = { 'charms', 'virus', 'garbshit' },
+
+        deck = { cards = {
+            { r = '5', s = 'D', e = 'm_garb_infected' },
+            { r = 'A', s = 'S', e = 'm_garb_infected' }
+        } },
+        execute = function()
+            equip 'BakeryCharm_Bakery_Virus'
+            Balatest.play_hand { '5D' }
+            Balatest.wait_for_input()
+        end,
+        assert = function()
+            Balatest.assert_eq(#G.hand.cards, 1)
+            Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
+        end
+    }
+    Balatest.TestPlay {
+        name = 'virus_no_cards',
+        category = { 'charms', 'virus', 'garbshit' },
+
+        jokers = { 'j_joker', 'j_joker', 'j_cavendish' },
+        deck = { cards = {
+            { r = 'A', s = 'D' },
+        } },
+        execute = function()
+            equip 'BakeryCharm_Bakery_Virus'
+            Balatest.play_hand { 'AD' }
+            Balatest.wait_for_input()
+        end,
+        assert = function()
+            Balatest.assert_eq(#G.hand.cards, 0)
+        end
+    }
+    --#endregion
+end
+
+--#region Petri Dish
+Balatest.TestPlay {
+    name = 'petri_dish_equip',
+    category = { 'charms', 'petri_dish' },
+
+    execute = function()
+        equip 'BakeryCharm_Bakery_PetriDish'
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 4)
+    end
+}
+Balatest.TestPlay {
+    name = 'petri_dish_unequip',
+    category = { 'charms', 'petri_dish' },
+
+    execute = function()
+        equip 'BakeryCharm_Bakery_PetriDish'
+        equip 'BakeryCharm_Bakery_Coin'
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'petri_dish_debuff',
+    category = { 'charms', 'petri_dish', 'stoic' },
+
+    blind = 'bl_Bakery_Lammed',
+    no_auto_start = true,
+    execute = function()
+        equip 'BakeryCharm_Bakery_PetriDish'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'petri_dish_undebuff',
+    category = { 'charms', 'petri_dish', 'stoic' },
+
+    blind = 'bl_Bakery_Lammed',
+    no_auto_start = true,
+    execute = function()
+        equip 'BakeryCharm_Bakery_PetriDish'
+        Balatest.start_round()
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 4)
+    end
+}
+--#endregion
+
+--#region Cogwheel
+Balatest.TestPlay {
+    name = 'cogwheel',
+    category = { 'charms', 'cogwheel' },
+
+    execute = function()
+        Balatest.end_round()
+        Balatest.cash_out()
+        equip 'BakeryCharm_Bakery_Cogwheel'
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.round_resets.ante, -1)
+        Balatest.assert_eq(G.shop_jokers.config.card_limit, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'cogwheel_unequip',
+    category = { 'charms', 'cogwheel' },
+
+    execute = function()
+        Balatest.end_round()
+        Balatest.cash_out()
+        equip 'BakeryCharm_Bakery_Cogwheel'
+        equip 'BakeryCharm_Bakery_Coin'
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.round_resets.ante, 1)
+        Balatest.assert_eq(G.GAME.shop.joker_max, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'cogwheel_debuff',
+    category = { 'charms', 'cogwheel', 'blinds', 'stoic' },
+
+    blind = 'bl_Bakery_Lammed',
+    execute = function()
+        Balatest.end_round()
+        Balatest.cash_out()
+        equip 'BakeryCharm_Bakery_Cogwheel'
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.round_resets.ante, 2)
+        Balatest.assert_eq(G.GAME.shop.joker_max, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'cogwheel_undebuff',
+    category = { 'charms', 'cogwheel', 'blinds', 'stoic' },
+
+    blind = 'bl_Bakery_Lammed',
+    execute = function()
+        Balatest.end_round()
+        Balatest.cash_out()
+        equip 'BakeryCharm_Bakery_Cogwheel'
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.end_round()
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.round_resets.ante, 1)
+        Balatest.assert_eq(G.GAME.shop.joker_max, 1)
+    end
+}
+--#endregion
+
+--#region Oops! All 20s
+Balatest.TestPlay {
+    name = 'oops_all_20s_business_card',
+    category = { 'charms', 'oops_all_20s' },
+
+    jokers = { 'j_business' },
+    dollars = 8,
+    execute = function()
+        equip 'BakeryCharm_Bakery_OopsAll20s'
+        Balatest.play_hand { 'KS', 'QS', 'JS', 'AS', 'TS' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 6)
+    end
+}
+Balatest.TestPlay {
+    name = 'oops_all_20s_6_banana',
+    category = { 'charms', 'oops_all_20s' },
+
+    jokers = { 'j_oops', 'j_gros_michel', 'j_gros_michel', 'j_gros_michel', 'j_gros_michel' },
+    dollars = 8,
+    execute = function()
+        equip 'BakeryCharm_Bakery_OopsAll20s'
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 1)
+    end
+}
+--#endregion
+
+--#region Fortuna
+Balatest.TestPlay {
+    name = 'fortuna',
+    category = { 'charms', 'fortuna' },
+
+    jokers = { 'j_oops', 'j_oops', 'j_joker', 'j_joker', 'j_joker' },
+    consumeables = { 'c_wheel_of_fortune', 'c_wheel_of_fortune', 'c_wheel_of_fortune', 'c_wheel_of_fortune', 'c_wheel_of_fortune' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Fortuna'
+        for i = 1, 5 do
+            Balatest.use(G.consumeables.cards[i])
+        end
+    end,
+    assert = function()
+        for i = 1, 5 do
+            Balatest.assert(G.jokers.cards[i].edition.key == 'e_polychrome')
+        end
+    end
+}
+--#endregion
+
+--#region Memento Mori
+Balatest.TestPlay {
+    name = 'memento_mori_shop',
+    category = { 'charms', 'memento_mori' },
+
+    execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.q(function()
+            G.GAME.joker_rate = 0
+            G.GAME.planet_rate = 0
+        end)
+        Balatest.end_round()
+        Balatest.cash_out()
+    end,
+    assert = function()
+        Balatest.assert(G.shop_jokers.cards[1].config.center.key == 'c_death')
+        Balatest.assert(G.shop_jokers.cards[2].config.center.key == 'c_death')
+    end
+}
+Balatest.TestPlay {
+    name = 'memento_mori_pack',
+    category = { 'charms', 'memento_mori' },
+
+    execute = function()
+        Balatest.hook(_G, 'Card', function(orig, a, b, c, d, e, center, f, ...)
+            if center.set == 'Booster' then
+                return orig(a, b, c, d, e, G.P_CENTERS.p_arcana_jumbo_1, f, ...)
+            end
+            return orig(a, b, c, d, e, center, f, ...)
+        end)
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[1] end)
+    end,
+    assert = function()
+        for i = 1, 5 do
+            Balatest.assert(G.pack_cards.cards[i].config.center.key == 'c_death')
+        end
+    end
+}
+Balatest.TestPlay {
+    name = 'memento_mori_cartomancer',
+    category = { 'charms', 'memento_mori' },
+
+    no_auto_start = true,
+    jokers = { 'j_cartomancer' },
+    execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.key == 'c_death')
+    end
+}
+Balatest.TestPlay {
+    name = 'memento_mori_vagabond_stoic',
+    category = { 'charms', 'memento_mori', 'blinds', 'stoic' },
+
+    jokers = { 'j_vagabond' },
+    dollars = 0,
+    blind = 'bl_Bakery_Lammed',
+    no_auto_start = true,
+    execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
+            if key == 'c_death' then
+                return orig(a, b, c, d, e, f, 'c_strength', ...)
+            end
+            return orig(a, b, c, d, e, f, key, ...)
+        end)
+        equip 'BakeryCharm_Bakery_MementoMori'
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+        Balatest.play_hand { '2H' }
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.key ~= 'c_death')
+        Balatest.assert(G.consumeables.cards[2].config.center.key ~= 'c_death')
+    end
+}
+--#endregion

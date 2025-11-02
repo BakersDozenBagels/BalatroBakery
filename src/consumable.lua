@@ -209,6 +209,8 @@ Bakery_API.credit(SMODS.Consumable {
                             _card:set_eternal(nil)
                             _card:add_to_deck()
                             G.jokers:emplace(_card)
+
+                            check_for_unlock { type = 'Bakery_Scribe_Joker', key = copied.config.center.key }
                         end
                     end
                 end
@@ -219,3 +221,73 @@ Bakery_API.credit(SMODS.Consumable {
         }))
     end
 })
+
+SMODS.Consumable {
+    key = 'Boids',
+    set = 'Spectral',
+    atlas = "BakeryConsumables",
+    pos = {
+        x = 3,
+        y = 0
+    },
+    cost = 6,
+    config = {
+        extra = {
+            cards = 5
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { card.ability.extra.cards }
+        }
+    end,
+    use = function(self, card, area, copier)
+        local front = pseudorandom_element(G.P_CARDS, pseudoseed 'c_Bakery_Boids')
+        G.E_MANAGER:add_event(Event {
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound 'tarot1'
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        })
+        for i = 1, #Bakery_API.get_highlighted() do
+            local percent = 1.15 - (i - 0.999) / (#Bakery_API.get_highlighted() - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.15, func = function()
+                Bakery_API.get_highlighted()[i]:flip(); play_sound('card1', percent); Bakery_API.get_highlighted()[i]
+                    :juice_up(0.3, 0.3); return true
+            end })
+        end
+        delay(0.2)
+        for i = 1, #Bakery_API.get_highlighted() do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    local card = Bakery_API.get_highlighted()[i]
+                    card:set_base(front)
+                    return true
+                end
+            }))
+        end
+        for i = 1, #Bakery_API.get_highlighted() do
+            local percent = 0.85 + (i - 0.999) / (#Bakery_API.get_highlighted() - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.15, func = function()
+                Bakery_API.get_highlighted()[i]:flip(); play_sound('tarot2', percent, 0.6); Bakery_API.get_highlighted()
+                    [i]:juice_up(0.3, 0.3); return true
+            end })
+        end
+        G.E_MANAGER:add_event(Event {
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                Bakery_API.unhighlight_all(); return true
+            end
+        })
+        delay(0.5)
+    end,
+    can_use = function(self, card)
+        return #Bakery_API.get_highlighted() > 0 and #Bakery_API.get_highlighted() <= card.ability.extra.cards
+    end
+}

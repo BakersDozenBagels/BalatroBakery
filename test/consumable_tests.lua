@@ -399,3 +399,80 @@ Balatest.TestPlay {
     end
 }
 --#endregion Astrology
+
+--#region Boids
+Balatest.TestPlay {
+    name = 'boids_can_use_no_cards',
+    category = { 'consumeables', 'boids' },
+
+    consumeables = { 'c_Bakery_Boids' },
+    execute = function() end,
+    assert = function()
+        Balatest.assert(not G.consumeables.cards[1]:can_use_consumeable())
+    end
+}
+Balatest.TestPlay {
+    name = 'boids_can_use_one_card',
+    category = { 'consumeables', 'boids' },
+
+    consumeables = { 'c_Bakery_Boids' },
+    execute = function()
+        Balatest.highlight { '2S' }
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1]:can_use_consumeable())
+    end
+}
+Balatest.TestPlay {
+    name = 'boids_can_use_five_cards',
+    category = { 'consumeables', 'boids' },
+
+    consumeables = { 'c_Bakery_Boids' },
+    execute = function()
+        Balatest.highlight { '2S', '3S', '4S', '5S', '6S' }
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1]:can_use_consumeable())
+    end
+}
+Balatest.TestPlay {
+    name = 'boids_use_one_card',
+    category = { 'consumeables', 'boids' },
+
+    consumeables = { 'c_Bakery_Boids' },
+    deck = { cards = { { r = '2', s = 'S' } } },
+    execute = function()
+        Balatest.hook(_G, 'pseudorandom_element', function(orig, target, ...)
+            if target == G.P_CARDS then return G.P_CARDS.C_K end
+            return orig(target, ...)
+        end)
+        Balatest.highlight { '2S' }
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert(G.hand.cards[1].base.suit == 'Clubs')
+        Balatest.assert(G.hand.cards[1].base.value == 'King')
+    end
+}
+Balatest.TestPlay {
+    name = 'boids_use_five_cards',
+    category = { 'consumeables', 'boids' },
+
+    consumeables = { 'c_Bakery_Boids' },
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' }, { r = '4', s = 'S' }, { r = '5', s = 'S' }, { r = '6', s = 'S' } } },
+    execute = function()
+        Balatest.hook(_G, 'pseudorandom_element', function(orig, target, ...)
+            if target == G.P_CARDS then return G.P_CARDS.C_K end
+            return orig(target, ...)
+        end)
+        Balatest.highlight { '2S', '3S', '4S', '5S', '6S' }
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        for i = 1, 5 do
+            Balatest.assert(G.hand.cards[i].base.suit == 'Clubs')
+            Balatest.assert(G.hand.cards[i].base.value == 'King')
+        end
+    end
+}
+--#endregion
