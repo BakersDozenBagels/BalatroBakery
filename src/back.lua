@@ -331,64 +331,12 @@ function SMODS.pseudorandom_probability(...)
     return result
 end
 
----Checks if the Dominion Deck should be unlocked based on the following condition:
----Have at least 3 of any one Joker
----@return boolean
-local function check_for_unlock_dominion()
-    if G.jokers and G.jokers.cards and #G.jokers.cards >= 3 then
-        local joker_key_counts = {}
-        for _, joker in ipairs(G.jokers.cards) do
-            joker_key_counts[joker.config.center.key] = (
-                joker_key_counts[joker.config.center.key] or 0
-            ) + 1
-            if joker_key_counts[joker.config.center.key] >= 3 then
-                return true
-            end
-        end
-    end
-    return false
-end
 local function is_double_dominion()
     return G.GAME.selected_sleeve == 'sleeve_Bakery_Dominion' and (
         (G.GAME.selected_back_key and G.GAME.selected_back_key.key) or
         G.GAME.selected_back.key) == 'b_Bakery_Dominion'
 end
----Applies the initial effects of the Dominion Deck and Sleeve, those being:
----Start with -3 hand size and 3 Estate Jokers
----@param obj any The Dominion Deck or Sleeve object (self).
-local function apply_dominion(obj)
-    G.E_MANAGER:add_event(Event({
-        func = function()
-            G.hand:change_size(-obj.config.hand_size_penalty)
-            for _ = 1, obj.config.joker_count do
-                local joker = create_card(
-                    "Joker", nil, nil, nil, nil, nil, obj.config.joker
-                )
-                G.jokers:emplace(joker)
-            end
-            return true
-        end
-    }))
-end
----Updates the game state when playing with the Dominion Deck or Sleeve, but only if not together, doing the following:
----+1 hand size every 2 Antes
----@param obj any The Dominion Deck or Sleeve object (self).
-local function calculate_dominion(obj)
-    if not is_double_dominion() and G.GAME.round_resets.ante > obj.config.extra.highest_ante_yet then
-        -- Ensure that this triggers for all Antes that haven't triggered yet
-        local period_triggers = 0
-        for i = obj.config.extra.highest_ante_yet + 1, G.GAME.round_resets.ante do
-            if (i + 1) % obj.config.ante_period == 0 then -- Starting from Ante 1
-                period_triggers = period_triggers + 1
-            end
-        end
-        for _ = 1, period_triggers do
-            G.hand:change_size(obj.config.hand_size_per_period)
-        end
-        obj.config.extra.highest_ante_yet = G.GAME.round_resets.ante
-    end
-end
-SMODS.Back {
+local b_dominion = SMODS.Back {
     key = "Dominion",
     name = "Dominion",
     config = {
@@ -412,11 +360,24 @@ SMODS.Back {
     coder = "Jack5",
     idea = "Jack5",
     unlocked = false,
+    ---Have at least 3 of any one Joker
     check_for_unlock = function(self, args)
-        check_for_unlock_dominion()
+        if not G.jokers or not G.jokers.cards or not #G.jokers.cards >= 3 then
+            return false
+        end
+
+        local joker_key_counts = {}
+        for _, joker in ipairs(G.jokers.cards) do
+            joker_key_counts[joker.config.center.key] = (
+                joker_key_counts[joker.config.center.key] or 0
+            ) + 1
+            if joker_key_counts[joker.config.center.key] >= 3 then
+                return true
+            end
+        end
     end,
     locked_loc_vars = function(self, args)
-        return { vars = 3 }
+        return { vars = { 3 } }
     end,
     loc_vars = function(self, info_queue, back)
         return {
@@ -431,11 +392,37 @@ SMODS.Back {
             }
         }
     end,
+    ---Applies the initial effects of the Dominion Deck and Sleeve, those being:
+    ---Start with -3 hand size and 3 Estate Jokers
     apply = function(self, back)
-        apply_dominion(self)
+        G.E_MANAGER:add_event(Event {
+            func = function()
+                G.hand:change_size(-self.config.hand_size_penalty)
+                for _ = 1, self.config.joker_count do
+                    local joker = create_card(
+                        "Joker", nil, nil, nil, nil, nil, self.config.joker
+                    )
+                    G.jokers:emplace(joker)
+                end
+                return true
+            end
+        })
     end,
+    ---+1 hand size every 2 Antes
     calculate = function(self, back, context)
-        calculate_dominion(self)
+        if not is_double_dominion() and G.GAME.round_resets.ante > self.config.extra.highest_ante_yet then
+            -- Ensure that this triggers for all Antes that haven't triggered yet
+            local period_triggers = 0
+            for i = self.config.extra.highest_ante_yet + 1, G.GAME.round_resets.ante do
+                if (i + 1) % self.config.ante_period == 0 then -- Starting from Ante 1
+                    period_triggers = period_triggers + 1
+                end
+            end
+            for _ = 1, period_triggers do
+                G.hand:change_size(self.config.hand_size_per_period)
+            end
+            self.config.extra.highest_ante_yet = G.GAME.round_resets.ante
+        end
     end
 }
 
@@ -575,15 +562,6 @@ if CardSleeves then
         end
     }
 
-    function contains(table, element)
-        for _, value in pairs(table) do
-            if value == element then
-                return true
-            end
-        end
-        return false
-    end
-
     CardSleeves.Sleeve {
         key = "Dominion",
         atlas = "BakerySleeves",
@@ -607,17 +585,17 @@ if CardSleeves then
                 highest_ante_yet = 1
             },
             -- Combo config
-            combo_voucher = "v_illusion",
+            vouchers = {
+                "v_magic_trick",
+                "v_illusion",
+            },
             combo_cards_count = 7
         },
-        check_for_unlock = function(self, args)
-            check_for_unlock_dominion()
-        end,
-        locked_loc_vars = function(self, args)
-            return { vars = 3 }
-        end,
+        unlock_condition = {
+            deck = "b_Bakery_Dominion",
+            stake = "stake_white"
+        },
         loc_vars = function(self, info_queue, back)
-            -- Global localisation
             local key = self.key
             local vars = {
                 self.config.hand_size_penalty,
@@ -634,7 +612,10 @@ if CardSleeves then
                 key = key .. "_alt"
                 table.insert(vars, self.config.combo_cards_count)
                 table.insert(vars, localize {
-                    type = 'name_text', key = self.config.combo_voucher, set = 'Voucher'
+                    type = 'name_text', key = self.config.vouchers[1], set = 'Voucher'
+                })
+                table.insert(vars, localize {
+                    type = 'name_text', key = self.config.vouchers[2], set = 'Voucher'
                 })
             end
             return {
@@ -644,60 +625,42 @@ if CardSleeves then
         end,
         apply = function(self, back)
             if not is_double_dominion() then
-                apply_dominion(self)
-                return
+                return b_dominion.apply(self, back)
             end
             -- Combo effects: Start with -3 hand size, 3 Estate Jokers, 7 total cards and Illusion Voucher
-            G.E_MANAGER:add_event(Event({
+            G.E_MANAGER:add_event(Event {
                 func = function()
                     -- Remove all but 7 cards
                     local keep_cards = {}
-                    while #keep_cards < self.config.combo_cards_count do
+                    local kept = 0
+                    while kept < self.config.combo_cards_count do
                         local keep_card = pseudorandom_element(
                             G.playing_cards, pseudoseed("Nothin'ButCoppers")
                         )
-                        if not contains(keep_cards, keep_card) then
-                            table.insert(keep_cards, keep_card)
+                        if not keep_cards[keep_card] then
+                            keep_cards[keep_card] = true
+                            kept = kept + 1
                         end
                     end
                     for _, card in pairs(G.playing_cards) do
-                        if not contains(keep_cards, card) then
+                        if not keep_cards[card] then
                             card:start_dissolve(nil)
                         end
                     end
-                    -- Redeem Illusion Voucher
-                    if not G.redeemed_vouchers_during_hand then
-                        G.redeemed_vouchers_during_hand = CardArea(
-                            G.play.T.x,
-                            G.play.T.y,
-                            G.play.T.w,
-                            G.play.T.h,
-                            { type = "play", card_limit = 5 }
-                        )
-                    end
-                    local voucher = create_card(
-                        "Voucher", G.redeemed_vouchers_during_hand,
-                        nil, nil, nil, nil, self.config.combo_voucher
-                    )
-                    voucher:start_materialize()
-                    G.redeemed_vouchers_during_hand:emplace(voucher)
-                    voucher.cost = 0
-                    voucher.shop_voucher = false
-                    voucher:redeem()
-                    G.E_MANAGER:add_event(Event({
-                        trigger = "after",
-                        delay = 0,
-                        func = function()
-                            voucher:start_dissolve()
-                            return true
-                        end,
-                    }))
                     return true
                 end
-            }))
+            })
+            for k, v in pairs(self.config.vouchers) do
+                G.GAME.used_vouchers[v] = true
+                G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 1
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        Card.apply_to_run(nil, G.P_CENTERS[v])
+                        return true
+                    end
+                }))
+            end
         end,
-        calculate = function(self, back, context)
-            calculate_dominion(self)
-        end
+        calculate = b_dominion.calculate,
     }
 end

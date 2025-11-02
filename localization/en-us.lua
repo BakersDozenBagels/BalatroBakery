@@ -322,19 +322,13 @@ return {
                     "and {C:attention}#2# #3# Jokers{},",
                     "{C:attention}+#4#{} hand size",
                     "every {C:attention}#5# Antes"
-                },
-                unlock = {
-                    "Have at least {C:attention}#1#",
-                    "of any one {C:attention}Joker"
                 }
             },
             sleeve_Bakery_Dominion_alt = {
                 name = "Dominion Sleeve",
                 text = {
-                    "Start with {C:red}-#1#{} hand size,",
-                    "{C:attention}#2# #3# Jokers{},",
-                    "{C:red}#4#{} total cards and",
-                    "{C:attention}#5# Voucher"
+                    "Start with {C:red}#4#{} playing cards,",
+                    "{C:attention}#5#{}, and {C:attention}#6#"
                 }
             }
         },

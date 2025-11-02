@@ -10,7 +10,7 @@ Current contents:
 - 15 Charms (a new kind of thing in the shop)
 - 20 Tags
 - 5 Decks
-- 4 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
+- 5 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 7 Blinds
 - 3 Challenges
 - 1 Tarot Card

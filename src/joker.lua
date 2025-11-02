@@ -1289,6 +1289,7 @@ Bakery_API.Joker {
     },
     artist = "Jack5",
     coder = "Jack5",
+    idea = "Jack5",
     rarity = 1,
     cost = 5,
     blueprint_compat = true,
