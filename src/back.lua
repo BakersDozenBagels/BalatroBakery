@@ -405,7 +405,7 @@ SMODS.Back {
     },
     atlas = "BakeryBack",
     pos = {
-        x = 2,
+        x = 4,
         y = 0
     },
     artist = "Jack5",
@@ -588,7 +588,7 @@ if CardSleeves then
         key = "Dominion",
         atlas = "BakerySleeves",
         pos = {
-            x = 3,
+            x = 4,
             y = 0
         },
         artist = "Jack5",

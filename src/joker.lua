@@ -1284,8 +1284,8 @@ Bakery_API.Joker {
 Bakery_API.Joker {
     key = "Estate",
     pos = {
-        x = 4,
-        y = 3
+        x = 0,
+        y = 4
     },
     artist = "Jack5",
     coder = "Jack5",
