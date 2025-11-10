@@ -524,6 +524,11 @@ return {
                 name = 'Full Moon',
                 text = { 'All {C:attention}Werewolves{} are', 'always on the night side' },
                 unlock = { 'Have {C:attention}3 Werewolves' }
+            },
+            BakeryCharm_Bakery_OrdinaryStone = {
+                name = 'Ordinary Stone',
+                text = { 'Your {C:attention}deck{} is', 'not shuffled' },
+                unlock = { 'Discover at least', '{C:attention}#1#{} Charms' }
             }
             -- KEEP_LITE
         },

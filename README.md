@@ -7,7 +7,7 @@ Additions are generally meant to be well-balanced with vanilla, although the dec
 Current contents:
 
 - 29 Jokers
-- 16 Charms (a new kind of thing in the shop)
+- 17 Charms (a new kind of thing in the shop)
 - 20 Tags
 - 4 Decks
 - 4 [Deck Sleeves](https://github.com/larswijn/CardSleeves)

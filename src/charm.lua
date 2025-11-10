@@ -1235,6 +1235,39 @@ function Card:set_ability(center, initial, ...)
     end
 end
 
+Bakery_API.Charm {
+    key = 'OrdinaryStone',
+    pos = { x = 1, y = 4 },
+    atlas = 'Charms',
+    unlocked = false,
+    config = { extra = 10 },
+    locked_loc_vars = function(self)
+        return {
+            vars = {
+                self.config.extra
+            }
+        }
+    end,
+    check_for_unlock = function(self)
+        local count = 0
+        for _, c in pairs(G.P_CENTER_POOLS.BakeryCharm) do
+            if c.discovered then
+                count = count + 1
+                if count >= self.config.extra then
+                    return true
+                end
+            end
+        end
+    end
+}
+
+local raw_CardArea_shuffle = CardArea.shuffle
+function CardArea:shuffle(...)
+    if G.GAME.Bakery_charm ~= 'BakeryCharm_Bakery_OrdinaryStone' or self ~= G.deck then
+        return raw_CardArea_shuffle(self, ...)
+    end
+end
+
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {
         key = "PrintError",
