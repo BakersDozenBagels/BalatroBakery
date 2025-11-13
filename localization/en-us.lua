@@ -523,7 +523,7 @@ return {
             BakeryCharm_Bakery_FullMoon = {
                 name = 'Full Moon',
                 text = { 'All {C:attention}Werewolves{} are', 'always on the night side' },
-                unlock = { 'Have {C:attention}3 Werewolves' }
+                unlock = { 'Have {C:attention}3 Werewolves', 'at once' }
             },
             BakeryCharm_Bakery_OrdinaryStone = {
                 name = 'Ordinary Stone',
