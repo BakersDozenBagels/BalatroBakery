@@ -2180,7 +2180,39 @@ Balatest.TestPlay {
 
 --#region Estate
 Balatest.TestPlay {
-    name = 'estate',
+    name = 'estate_one',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30)
+    end
+}
+Balatest.TestPlay {
+    name = 'estate_two',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_to_the_moon', 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        Balatest.assert_chips(75)
+    end
+}
+Balatest.TestPlay {
+    name = 'estate_four',
     category = { 'jokers', 'estate' },
 
     jokers = { 'j_to_the_moon', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate' },
@@ -2192,55 +2224,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2D' }
     end,
     assert = function()
-        local chips = 5
-        local mult = 1
-        for i = 2, 5 do
-            chips = chips + 10 * i
-            mult = mult + i
-        end
-        Balatest.assert_chips(chips * mult)
-    end
-}
-Balatest.TestPlay {
-    name = 'estate_debuff',
-    category = { 'jokers', 'estate' },
-
-    jokers = { 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate' },
-    deck = { cards = {
-        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
-        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
-        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
-        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
-        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
-        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
-    } },
-    execute = function()
-        G.GAME.blind.chips = math.huge -- Prevent round from ending
-        for i = 1, #G.jokers.cards do
-            Balatest.wait_for_input()
-            Balatest.q(function()
-                if i ~= 1 then
-                    G.jokers.cards[i - 1]:set_debuff(false)
-                end
-                G.jokers.cards[i]:set_debuff(true)
-            end)
-            Balatest.play_hand { '2D' }
-        end
-    end,
-    assert = function()
-        local total = 0
-        for debuffed = 1, #G.jokers.cards do
-            local chips = 5
-            local mult = 1
-            for i = 1, #G.jokers.cards do
-                if i ~= debuffed then
-                    chips = chips + 10 * i
-                    mult = mult + i
-                end
-            end
-            total = total + chips * mult
-        end
-        Balatest.assert_chips(total)
+        Balatest.assert_chips(15 * 145)
     end
 }
 --#endregion

@@ -173,7 +173,7 @@ Balatest.TestPlay {
 
     back = 'Dominion',
     deck = { cards = {
-        { r = 'A', s = 'D' }, -- How do you spell AC/DC?
+        { r = 'A', s = 'D' },
         { r = 'A', s = 'D' },
         { r = 'A', s = 'C' },
         { r = 'A', s = 'C' },
@@ -184,22 +184,15 @@ Balatest.TestPlay {
     } },
     hand_size = 8,
     no_auto_start = true,
+    blind = 'bl_serpent',
     execute = function()
         for _ = 1, 2 do
             Balatest.skip_blind 'tag_Bakery_BlankTag'
             Balatest.skip_blind 'tag_Bakery_BlankTag'
             Balatest.start_round()
-            Balatest.q(function()
-                for _, card in ipairs(G.hand.cards) do
-                    G.hand:add_to_highlighted(card, true)
-                end
-                G.hand:align_cards()
-                G.FUNCS.play_cards_from_highlighted()
-            end)
-            Balatest.wait_for_input()
+            Balatest.end_round()
             Balatest.cash_out()
             Balatest.exit_shop()
-            -- TODO: Fix Ante not increasing, Boss Blind is being ignored
         end
         Balatest.start_round()
     end,
@@ -207,5 +200,3 @@ Balatest.TestPlay {
         Balatest.assert_eq(#G.hand.cards, 6)
     end
 }
--- TODO: Test Dominion Sleeve does the same thing
--- TODO: Test Dominion Sleeve combo effect

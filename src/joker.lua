@@ -1281,6 +1281,19 @@ Bakery_API.Joker {
     end
 }
 
+function estate_pos(card)
+    if not G.jokers then return 1 end
+    local joker_count = 1
+    for _, v in ipairs(G.jokers.cards) do
+        if v == card then
+            return joker_count
+        else
+            joker_count = joker_count + 1
+        end
+    end
+    return 1
+end
+
 Bakery_API.Joker {
     key = "Estate",
     pos = {
@@ -1302,20 +1315,14 @@ Bakery_API.Joker {
         }
     },
     loc_vars = function(self, info_queue, card)
+        local joker_count = estate_pos(card)
         return {
-            vars = { card.ability.extra.chips, card.ability.extra.mult }
+            vars = { card.ability.extra.chips * joker_count, card.ability.extra.mult * joker_count }
         }
     end,
     calculate = function(self, card, context)
         if context.joker_main then
-            local joker_count = 1
-            for _, v in ipairs(G.jokers.cards) do
-                if v == card then
-                    break
-                else
-                    joker_count = joker_count + 1
-                end
-            end
+            local joker_count = estate_pos(card)
             return {
                 chips = card.ability.extra.chips * joker_count,
                 mult = card.ability.extra.mult * joker_count

@@ -157,9 +157,8 @@ return {
             j_Bakery_Estate = {
                 name = "Estate",
                 text = {
-                    "{C:chips}+#1#N{} Chips and {C:mult}+#2#N{} Mult",
-                    "where N is the number of Jokers",
-                    "to the left including this"
+                    "{C:chips}+#1#{} Chips, {C:mult}+#2#{} Mult",
+                    "{C:inactive}(More when further right)"
                 }
             }
         },
