@@ -82,3 +82,55 @@ Bakery_API.guard(function()
         return count
     end
 end)
+-- from http://lua-users.org/wiki/SplitJoin
+local function Split(str, delim)
+    if string.find(str, delim) == nil then return { str } end
+    local result = {}
+    local pat = "(.-)" .. delim .. "()"
+    local nb = 0
+    local lastPos
+    for part, pos in string.gfind(str, pat) do
+        nb = nb + 1
+        result[nb] = part
+        lastPos = pos
+    end
+    result[nb + 1] = string.sub(str, lastPos)
+    return result
+end
+
+local MAX_NUM
+
+function Bakery_API.parse_hyper_e(num)
+    local split_array = num:sub(2)
+    local arr = {}
+    local current_run = 0
+    local i = 1
+    for _, str in ipairs(Split(split_array, "#")) do
+        current_run = current_run + 1
+        if #str ~= 0 then
+            local val = tonumber(str)
+            if current_run == 1 then
+                if i > 2 then val = val - 1 end
+                arr[i] = val
+            elseif current_run == 2 then
+                local last = arr[i - 1]
+                for _ = 1, val do
+                    arr[i] = last
+                    i = i + 1
+                end
+            else
+                -- Triple hash is unsupported. Bail.
+                return MAX_NUM, true
+            end
+            current_run = 0
+            i = i + 1
+            if i > 10010 then
+                -- Number is too big to fit in memory. Bail.
+                return MAX_NUM, true
+            end
+        end
+    end
+    return setmetatable({ array = arr, sign = 1 }, OmegaMeta)
+end
+
+MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
