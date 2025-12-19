@@ -720,19 +720,16 @@ Bakery_API.guard(function()
 
     local raw_SMODS_calculate_repetitions = SMODS.calculate_repetitions
     SMODS.calculate_repetitions = function(card, context, reps, ...)
-        reps = raw_SMODS_calculate_repetitions(card, context, reps, ...)
-
         for i = 1, #G.GAME.tags do
             local eval = G.GAME.tags[i]:apply_to_run({
                 type = 'Bakery_add_repetitions_to_card',
                 context = context
             })
             if eval then
-                SMODS.insert_repetitions(reps, eval, G.GAME.tags[i])
+                reps[#reps + 1] = { key = eval }
             end
         end
-
-        return reps
+        return raw_SMODS_calculate_repetitions(card, context, reps, ...)
     end
 
     sendInfoMessage("SMODS.calculate_repetitions() patched. Reason: Up Tag", "Bakery")
