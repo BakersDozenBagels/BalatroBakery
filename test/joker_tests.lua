@@ -2177,3 +2177,97 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Lua Joker
+Balatest.TestPlay {
+    name = 'lua_joker_small',
+    category = { 'jokers', 'lua_joker', 'talisman' },
+
+    jokers = { 'j_joker', 'j_Bakery_Lua' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(84)
+    end
+}
+Balatest.TestPlay {
+    name = 'lua_joker_fractional',
+    category = { 'jokers', 'lua_joker', 'talisman' },
+
+    jokers = { 'j_Bakery_Lua' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(1) -- 1.54 but the game rounds
+    end
+}
+Balatest.TestPlay {
+    name = 'lua_joker_thousands',
+    category = { 'jokers', 'lua_joker', 'talisman' },
+
+    jokers = { 'j_joker', 'j_Bakery_Lua' },
+    execute = function()
+        G.jokers.cards[1].ability.mult = 4999
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(70014)
+    end
+}
+Balatest.TestPlay {
+    name = 'lua_joker_e',
+    category = { 'jokers', 'lua_joker', 'talisman' },
+
+    jokers = { 'j_joker', 'j_Bakery_Lua' },
+    execute = function()
+        G.jokers.cards[1].ability.mult = 5e15 - 1
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 1e152) -- Explicitly spell this multiplication to avoid precision issues
+    end
+}
+if Talisman then
+    Balatest.TestPlay {
+        name = 'lua_joker_talisman_ee',
+        category = { 'jokers', 'lua_joker', 'talisman' },
+
+        jokers = { 'j_joker', 'j_Bakery_Lua' },
+        execute = function()
+            G.jokers.cards[1].ability.mult = Big:parse 'e1e62'
+            Balatest.play_hand { '2S' }
+        end,
+        assert = function()
+            Balatest.assert_chips(Big:parse 'e1e622')
+        end
+    }
+    Balatest.TestPlay {
+        name = 'lua_joker_talisman_#',
+        category = { 'jokers', 'lua_joker', 'talisman' },
+
+        jokers = { 'j_joker', 'j_Bakery_Lua' },
+        execute = function()
+            G.jokers.cards[1].ability.mult = Bakery_API.parse_hyper_e 'e10#62'
+            Balatest.play_hand { '2S' }
+        end,
+        assert = function()
+            Balatest.assert_chips(Bakery_API.parse_hyper_e 'e10#622')
+        end
+    }
+    Balatest.TestPlay {
+        name = 'lua_joker_talisman_##',
+        category = { 'jokers', 'lua_joker', 'talisman' },
+
+        jokers = { 'j_joker', 'j_Bakery_Lua' },
+        execute = function()
+            G.jokers.cards[1].ability.mult = Bakery_API.parse_hyper_e 'e10#10##62'
+            Balatest.play_hand { '2S' }
+        end,
+        assert = function()
+            Balatest.assert_chips(Bakery_API.parse_hyper_e 'e10#10##622')
+        end
+    }
+end
+--#endregion

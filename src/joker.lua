@@ -1218,8 +1218,13 @@ Bakery_API.Joker {
     end
 }
 
+-- KEEP_LITE
 -- from http://lua-users.org/wiki/SplitJoin
+<<<<<<< HEAD
 function Split(str, delim)
+=======
+local function Split(str, delim)
+>>>>>>> main
     if string.find(str, delim) == nil then return { str } end
     local result = {}
     local pat = "(.-)" .. delim .. "()"
@@ -1236,7 +1241,7 @@ end
 
 local MAX_NUM
 
-function parse_hyper_e(num)
+function Bakery_API.parse_hyper_e(num)
     local split_array = num:sub(2)
     local arr = {}
     local current_run = 0
@@ -1269,7 +1274,8 @@ function parse_hyper_e(num)
     return setmetatable({ array = arr, sign = 1 }, OmegaMeta)
 end
 
-MAX_NUM = parse_hyper_e("e10#10##10000")
+MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+-- END_KEEP_LITE
 
 Bakery_API.Joker {
     key = "Lua",
@@ -1294,8 +1300,12 @@ Bakery_API.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                x_mult = card.ability.extra.x_mult,
                 func = function()
+                    mult = mult * card.ability.extra.x_mult
+                    update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
+                    card_eval_status_text(
+                        card, 'x_mult', card.ability.extra.x_mult, percent
+                    )
                     local too_big
                     if type(mult) == 'table' and (
                             (mult.isFinite and not mult:isFinite())
@@ -1306,9 +1316,9 @@ Bakery_API.Joker {
                         mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
                         if Talisman then
                             if mult:find("#") then
-                                mult, too_big = parse_hyper_e(mult)
+                                mult, too_big = Bakery_API.parse_hyper_e(mult)
                             else
-                                mult = Big.parse(mult, mult)
+                                mult = Big:parse(mult)
                             end
                         else
                             mult = tonumber(mult)
@@ -1329,6 +1339,7 @@ Bakery_API.Joker {
         end
     end
 }
+<<<<<<< HEAD
 
 Bakery_API.Joker {
     key = "Awarewolf",
@@ -1613,3 +1624,5 @@ Bakery_API.Joker {
         end
     end
 }
+=======
+>>>>>>> main
