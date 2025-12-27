@@ -1220,11 +1220,7 @@ Bakery_API.Joker {
 
 -- KEEP_LITE
 -- from http://lua-users.org/wiki/SplitJoin
-<<<<<<< HEAD
-function Split(str, delim)
-=======
 local function Split(str, delim)
->>>>>>> main
     if string.find(str, delim) == nil then return { str } end
     local result = {}
     local pat = "(.-)" .. delim .. "()"
@@ -1339,7 +1335,6 @@ Bakery_API.Joker {
         end
     end
 }
-<<<<<<< HEAD
 
 Bakery_API.Joker {
     key = "Awarewolf",
@@ -1624,5 +1619,3 @@ Bakery_API.Joker {
         end
     end
 }
-=======
->>>>>>> main
