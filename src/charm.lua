@@ -570,7 +570,7 @@ SMODS.PokerHand:take_ownership("Five of a Kind", {
             return raw_five_of_a_kind_modify_display_text()
         end
     end
-})
+}, true)
 
 local raw_flush_five_modify_display_text = SMODS.PokerHands['Flush Five'].modify_display_text
 SMODS.PokerHand:take_ownership("Flush Five", {
@@ -587,7 +587,7 @@ SMODS.PokerHand:take_ownership("Flush Five", {
             return raw_flush_five_modify_display_text()
         end
     end
-})
+}, true)
 
 local raw_two_pair_modify_display_text = SMODS.PokerHands['Two Pair'].modify_display_text
 SMODS.PokerHand:take_ownership("Two Pair", {
@@ -601,7 +601,7 @@ SMODS.PokerHand:take_ownership("Two Pair", {
             return raw_two_pair_modify_display_text()
         end
     end
-})
+}, true)
 
 local function default_straight(hand)
     return get_straight(hand, SMODS.four_fingers(), SMODS.shortcut(), SMODS.wrap_around_straight())
@@ -659,7 +659,7 @@ SMODS.PokerHand:take_ownership("Flush House", {
             return raw_flush_house_modify_display_text()
         end
     end
-})
+}, true)
 
 local raw_flush_modify_display_text = SMODS.PokerHands['Flush'].modify_display_text
 SMODS.PokerHand:take_ownership("Flush", {
@@ -673,7 +673,7 @@ SMODS.PokerHand:take_ownership("Flush", {
             return raw_flush_modify_display_text()
         end
     end
-})
+}, true)
 
 Bakery_API.credit(Bakery_API.Charm {
     key = "AnaglyphLens",
@@ -740,7 +740,7 @@ SMODS.PokerHand:take_ownership("Full House", {
             return raw_Full_House_modify_display_text()
         end
     end
-})
+}, true)
 
 Bakery_API.Charm {
     key = "Pedigree",
@@ -1545,13 +1545,13 @@ if next(SMODS.find_mod 'Cryptid') then
         get_weight = function(...)
             return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
         end
-    })
+    }, true)
     local raw_get_weight = SMODS.Rarities.Common.get_weight
     SMODS.Rarity:take_ownership("Uncommon", {
         get_weight = function(...)
             return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
         end
-    })
+    }, true)
 end
 
 if next(SMODS.find_mod 'GARBPACK') then -- Garbshit
