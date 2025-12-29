@@ -1298,8 +1298,66 @@ Bakery_API.Charm {
                 set = 'Spectral'
             } or localize('k_unknown'), card.ability.extra }
         }
+    end,
+}
+
+Bakery_API.Charm {
+    key = 'MilkyWay',
+    pos = { x = 3, y = 4 },
+    atlas = 'Charms',
+    unlocked = false,
+    config = { extra = 5 },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra } }
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                G.P_CENTERS.c_Bakery_Astrology.discovered and localize {
+                    type = 'name_text',
+                    key = 'c_Bakery_Astrology',
+                    set = 'Spectral'
+                } or localize 'k_unknown',
+                10,
+                G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology and
+                G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count or 0
+            }
+        }
+    end,
+    check_for_unlock = function()
+        return (G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology and
+                G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count or 0)
+            >= 10
     end
 }
+
+local raw_level_up_hand = level_up_hand
+function level_up_hand(card, hand, instant, amount)
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' and card.config.center.set == 'Planet' then
+        amount = (amount or 1) * G.Bakery_charm_area.cards[1].ability.extra
+    end
+    return raw_level_up_hand(card, hand, instant, amount)
+end
+
+-- KEEP_LITE
+function Bakery_API.milkyway_resample(center)
+    -- END_KEEP_LITE
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' and center.set == 'Tarot' then
+        local _pool, _pool_key = get_current_pool('Planet', nil, nil, 'MilkyWay')
+        center = pseudorandom_element(_pool, pseudoseed(_pool_key))
+        local it = 1
+        while center == 'UNAVAILABLE' do
+            it = it + 1
+            center = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
+        end
+
+        center = G.P_CENTERS[center]
+    end
+    -- KEEP_LITE
+    return center
+end
+
+-- END_KEEP_LITE
 
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {

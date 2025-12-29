@@ -541,6 +541,11 @@ return {
             BakeryCharm_Bakery_CrackedMarble = {
                 name = 'Cracked Marble',
                 text = { '{C:spectral}#1#{} appears', '{C:white,X:spectral}#2#X{} as often' }
+            },
+            BakeryCharm_Bakery_MilkyWay = {
+                name = 'Milky Way',
+                text = { 'All {C:tarot}Tarot{} cards', 'are {C:planet}Planets{},', 'all {C:planet}Planets{} are', '{C:white,X:planet}#1#X{} stronger' },
+                unlock = { 'Use {C:spectral}#1#{}', '{C:attention}#2#{} total times', '{C:inactive}(#3#)' }
             }
             -- KEEP_LITE
         },
