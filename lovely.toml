@@ -427,3 +427,13 @@ payload = """
 """
 match_indent = true
 times = 1
+
+# Charm unlock toast
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = "if _achievement == 'b_challenge' then subtext = localize('k_challenges') end"
+position = 'before'
+payload = "if _type == 'BakeryCharm' then subtext = localize 'k_bakerycharm' end"
+match_indent = true
+times = 1
