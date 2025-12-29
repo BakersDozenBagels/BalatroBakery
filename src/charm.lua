@@ -1288,6 +1288,9 @@ Bakery_API.Charm {
     config = { extra = 7.7 },
 
     loc_vars = function(self, info_queue, card)
+        if G.P_CENTERS.c_soul.discovered then
+            info_queue[#info_queue + 1] = G.P_CENTERS.c_soul
+        end
         return {
             vars = { G.P_CENTERS.c_soul.discovered and localize {
                 type = 'name_text',
