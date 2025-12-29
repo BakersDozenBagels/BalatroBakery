@@ -132,7 +132,7 @@ Balatest.TestPlay {
         end
     end
 }
-Balatest.TestPlay {
+Balatest.TestPlay { -- This test passes at 8x speed but fails at 16x or higher??? Manually, this works fine even at higher speeds.
     name = 'down_tag_witch',
     category = { 'tags', 'blinds', 'down_tag', 'witch' },
 

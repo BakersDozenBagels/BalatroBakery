@@ -144,22 +144,30 @@ SMODS.Blind {
         playing_card_joker_effects(cards)
     end,
     disable = function(self)
-        local done = 0
-        for i = 1, #G.deck.cards do
-            if G.deck.cards[i].config.center.key == 'm_Bakery_Curse' then
-                local card = G.deck.cards[i]
-                G.E_MANAGER:add_event(Event {
-                    func = function()
-                        card:start_dissolve()
-                        return true
+        G.E_MANAGER:add_event(Event {
+            func = function()
+                local done = {}
+                local todo = { unpack(G.deck.cards) }
+                for _, v in pairs(G.hand.cards) do todo[#todo + 1] = v end
+                for _, v in pairs(G.discard.cards) do todo[#todo + 1] = v end
+                for _, card in pairs(todo) do
+                    if card.config.center.key == 'm_Bakery_Curse' then
+                        G.E_MANAGER:add_event(Event {
+                            func = function()
+                                card.area:remove_card(card):start_dissolve()
+                                return true
+                            end
+                        })
+                        done[#done + 1] = card
+                        if #done >= G.GAME.round_resets.ante then
+                            break
+                        end
                     end
-                })
-                done = done + 1
-                if done >= G.GAME.round_resets.ante then
-                    return
                 end
+                SMODS.calculate_context { remove_playing_cards = true, removed = done }
+                return true
             end
-        end
+        })
     end
 }
 
