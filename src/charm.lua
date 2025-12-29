@@ -346,6 +346,22 @@ Bakery_API.guard(function()
         }))
     end
 
+    local raw_G_FUNCS_redeem_from_shop = G.FUNCS.redeem_from_shop
+    function G.FUNCS.redeem_from_shop(e, ...)
+        if e.config.ref_table.config.center.set == 'BakeryCharm' then
+            return G.FUNCS.Bakery_equip_from_shop(e, ...)
+        end
+        return raw_G_FUNCS_redeem_from_shop(e, ...)
+    end
+
+    local raw_G_FUNCS_can_redeem = G.FUNCS.can_redeem
+    function G.FUNCS.can_redeem(e, ...)
+        if e.config.ref_table.config.center.set == 'BakeryCharm' then
+            return G.FUNCS.Bakery_can_equip(e, ...)
+        end
+        return raw_G_FUNCS_can_redeem(e, ...)
+    end
+
     local raw_CardArea_emplace = CardArea.emplace
     function CardArea:emplace(card, ...)
         if self == G.consumeables and card.ability.set == 'BakeryCharm' then
