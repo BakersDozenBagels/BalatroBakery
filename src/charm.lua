@@ -346,7 +346,18 @@ Bakery_API.guard(function()
         }))
     end
 
-    function Card:Bakery_equip()
+    local raw_CardArea_emplace = CardArea.emplace
+    function CardArea:emplace(card, ...)
+        if self == G.consumeables and card.ability.set == 'BakeryCharm' then
+            card:remove_from_area()
+            card:Bakery_equip(true)
+            return
+        end
+
+        return raw_CardArea_emplace(self, card, ...)
+    end
+
+    function Card:Bakery_equip(not_bought)
         if self.config.center.set ~= 'BakeryCharm' then
             return
         end
@@ -370,7 +381,7 @@ Bakery_API.guard(function()
         G.GAME.Bakery_charm = self.config.center_key
         G.GAME.used_jokers[self.config.center_key] = true
         G.Bakery_charm_area:emplace(self)
-        if self.cost ~= 0 then
+        if self.cost ~= 0 and not not_bought then
             ease_dollars(-self.cost)
             inc_career_stat('c_shop_dollars_spent', self.cost)
         end
@@ -380,12 +391,14 @@ Bakery_API.guard(function()
 
         self.config.center:equip(self)
         delay(0.6)
-        SMODS.calculate_context({
-            buying_card = true,
-            card = self
-        })
+        if not not_bought then
+            SMODS.calculate_context({
+                buying_card = true,
+                card = self
+            })
+        end
 
-        if G.GAME.modifiers.inflation then
+        if G.GAME.modifiers.inflation and not not_bought then
             G.GAME.inflation = G.GAME.inflation + 1
             G.E_MANAGER:add_event(Event({
                 func = function()
