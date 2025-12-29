@@ -537,6 +537,10 @@ return {
                 name = 'Ordinary Stone',
                 text = { 'Your {C:attention}deck{} is', 'not shuffled' },
                 unlock = { 'Discover at least', '{C:attention}#1#{} Charms' }
+            },
+            BakeryCharm_Bakery_CrackedMarble = {
+                name = 'Cracked Marble',
+                text = { '{C:spectral}#1#{} appears', '{C:white,X:spectral}#2#X{} as often' }
             }
             -- KEEP_LITE
         },

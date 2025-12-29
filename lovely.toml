@@ -383,3 +383,21 @@ position = 'after'
 payload = "if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Fortuna' then _options = { 'e_negative', 'e_polychrome' } end"
 match_indent = true
 times = 1
+
+# Cracked Marble
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = """
+if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+    forced_key = 'c_soul'
+end
+"""
+position = 'at'
+payload = """
+if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > Bakery_API.soul_rate() then
+    forced_key = 'c_soul'
+end
+"""
+match_indent = true
+times = 1

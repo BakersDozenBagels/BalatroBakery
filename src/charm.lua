@@ -1268,6 +1268,36 @@ function CardArea:shuffle(...)
     end
 end
 
+-- KEEP_LITE
+function Bakery_API.soul_rate()
+    -- END_KEEP_LITE
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_CrackedMarble' then
+        return 1 - 0.003 * G.Bakery_charm_area.cards[1].ability.extra
+    end
+    -- KEEP_LITE
+    return 1 - 0.003
+end
+
+-- END_KEEP_LITE
+
+Bakery_API.Charm {
+    key = 'CrackedMarble',
+    pos = { x = 2, y = 4 },
+    atlas = 'Charms',
+    unlocked = true,
+    config = { extra = 7.7 },
+
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { G.P_CENTERS.c_soul.discovered and localize {
+                type = 'name_text',
+                key = 'c_soul',
+                set = 'Spectral'
+            } or localize('k_unknown'), card.ability.extra }
+        }
+    end
+}
+
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {
         key = "PrintError",
