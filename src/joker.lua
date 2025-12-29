@@ -1619,3 +1619,89 @@ Bakery_API.Joker {
         end
     end
 }
+
+Bakery_API.Joker {
+    key = "Wearwolf",
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = false,
+    config = {
+        extra = {
+            mult = 0,
+            d_mult = 4,
+            flipped = false,
+            front_pos = {
+                x = 2,
+                y = 5,
+            },
+            back_pos = {
+                x = 4,
+                y = 5,
+            }
+        }
+    },
+    artist = 'Craw',
+    pixel_size = {
+        w = 95,
+        h = 71
+    },
+
+    loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return { vars = {} }
+        end
+        return {
+            vars = {
+                card.ability.extra.d_mult,
+                localize('Two Pair', 'poker_hands'),
+                card.ability.extra.mult
+            }
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = 'j_Bakery_Wearwolf_Back'
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = 'j_Bakery_Wearwolf_Back'
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    -- generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Wearwolf_Back',
+
+    calculate = function(self, card, context)
+        if not card.ability.extra.flipped then
+            if context.before and not context.blueprint then
+                if next(context.poker_hands['Two Pair']) then
+                    -- See note about SMODS Scaling Manipulation on the wiki
+                    card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.d_mult
+                    return {
+                        message = localize('k_upgrade_ex'),
+                        colour = G.C.RED
+                    }
+                else
+                    Bakery_API.flip_double_sided(card)
+                end
+            end
+        else
+            if context.joker_main then
+                if not context.blueprint and next(context.poker_hands['Two Pair']) then
+                    Bakery_API.flip_double_sided(card)
+                end
+                return {
+                    mult = card.ability.extra.mult
+                }
+            end
+        end
+    end
+}

@@ -569,7 +569,8 @@ Bakery_API.guard(function()
         j_Bakery_Awarewolf = true,
         j_Bakery_Warewolf = true,
         j_Bakery_Wherewolf = true,
-        j_Bakery_Wearywolf = true
+        j_Bakery_Wearywolf = true,
+        j_Bakery_Wearwolf = true
     }
     -- Cards affected by Full Moon
     Bakery_API.werewolves = {
@@ -578,7 +579,8 @@ Bakery_API.guard(function()
         j_Bakery_Awarewolf = true,
         j_Bakery_Warewolf = true,
         j_Bakery_Wherewolf = true,
-        j_Bakery_Wearywolf = true
+        j_Bakery_Wearywolf = true,
+        j_Bakery_Wearwolf = true
     }
 
     -- Flips a double-sided card.

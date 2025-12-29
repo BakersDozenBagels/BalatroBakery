@@ -185,6 +185,14 @@ return {
             j_Bakery_Wearywolf_Back = {
                 name = "Wearywolf (Night)",
                 text = { "Prevents Death", "if scored chips", "are at least {C:attention}#3#%", "of required chips", "{C:attention}Transforms" }
+            },
+            j_Bakery_Wearwolf = {
+                name = "Wearwolf (Day)",
+                text = { "Gains {C:mult}+#1#{} Mult if", "played hand contains", "a {C:attention}#2#", "{C:attention}Transforms{} otherwise" }
+            },
+            j_Bakery_Wearwolf_Back = {
+                name = "Wearwolf (Night)",
+                text = { "{C:mult}+#3#{} Mult", "{C:attention}Transforms{} is played hand", "contains a {C:attention}#2#" }
             }
         },
         Tag = {

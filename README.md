@@ -6,7 +6,7 @@ Additions are generally meant to be well-balanced with vanilla, although the dec
 
 Current contents:
 
-- 29 Jokers
+- 30 Jokers
 - 17 Charms (a new kind of thing in the shop)
 - 20 Tags
 - 4 Decks
@@ -40,7 +40,7 @@ If another mod depends on Bakery, but you do not want Bakery's additions, you ca
 
 ## Other Contributors
 
-- GhostSalt (@ghost12salt) and SadCube (@sadcube) - Some of the artwork used
+- [GhostSalt](https://github.com/GhostSalt/) (@ghost12salt), SadCube (@sadcube), and [craw](https://craw.run/) - Some of the artwork used
 - [Jack5](https://github.com/jack5github) (@jack5) - Some ideas, coding and artwork
 - [balt](https://github.com/balt-dev) (@baltdev) - Bugfixes
 
