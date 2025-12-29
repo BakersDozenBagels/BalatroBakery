@@ -418,11 +418,12 @@ target = 'functions/common_events.lua'
 pattern = "elseif _c.set == 'Planet' then"
 position = 'after'
 payload = """
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' then
-        _c.vars = _c.vars or {
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' and not _c.vars then
+        _c.vars = {
             G.GAME.hands[cfg.hand_type].level, localize(cfg.hand_type, 'poker_hands'), G.GAME.hands[cfg.hand_type].l_mult * G.Bakery_charm_area.cards[1].ability.extra, G.GAME.hands[cfg.hand_type].l_chips * G.Bakery_charm_area.cards[1].ability.extra,
             colours = {(G.GAME.hands[cfg.hand_type].level==1 and G.C.UI.TEXT_DARK or G.C.HAND_LEVELS[math.min(7, G.GAME.hands[cfg.hand_type].level)])}
         }
+        G.E_MANAGER:add_event(Event { blocking = false, blockable = false, func = function() _c.vars = nil return true end })
     end
 """
 match_indent = true
