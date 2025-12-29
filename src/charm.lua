@@ -1388,6 +1388,51 @@ end
 
 -- END_KEEP_LITE
 
+Bakery_API.Charm {
+    key = 'Radiation',
+    pos = { x = 4, y = 4 },
+    atlas = 'Charms',
+    unlocked = false,
+    check_for_unlock = function()
+        -- We love the moment before any cards are added to the deck at the start of the run in this household
+        if G.GAME and G.hand and G.discard and G.deck then
+            local any = #G.hand.cards + #G.discard.cards + #G.deck.cards ~= 0
+            if G.GAME.Bakery_ever_had_any and not any then
+                return true
+            elseif not G.GAME.Bakery_ever_had_any and any then
+                G.GAME.Bakery_ever_had_any = true
+            end
+        end
+        return false
+    end,
+
+    calculate = function(self, card, context)
+        if context.setting_blind then
+            local count = math.ceil(#G.deck.cards / 2)
+            local temp = {}
+            for _, v in ipairs(G.deck.cards) do
+                temp[#temp + 1] = v
+            end
+            table.sort(temp,
+                function(a, b) return not a.playing_card or not b.playing_card or a.playing_card < b.playing_card end)
+            pseudoshuffle(temp, pseudoseed 'BakeryCharm_Bakery_Radiation')
+
+            local destroyed = {}
+            for i = 1, count do
+                destroyed[#destroyed + 1] = temp[i]
+            end
+
+            SMODS.destroy_cards(destroyed)
+        end
+    end
+}
+
+local raw_Card_remove = Card.remove
+function Card:remove(...)
+    check_for_unlock { type = 'Bakery_nothing' }
+    return raw_Card_remove(self, ...)
+end
+
 if next(SMODS.find_mod "RevosVault") then
     Bakery_API.Charm {
         key = "PrintError",

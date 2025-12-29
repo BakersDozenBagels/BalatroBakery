@@ -546,6 +546,11 @@ return {
                 name = 'Milky Way',
                 text = { 'All {C:tarot}Tarot{} cards', 'are {C:planet}Planets{},', 'all {C:planet}Planets{} are', '{C:white,X:planet}#1#X{} stronger' },
                 unlock = { 'Use {C:spectral}#1#{}', '{C:attention}#2#{} total times', '{C:inactive}(#3#)' }
+            },
+            BakeryCharm_Bakery_Radiation = {
+                name = 'Radiation',
+                text = { '{C:red}Destroy {C:attention}half{} your deck', 'when {C:attention}Blind{} is selected' },
+                unlock = { 'Have {C:red}0{} cards in', 'your {C:attention}full deck' }
             }
             -- KEEP_LITE
         },
