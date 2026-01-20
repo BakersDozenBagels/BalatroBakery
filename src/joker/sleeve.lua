@@ -366,17 +366,21 @@ Bakery_API.guard(function()
     end
 
     function Bakery_API.rehighlight(card)
+        if G.CONTROLLER.HID.controller then
+            if card.children.focused_ui then
+                card.children.focused_ui:remove()
+                card.children.focused_ui = nil
+            end
+            card:stop_hover()
+            card:hover()
+        end
+
         local highlighted = card.highlighted
         if card.children.use_button then
             card.children.use_button:remove()
             card.children.use_button = nil
         end
-        if card.children.focused_ui then
-            card.children.focused_ui:remove()
-            card.children.focused_ui = nil
-        end
         card:highlight(highlighted)
-        card:hover()
     end
 
     function Bakery_API.can_highlight_area(area)
