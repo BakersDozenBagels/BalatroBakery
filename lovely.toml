@@ -451,3 +451,13 @@ elseif args.type == 'Bakery_use' then
 '''
 match_indent = true
 times = 1
+
+# Card Sleeve and Scribe + Controller
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "if G.CONTROLLER.HID.controller and self ~= G.hand then self:unhighlight_all() end"
+position = 'at'
+payload = '''if G.CONTROLLER.HID.controller and not Bakery_API.can_highlight_area(self) then self:unhighlight_all() end'''
+match_indent = true
+times = 1

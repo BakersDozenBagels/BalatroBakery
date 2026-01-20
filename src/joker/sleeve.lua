@@ -366,5 +366,30 @@ Bakery_API.guard(function()
         card:highlight(highlighted)
         card:hover()
     end
+
+    function Bakery_API.can_highlight_area(area)
+        return area == G.hand
+            -- END_KEEP_LITE
+            or area == G.jokers or area:is(CardSleeveCardArea)
+            -- KEEP_LITE
+    end
 end)
 -- END_KEEP_LITE
+
+local raw_card_highlight = Card.highlight
+function Card:highlight(is_highlighted)
+    self.highlighted = is_highlighted
+    if G.CONTROLLER.HID.controller then
+        return
+    end
+
+    return raw_card_highlight(self, is_highlighted)
+end
+
+local raw_CardArea_can_highlight = CardArea.can_highlight
+function CardArea:can_highlight(card)
+    if self == G.jokers then
+        return true
+    end
+    return raw_CardArea_can_highlight(self, card)
+end
