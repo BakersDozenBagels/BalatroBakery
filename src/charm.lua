@@ -1335,7 +1335,7 @@ Bakery_API.Charm {
     pos = { x = 3, y = 4 },
     atlas = 'Charms',
     unlocked = false,
-    config = { extra = 5 },
+    config = { extra = 2 },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra } }
     end,
