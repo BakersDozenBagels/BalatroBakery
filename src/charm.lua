@@ -1043,7 +1043,7 @@ Bakery_API.Charm {
     unlocked = false,
     config = {
         extra = {
-            mod = 8
+            mod = 10
         }
     },
     locked_loc_vars = function(info_queue, card)
