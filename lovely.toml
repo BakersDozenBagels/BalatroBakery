@@ -438,3 +438,16 @@ position = 'before'
 payload = "if _type == 'BakeryCharm' then subtext = localize 'k_bakerycharm' end"
 match_indent = true
 times = 1
+
+# Usable Jokers on Controller
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "elseif args.type == 'buy_and_use' then"
+position = 'before'
+payload = '''
+elseif args.type == 'Bakery_use' then
+  button_contents = { n = G.UIT.T, config = { text = args.Bakery_loc, colour = G.C.WHITE, scale = 0.5 } }
+'''
+match_indent = true
+times = 1

@@ -126,7 +126,7 @@ j_sleeve = SMODS.Joker {
             draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil,
                 nil, true)
             card.ability.extra.occupied = true
-            card:highlight(card.highlighted)
+            Bakery_API.rehighlight(card)
         end
     end,
     Bakery_use_button_text = function(self, card)
@@ -277,6 +277,21 @@ Bakery_API.guard(function()
         return ret
     end
 
+    local raw_G_UIDEF_card_focus_ui = G.UIDEF.card_focus_ui
+    function G.UIDEF.card_focus_ui(card)
+        local ret = raw_G_UIDEF_card_focus_ui(card)
+        local card_width = card.T.w + (card.ability.consumeable and -0.1 or card.ability.set == 'Voucher' and -0.16 or 0)
+        local base_attach = ret:get_UIE_by_ID('ATTACH_TO_ME')
+        if (card.area == G.jokers and G.jokers) and card.config.center.Bakery_use_joker then
+            base_attach.children.use = G.UIDEF.card_focus_button {
+                card = card, parent = base_attach, type = 'Bakery_use',
+                Bakery_loc = card.config.center.Bakery_use_button_text and card.config.center:Bakery_use_button_text(card) or localize 'b_use',
+                func = 'Bakery_can_use_joker', button = 'use_card', card_width = card_width
+            }
+        end
+        return ret
+    end
+
     local raw_Card_remove = Card.remove
     function Card:remove()
         raw_Card_remove(self)
@@ -344,7 +359,12 @@ Bakery_API.guard(function()
             card.children.use_button:remove()
             card.children.use_button = nil
         end
+        if card.children.focused_ui then
+            card.children.focused_ui:remove()
+            card.children.focused_ui = nil
+        end
         card:highlight(highlighted)
+        card:hover()
     end
 end)
 -- END_KEEP_LITE
