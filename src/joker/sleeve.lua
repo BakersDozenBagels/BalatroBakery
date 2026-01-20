@@ -151,12 +151,24 @@ next_key = function()
 end
 
 local raw_copy_card = copy_card
-function copy_card(other, new_card, card_scale, playing_card, strip_edition)
-    local ret = raw_copy_card(other, new_card, card_scale, playing_card, strip_edition)
-    if ret.config.center.key == j_sleeve.key then
-        ret.ability.extra.key = nil
-        ret.ability.extra.occupied = false
-        ret.ability.extra.override = nil
+function copy_card(other, new_card, card_scale, playing_card, strip_edition, ...)
+    local k, o, v, a
+    if other.config.center.key == j_sleeve.key then
+        k = other.ability.extra.key
+        o = other.ability.extra.occupied
+        v = other.ability.extra.override
+        a = other.ability.extra.area
+        other.ability.extra.key = nil
+        other.ability.extra.occupied = nil
+        other.ability.extra.override = nil
+        other.ability.extra.area = nil
+    end
+    local ret = raw_copy_card(other, new_card, card_scale, playing_card, strip_edition, ...)
+    if other.config.center.key == j_sleeve.key then
+        other.ability.extra.key = k
+        other.ability.extra.occupied = o
+        other.ability.extra.override = v
+        other.ability.extra.area = a
     end
     return ret
 end

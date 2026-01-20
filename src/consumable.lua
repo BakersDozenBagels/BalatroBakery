@@ -192,8 +192,8 @@ Bakery_API.credit(SMODS.Consumable {
                         _card:set_eternal(nil)
                         _card:add_to_deck()
                         G.deck.config.card_limit = G.deck.config.card_limit + 1
-                        table.insert(G.playing_cards, _card)
-                        G.hand:emplace(_card)
+                        table.insert(G.playing_cards, _card);
+                        (G.P_CENTERS.j_Bakery_CardSleeve._hand_available() and G.hand or G.deck):emplace(_card)
                         _card:start_materialize(nil, _first_dissolve)
                         _first_dissolve = true
                         new_cards[#new_cards + 1] = _card
