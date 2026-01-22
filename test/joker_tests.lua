@@ -1546,6 +1546,103 @@ Balatest.TestPlay {
         Balatest.assert(not G.jokers.cards[1].ability.extra.occupied)
     end,
 }
+
+Balatest.TestPlay {
+    name = 'scribe_sleeve_empty',
+    category = { 'consumables', 'scribe', 'jokers', 'card_sleeve' },
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        G.jokers:add_to_highlighted(G.jokers.cards[1], true)
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'scribe_sleeve_full_joker',
+    category = { 'consumables', 'scribe', 'jokers', 'card_sleeve' },
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        G.jokers:add_to_highlighted(G.jokers.cards[1], true)
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 2)
+        Balatest.assert(G.jokers.cards[1].ability.extra.occupied)
+        Balatest.assert(not G.jokers.cards[2].ability.extra.occupied)
+    end
+}
+Balatest.TestPlay {
+    name = 'scribe_sleeve_full_card_can_use',
+    category = { 'consumables', 'scribe', 'jokers', 'card_sleeve' },
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1]:can_use_consumeable())
+    end
+}
+Balatest.TestPlay {
+    name = 'scribe_sleeve_full_card_use',
+    category = { 'consumables', 'scribe', 'jokers', 'card_sleeve' },
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 52)
+    end
+}
+Balatest.TestPlay {
+    name = 'scribe_sleeve_full_card_use_in_shop',
+    category = { 'consumables', 'scribe', 'jokers', 'card_sleeve' },
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.wait()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 0)
+        Balatest.assert_eq(#G.deck.cards, 52)
+    end
+}
 --#endregion
 
 --#region Bongard Problem
