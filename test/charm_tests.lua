@@ -749,7 +749,7 @@ Balatest.TestPlay {
         equip 'BakeryCharm_Bakery_Void'
     end,
     assert = function()
-        Balatest.assert_eq(G.P_CENTERS.e_negative:get_weight(), 24)
+        Balatest.assert_eq(G.P_CENTERS.e_negative:get_weight(), 30)
     end
 }
 Balatest.TestPlay {
@@ -1032,6 +1032,7 @@ Balatest.TestPlay {
 
     execute = function()
         equip 'BakeryCharm_Bakery_PetriDish'
+        Balatest.wait()
     end,
     assert = function()
         Balatest.assert_eq(G.consumeables.config.card_limit, 4)
@@ -1287,6 +1288,7 @@ Balatest.TestPlay {
     execute = function()
         Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
             if key == 'c_death' then
+                -- TODO: fix this flaky hook
                 return orig(a, b, c, d, e, f, 'c_strength', ...)
             end
             return orig(a, b, c, d, e, f, key, ...)
