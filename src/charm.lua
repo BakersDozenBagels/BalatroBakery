@@ -1362,7 +1362,7 @@ Bakery_API.Charm {
 
 local raw_level_up_hand = level_up_hand
 function level_up_hand(card, hand, instant, amount)
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' and card.config.center.set == 'Planet' then
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' and card and card.config.center and card.config.center.set == 'Planet' then
         amount = (amount or 1) * G.Bakery_charm_area.cards[1].ability.extra
     end
     return raw_level_up_hand(card, hand, instant, amount)
