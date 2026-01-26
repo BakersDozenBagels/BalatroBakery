@@ -158,10 +158,10 @@ payload = "Bakery_API.interest_scale()"
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
-pattern = '>= (to_big)?\(5\)'
+pattern = 'G.GAME.dollars >= (to_big\(5\))?5?'
 position = 'at'
 times = 1
-payload = ">= Bakery_API.interest_scale()"
+payload = "G.GAME.dollars >= Bakery_API.interest_scale()"
 
 # cont.
 [[patches]]
