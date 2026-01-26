@@ -165,6 +165,45 @@ Balatest.TestPlay { -- This test passes at 8x speed but fails at 16x or higher??
         end
     end
 }
+Balatest.TestPlay {
+    name = 'luchador_witch',
+    category = { 'blinds', 'witch' },
+
+    hand_size = 100,
+    jokers = { 'j_luchador' },
+    blind = 'bl_Bakery_Qof',
+    execute = function()
+        Balatest.sell(function() return G.jokers.cards[1] end)
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 52)
+
+        for k, v in pairs(G.hand.cards) do
+            assert(v.config.center.key == 'c_base',
+                "Card " .. k .. " should have no enhancement, found " .. v.config.center.key)
+        end
+    end
+}
+Balatest.TestPlay {
+    name = 'luchador_witch_alt',
+    category = { 'blinds', 'witch' },
+
+    hand_size = 1,
+    jokers = { 'j_luchador' },
+    blind = 'bl_Bakery_Qof',
+    execute = function()
+        Balatest.sell(function() return G.jokers.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.deck.cards, 51)
+
+        for k, v in pairs(G.deck.cards) do
+            assert(v.config.center.key == 'c_base',
+                "Card " .. k .. " should have no enhancement, found " .. v.config.center.key)
+        end
+    end
+}
 
 Balatest.TestPlay {
     name = 'build',
