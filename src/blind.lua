@@ -62,26 +62,6 @@ SMODS.Blind {
     end
 }
 
-local raw_SMODS_never_scores = SMODS.never_scores
-function SMODS.never_scores(card)
-    if G.GAME.blind.config.blind.key == "bl_Bakery_He" and not G.GAME.blind.disabled and G.play.cards[1] then
-        local max = 1
-        local max_rank = G.play.cards[1].base.nominal
-        for i = 2, #G.play.cards do
-            if G.play.cards[i].base.nominal > max_rank then
-                max = i
-                max_rank = G.play.cards[i].base.nominal
-            end
-        end
-        if card ~= G.play.cards[max] then
-            return true
-        end
-    end
-    return raw_SMODS_never_scores(card)
-end
-
-sendInfoMessage("SMODS.never_scores() patched. Reason: The Solo Boss Blind", "Bakery")
-
 SMODS.Blind {
     key = "He", -- The Solo
     atlas = "BakeryBlinds",
@@ -92,8 +72,23 @@ SMODS.Blind {
         min = 3,
         max = 0
     },
-    boss_colour = HEX('ffd78e')
+    boss_colour = HEX('ffd78e'),
     -- Only one card scores
+    calculate = function(self, card, context)
+        if context.modify_scoring_hand and not card.disabled then
+            local max = 1
+            local max_rank = context.scoring_hand[1].base.nominal
+            for i = 2, #context.scoring_hand do
+                if context.scoring_hand[i].base.nominal > max_rank then
+                    max = i
+                    max_rank = context.scoring_hand[i].base.nominal
+                end
+            end
+            if context.other_card ~= context.scoring_hand[max] then
+                return { remove_from_hand = true }
+            end
+        end
+    end
 }
 
 SMODS.Blind {

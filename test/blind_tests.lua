@@ -91,6 +91,18 @@ Balatest.TestPlay {
     end
 }
 Balatest.TestPlay {
+    name = 'solo_pair_low',
+    category = { 'blinds', 'solo' },
+
+    blind = 'bl_Bakery_He',
+    execute = function()
+        Balatest.play_hand { '2S', '2H', '3S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(24)
+    end
+}
+Balatest.TestPlay {
     name = 'solo_chicot',
     category = { 'blinds', 'solo' },
 
