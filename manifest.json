@@ -11,7 +11,7 @@
     "badge_colour": "EDD198",
     "badge_text_colour": "362708",
     "display_name": "Bakery",
-    "version": "3.0.0~beta15",
+    "version": "3.0.0~beta16",
     "dependencies": [
         "Steamodded (>=1.0.0~BETA-0711a)",
         "Lovely (>=0.6)"
