@@ -74,7 +74,7 @@ Balatest.TestPlay {
     category = { 'backs', 'credit_deck' },
 
     back = 'Credit',
-    money = 0,
+    dollars = 0,
     jokers = { 'j_joker' },
     deck = { cards = { { s = 'S', r = '2', e = 'm_gold' } } },
     execute = function()
@@ -90,7 +90,7 @@ Balatest.TestPlay {
     category = { 'backs', 'credit_deck' },
 
     back = 'Credit',
-    money = 2,
+    dollars = 2,
     execute = function()
         G.GAME.tarot_rate = 0
         G.GAME.planet_rate = 0
@@ -101,9 +101,10 @@ Balatest.TestPlay {
         Balatest.end_round()
         Balatest.cash_out()
         Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.wait()
     end,
     assert = function()
-        Balatest.assert_eq(G.GAME.dollars, 0)
+        Balatest.assert_eq(G.GAME.dollars, 1)
     end
 }
 
