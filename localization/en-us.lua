@@ -47,7 +47,7 @@ return {
             },
             j_Bakery_StickerSheet = {
                 name = "Sticker Sheet",
-                text = { "Each {C:attention}stickered{} Joker", "gives {X:mult,C:white}X#1#{} Mult" },
+                text = { "Each {C:attention}sticker{} on a Joker", "gives {X:mult,C:white}X#1#{} Mult" },
                 unlock = { "Have an {C:attention}eternal", "{C:attention}rental{} Joker" }
             },
             j_Bakery_PlayingCard = {

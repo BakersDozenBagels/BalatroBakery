@@ -592,7 +592,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(10.5))
     end
 }
 Balatest.TestPlay {
@@ -604,7 +604,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(10.5))
     end
 }
 Balatest.TestPlay {
@@ -616,7 +616,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(28)
+        Balatest.assert_chips(math.floor(7 * 1.5 * 1.5))
     end
 }
 Balatest.TestPlay {
@@ -629,7 +629,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(10.5))
     end
 }
 Balatest.TestPlay {
@@ -642,7 +642,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(10.5))
     end
 }
 Balatest.TestPlay {
@@ -656,7 +656,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(28)
+        Balatest.assert_chips(math.floor(7 * 1.5 * 1.5))
     end
 }
 Balatest.TestPlay {
@@ -669,7 +669,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(10.5))
     end
 }
 Balatest.TestPlay {
@@ -682,7 +682,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(10.5))
     end
 }
 Balatest.TestPlay {
@@ -696,7 +696,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(28)
+        Balatest.assert_chips(math.floor(7 * 1.5 * 1.5))
     end
 }
 Balatest.TestPlay {
@@ -709,7 +709,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(7 * 1.5 * 1.5))
     end
 }
 Balatest.TestPlay {
@@ -722,7 +722,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(14)
+        Balatest.assert_chips(math.floor(7 * 1.5 * 1.5))
     end
 }
 Balatest.TestPlay {
@@ -736,7 +736,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(28)
+        Balatest.assert_chips(math.floor(7 * 1.5 * 1.5 * 1.5 * 1.5))
     end
 }
 Balatest.TestPlay {
@@ -748,7 +748,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(84)
+        Balatest.assert_chips(math.floor(7 * (5.5 * 1.5)))
     end
 }
 Balatest.TestPlay {
@@ -760,7 +760,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(140)
+        Balatest.assert_chips(math.floor(7 * (5 * 1.5 * 1.5)))
     end
 }
 --#endregion

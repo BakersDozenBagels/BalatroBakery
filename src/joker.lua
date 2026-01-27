@@ -418,7 +418,7 @@ Bakery_API.Joker {
     unlocked = false,
     config = {
         extra = {
-            x_mult = 2
+            x_mult = 1.5
         }
     },
     loc_vars = function(self, info_queue, card)
@@ -439,28 +439,39 @@ Bakery_API.Joker {
     end,
     calculate = function(self, card, context)
         if context.other_joker then
-            local mod_sticker = false
+            local sticker_count = 0
             for k, v in ipairs(SMODS.Sticker.obj_buffer) do
                 if context.other_joker.ability[v] then
-                    mod_sticker = true
-                    break
+                    sticker_count = sticker_count + 1
                 end
             end
-            if mod_sticker or context.other_joker.ability.eternal or context.other_joker.ability.rental or
-                context.other_joker.ability.perishable or context.other_joker.pinned then
-                G.E_MANAGER:add_event(Event({
+            -- if context.other_joker.ability.eternal then
+            --     sticker_count = sticker_count + 1
+            -- end
+            -- if context.other_joker.ability.rental then
+            --     sticker_count = sticker_count + 1
+            -- end
+            -- if context.other_joker.ability.perishable then
+            --     sticker_count = sticker_count + 1
+            -- end
+            -- if context.other_joker.ability.pinned then
+            --     sticker_count = sticker_count + 1
+            -- end
+            if sticker_count > 0 then
+                local m = math.pow(card.ability.extra.x_mult, sticker_count)
+                G.E_MANAGER:add_event(Event {
                     func = function()
                         context.other_joker:juice_up(0.5, 0.5)
                         return true
                     end
-                }))
+                })
                 return {
                     message = localize {
                         type = 'variable',
                         key = 'a_xmult',
-                        vars = { card.ability.extra.x_mult }
+                        vars = { m }
                     },
-                    Xmult_mod = card.ability.extra.x_mult
+                    Xmult_mod = m
                 }
             end
         end
