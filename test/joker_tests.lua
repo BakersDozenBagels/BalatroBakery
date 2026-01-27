@@ -1821,7 +1821,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(27)
+        Balatest.assert_chips(37)
     end
 }
 Balatest.TestPlay {
@@ -1837,7 +1837,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(107)
+        Balatest.assert_chips(157)
     end
 }
 --#endregion

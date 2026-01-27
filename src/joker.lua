@@ -826,7 +826,7 @@ Bakery_API.Joker {
     config = {
         extra = {
             chips = 0,
-            chips_gain = 20
+            chips_gain = 30
         }
     },
     loc_vars = function(self, info_queue, card)
