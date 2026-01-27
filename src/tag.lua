@@ -78,10 +78,10 @@ SMODS.Tag {
     min_ante = 0,
     config = {
         type = 'Bakery_play_hand_early',
-        chips = 25,
-        mult = 5,
-        d_chips = 5,
-        d_mult = 1
+        chips = 50,
+        mult = 10,
+        d_chips = 10,
+        d_mult = 2
     },
     loc_vars = function(self, info_queue, tag)
         tag.ability = tag.ability or {}

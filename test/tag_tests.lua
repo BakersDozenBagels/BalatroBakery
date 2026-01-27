@@ -64,10 +64,10 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(32 * 6)
+        Balatest.assert_chips(57 * 11)
         Balatest.assert_eq(#G.GAME.tags, 1)
-        Balatest.assert_eq(G.GAME.tags[1].ability.chips, 20)
-        Balatest.assert_eq(G.GAME.tags[1].ability.mult, 4)
+        Balatest.assert_eq(G.GAME.tags[1].ability.chips, 40)
+        Balatest.assert_eq(G.GAME.tags[1].ability.mult, 8)
     end
 }
 Balatest.TestPlay {
@@ -80,15 +80,17 @@ Balatest.TestPlay {
         Balatest.skip_blind 'tag_Bakery_ChocolateTag'
         Balatest.start_round()
         Balatest.play_hand { '2S' }
+        Balatest.next_round()
         Balatest.play_hand { '2H' }
         Balatest.play_hand { '2C' }
+        Balatest.next_round()
         Balatest.play_hand { '2D' }
     end,
     assert = function()
-        Balatest.assert_chips(466)
+        Balatest.assert_chips(27 * 5)
         Balatest.assert_eq(#G.GAME.tags, 1)
-        Balatest.assert_eq(G.GAME.tags[1].ability.chips, 5)
-        Balatest.assert_eq(G.GAME.tags[1].ability.mult, 1)
+        Balatest.assert_eq(G.GAME.tags[1].ability.chips, 10)
+        Balatest.assert_eq(G.GAME.tags[1].ability.mult, 2)
     end
 }
 Balatest.TestPlay {
@@ -101,14 +103,16 @@ Balatest.TestPlay {
         Balatest.skip_blind 'tag_Bakery_ChocolateTag'
         Balatest.start_round()
         Balatest.play_hand { '2S' }
+        Balatest.next_round()
         Balatest.play_hand { '2H' }
         Balatest.play_hand { '2C' }
+        Balatest.next_round()
         Balatest.play_hand { '2D' }
         Balatest.next_round()
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(24)
+        Balatest.assert_chips(17 * 3)
         Balatest.assert_eq(#G.GAME.tags, 0)
     end
 }
