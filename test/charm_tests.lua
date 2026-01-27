@@ -1168,17 +1168,17 @@ Balatest.TestPlay {
     end
 }
 Balatest.TestPlay {
-    name = 'oops_all_20s_6_banana',
+    name = 'oops_all_20s_4_space',
     category = { 'charms', 'oops_all_20s' },
 
-    jokers = { 'j_oops', 'j_gros_michel', 'j_gros_michel', 'j_gros_michel', 'j_gros_michel' },
+    jokers = { 'j_oops', 'j_space', 'j_space', 'j_space', 'j_space' },
     dollars = 8,
     execute = function()
         equip 'BakeryCharm_Bakery_OopsAll20s'
-        Balatest.end_round()
+        Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(G.GAME.hands["High Card"].level, 5)
     end
 }
 --#endregion

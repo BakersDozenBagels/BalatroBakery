@@ -1137,7 +1137,7 @@ Bakery_API.Charm {
     atlas = 'Charms',
     calculate = function(self, card, context)
         if context.mod_probability then
-            return { numerator = context.numerator * 3 }
+            return { numerator = context.numerator * 2 }
         end
     end,
 }
