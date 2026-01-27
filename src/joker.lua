@@ -565,8 +565,8 @@ Bakery_API.Joker {
         x = 4,
         y = 1
     },
-    rarity = 2,
-    cost = 4,
+    rarity = 3,
+    cost = 6,
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
@@ -587,8 +587,8 @@ Bakery_API.Joker {
         x = 5,
         y = 1
     },
-    rarity = 2,
-    cost = 4,
+    rarity = 3,
+    cost = 6,
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
