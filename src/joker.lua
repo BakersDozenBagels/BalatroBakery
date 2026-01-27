@@ -622,7 +622,7 @@ Bakery_API.Joker {
     config = {
         extra = {
             mult = 0,
-            mult_gain = 2
+            mult_gain = 5
         }
     },
     blueprint_compat = true,
@@ -636,7 +636,7 @@ Bakery_API.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                mult = card.ability.extra.mult
+                chips = card.ability.extra.mult
             }
         end
 
@@ -645,7 +645,7 @@ Bakery_API.Joker {
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
             return {
                 message = 'Upgraded!',
-                colour = G.C.MULT,
+                colour = G.C.CHIPS,
                 card = card
             }
         end

@@ -76,9 +76,9 @@ return {
             j_Bakery_JokerAgainstHumanity = {
                 name = "Joker Against Humanity",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult when played",
+                    "Gains {C:chips}+#1#{} Chips when played",
                     "{C:attention}poker hand{} is {C:attention}level 1{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}"
                 }
             },
             j_Bakery_CardSleeve = {
