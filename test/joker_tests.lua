@@ -1816,28 +1816,28 @@ Balatest.TestPlay {
     name = 'snowball_1',
     category = { 'jokers', 'snowball' },
 
-    jokers = { 'j_joker', 'j_joker', 'j_Bakery_Snowball' },
+    jokers = { 'j_Bakery_Snowball' },
     execute = function()
-        Balatest.play_hand { '2S', '2H' }
+        Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(154)
+        Balatest.assert_chips(27)
     end
 }
 Balatest.TestPlay {
     name = 'snowball_5',
     category = { 'jokers', 'snowball' },
 
-    jokers = { 'j_joker', 'j_joker', 'j_Bakery_Snowball' },
+    jokers = { 'j_Bakery_Snowball' },
     execute = function()
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand { '2S', '2H' }
+        Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(210)
+        Balatest.assert_chips(107)
     end
 }
 --#endregion

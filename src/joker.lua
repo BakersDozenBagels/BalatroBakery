@@ -813,29 +813,32 @@ Bakery_API.Joker {
     rarity = 3,
     cost = 8,
     config = {
-        x_mult = 1,
         extra = {
-            xmult_gain = 0.1
+            chips = 0,
+            chips_gain = 20
         }
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { card.ability.extra.xmult_gain, card.ability.x_mult }
+            vars = { card.ability.extra.chips_gain, card.ability.extra.chips }
         }
     end,
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
     calculate = function(self, card, context)
+        if context.joker_main then
+            return { chips = card.ability.extra.chips }
+        end
         if context.setting_blind and not context.blueprint and not card.getting_sliced then
-            card.ability.x_mult = card.ability.x_mult + card.ability.extra.xmult_gain
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
             G.E_MANAGER:add_event(Event({
                 func = function()
                     card_eval_status_text(card, 'extra', nil, nil, nil, {
                         message = localize {
                             type = 'variable',
-                            key = 'a_xmult',
-                            vars = { card.ability.x_mult }
+                            key = 'a_chips',
+                            vars = { card.ability.extra.chips }
                         }
                     });
                     return true

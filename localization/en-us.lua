@@ -101,8 +101,8 @@ return {
             },
             j_Bakery_Snowball = {
                 name = "Snowball",
-                text = { "Gains {X:mult,C:white}X#1#{} Mult", "when {C:attention}Blind{} is selected",
-                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)" }
+                text = { "Gains {C:chips}+#1#{} Chips", "when {C:attention}Blind{} is selected",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)" }
             },
             j_Bakery_GetOutOfJailFreeCard = {
                 name = "Get Out of Jail Free Card",
