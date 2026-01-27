@@ -23,7 +23,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(7 * 6)
+        Balatest.assert_chips(7 * 11)
     end
 }
 Balatest.TestPlay {
@@ -36,7 +36,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(7 * 3)
+        Balatest.assert_chips(7 * 5)
     end
 }
 Balatest.TestPlay {
@@ -50,7 +50,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(7 * 8)
+        Balatest.assert_chips(7 * 15)
     end
 }
 Balatest.TestPlay {
