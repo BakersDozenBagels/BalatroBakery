@@ -256,5 +256,9 @@ Bakery_API.credit(SMODS.Blind {
     end,
     recalc_debuff = function(self, card, from_blind)
         return not G.GAME.blind.disabled and card.area == G.Bakery_charm_area
+    end,
+    -- Only appears if you have a charm equipped
+    in_pool = function()
+        return G.GAME.Bakery_charm ~= nil
     end
 })
