@@ -445,18 +445,6 @@ Bakery_API.Joker {
                     sticker_count = sticker_count + 1
                 end
             end
-            -- if context.other_joker.ability.eternal then
-            --     sticker_count = sticker_count + 1
-            -- end
-            -- if context.other_joker.ability.rental then
-            --     sticker_count = sticker_count + 1
-            -- end
-            -- if context.other_joker.ability.perishable then
-            --     sticker_count = sticker_count + 1
-            -- end
-            -- if context.other_joker.ability.pinned then
-            --     sticker_count = sticker_count + 1
-            -- end
             if sticker_count > 0 then
                 local m = math.pow(card.ability.extra.x_mult, sticker_count)
                 G.E_MANAGER:add_event(Event {
