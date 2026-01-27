@@ -535,8 +535,10 @@ local tags_3 = {
     { "alert",   "Alert",   "m_glass" },
     { "gold",    "Gold",    "m_gold" },
     { "battery", "Battery", "m_steel" },
-    { "rock",    "Rock",    "m_stone" },
-    { "equal",   "Equal",   "m_wild" },
+}
+local tags_4 = {
+    { "rock",  "Rock",  "m_stone" },
+    { "equal", "Equal", "m_wild" },
 }
 local tags_5 = {
     { "roulette", "Roulette", "m_lucky" },
@@ -607,6 +609,74 @@ for _, tag in ipairs(tags_3) do
             Balatest.assert(G.discard.cards[3].config.center.key == tag[3])
             Balatest.assert(G.discard.cards[4].config.center.key == tag[3])
             Balatest.assert(G.discard.cards[5].config.center.key == tag[3])
+        end
+    }
+end
+for _, tag in ipairs(tags_4) do
+    Balatest.TestPlay {
+        name = tag[1] .. '_tag_full',
+        category = { 'tags', tag[1] .. '_tag' },
+
+        dollars = 0,
+        no_auto_start = true,
+        execute = function()
+            Balatest.skip_blind('tag_Bakery_' .. tag[2] .. 'Tag')
+            Balatest.start_round()
+            Balatest.q(function() G.GAME.blind.chips = 1000 end)
+            Balatest.play_hand { '2S', '2H', '2C', '2D' }
+        end,
+        assert = function()
+            Balatest.assert_chips(68 * 7)
+            Balatest.assert_eq(G.GAME.dollars, 0)
+            Balatest.assert_eq(#G.GAME.tags, 0)
+            Balatest.assert_eq(#G.discard.cards, 4)
+            Balatest.assert(G.discard.cards[1].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[2].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[3].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[4].config.center.key == tag[3])
+        end
+    }
+    Balatest.TestPlay {
+        name = tag[1] .. '_tag_sub',
+        category = { 'tags', tag[1] .. '_tag' },
+
+        no_auto_start = true,
+        execute = function()
+            Balatest.skip_blind('tag_Bakery_' .. tag[2] .. 'Tag')
+            Balatest.start_round()
+            Balatest.play_hand { '2S' }
+        end,
+        assert = function()
+            Balatest.assert_chips(7)
+            Balatest.assert_eq(#G.GAME.tags, 1)
+            Balatest.assert_eq(G.GAME.tags[1].ability.amount, 3)
+            Balatest.assert_eq(#G.discard.cards, 1)
+            Balatest.assert(G.discard.cards[1].config.center.key == tag[3])
+        end
+    }
+    Balatest.TestPlay {
+        name = tag[1] .. '_tag_stack',
+        category = { 'tags', tag[1] .. '_tag' },
+
+        no_auto_start = true,
+        execute = function()
+            Balatest.skip_blind('tag_Bakery_' .. tag[2] .. 'Tag')
+            Balatest.skip_blind('tag_Bakery_' .. tag[2] .. 'Tag')
+            Balatest.start_round()
+            Balatest.play_hand { '2C' }
+            Balatest.play_hand { '2S', '3S', '4S', '5S', '7S' }
+        end,
+        assert = function()
+            Balatest.assert_chips(231)
+            Balatest.assert_eq(#G.GAME.tags, 1)
+            Balatest.assert_eq(G.GAME.tags[1].ability.amount, 2)
+            Balatest.assert_eq(#G.discard.cards, 6)
+            Balatest.assert(G.discard.cards[1].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[2].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[3].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[4].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[5].config.center.key == tag[3])
+            Balatest.assert(G.discard.cards[6].config.center.key == tag[3])
         end
     }
 end
