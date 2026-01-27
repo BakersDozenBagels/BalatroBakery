@@ -44,7 +44,7 @@ Bakery_API.Joker {
     config = {
         extra = {
             mult = 0,
-            mult_gain = 1,
+            mult_gain = 2,
             used_ranks = {}
         }
     },
