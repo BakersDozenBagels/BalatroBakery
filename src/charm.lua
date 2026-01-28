@@ -947,7 +947,7 @@ Bakery_API.Charm {
     unlocked = false,
     config = {
         extra = {
-            money = 4
+            money = 3
         }
     },
     loc_vars = function(self, info_queue, card)

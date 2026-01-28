@@ -599,7 +599,7 @@ Balatest.TestPlay {
         Balatest.wait_for_input()
     end,
     assert = function()
-        Balatest.assert_eq(G.GAME.dollars, 4)
+        Balatest.assert_eq(G.GAME.dollars, 3)
     end
 }
 Balatest.TestPlay {
@@ -616,7 +616,7 @@ Balatest.TestPlay {
         Balatest.cash_out()
     end,
     assert = function()
-        Balatest.assert_eq(G.GAME.dollars, 4)
+        Balatest.assert_eq(G.GAME.dollars, 3)
     end
 }
 --#endregion
