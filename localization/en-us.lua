@@ -193,6 +193,13 @@ return {
             j_Bakery_Wearwolf_Back = {
                 name = "Wearwolf (Night)",
                 text = { "{C:mult}+#3#{} Mult", "{C:attention}Transforms{} is played hand", "contains a {C:attention}#2#" }
+            },
+            j_Bakery_Estate = {
+                name = "Estate",
+                text = {
+                    "{C:chips}+#1#{} Chips, {C:mult}+#2#{} Mult",
+                    "{C:inactive}(More when further right)"
+                }
             }
         },
         Tag = {
@@ -302,6 +309,19 @@ return {
             b_Bakery_DN = {
                 name = "D & Deck",
                 text = { "All {C:green}probabilities{} are", "rolled with {C:attention}advantage", "{C:inactive}(Roll twice, keep the better result)" }
+            },
+            b_Bakery_Dominion = {
+                name = "Dominion Deck",
+                text = {
+                    "Start with {C:red}-#1#{} hand size",
+                    "and {C:attention}#2# #3# Jokers{},",
+                    "{C:attention}+#4#{} hand size",
+                    "every {C:attention}#5#{} Antes"
+                },
+                unlock = {
+                    "Have at least {C:attention}#1#",
+                    "of any one {C:attention}Joker"
+                }
             }
         },
         Sleeve = {
@@ -333,6 +353,22 @@ return {
             sleeve_Bakery_DN_alt = {
                 name = "5eeve",
                 text = { "All {C:green}probabilities{} are", "rolled with {C:attention}double advantage", "{C:inactive}(Roll three times, keep the best result)" }
+            },
+            sleeve_Bakery_Dominion = {
+                name = "Dominion Sleeve",
+                text = {
+                    "Start with {C:red}-#1#{} hand size",
+                    "and {C:attention}#2# #3# Jokers{},",
+                    "{C:attention}+#4#{} hand size",
+                    "every {C:attention}#5# Antes"
+                }
+            },
+            sleeve_Bakery_Dominion_alt = {
+                name = "Dominion Sleeve",
+                text = {
+                    "Start with {C:red}#4#{} playing cards,",
+                    "{C:attention}#5#{}, and {C:attention}#6#"
+                }
             }
         },
         Blind = {

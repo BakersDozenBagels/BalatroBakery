@@ -150,3 +150,54 @@ Balatest.TestPlay {
         Balatest.assert_eq(G.GAME.dollars, 20)
     end
 }
+
+Balatest.TestPlay {
+    name = 'dominion',
+    category = { 'backs', 'dominion_deck' },
+
+    back = 'Dominion',
+    hand_size = 8,
+    execute = function()
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 3)
+        for _, card in ipairs(G.jokers.cards) do
+            Balatest.assert_eq(card.config.center.key, 'j_Bakery_Estate')
+        end
+        Balatest.assert_eq(#G.hand.cards, 5)
+    end
+}
+Balatest.TestPlay {
+    name = 'dominion_increase',
+    category = { 'backs', 'dominion_deck' },
+
+    back = 'Dominion',
+    deck = { cards = {
+        { r = 'A', s = 'D' },
+        { r = 'A', s = 'D' },
+        { r = 'A', s = 'C' },
+        { r = 'A', s = 'C' },
+        { r = 'A', s = 'H' },
+        { r = 'A', s = 'H' },
+        { r = 'A', s = 'S' },
+        { r = 'A', s = 'S' },
+    } },
+    hand_size = 8,
+    no_auto_start = true,
+    blind = 'bl_serpent',
+    execute = function()
+        for _ = 1, 2 do
+            Balatest.skip_blind 'tag_Bakery_BlankTag'
+            Balatest.skip_blind 'tag_Bakery_BlankTag'
+            Balatest.start_round()
+            Balatest.end_round()
+            Balatest.cash_out()
+            Balatest.exit_shop()
+        end
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 6)
+    end
+}

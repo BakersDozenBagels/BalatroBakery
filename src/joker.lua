@@ -1707,3 +1707,50 @@ Bakery_API.Joker {
         end
     end
 }
+
+function estate_pos(card)
+    if not G.jokers then return 1 end
+    for i, v in ipairs(G.jokers.cards) do
+        if v == card then
+            return i
+        end
+    end
+    return 1
+end
+
+Bakery_API.Joker {
+    key = "Estate",
+    pos = {
+        x = 0,
+        y = 6
+    },
+    artist = "Jack5",
+    coder = "Jack5",
+    idea = "Jack5",
+    rarity = 1,
+    cost = 5,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            chips = 10,
+            mult = 1,
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        local joker_count = estate_pos(card)
+        return {
+            vars = { card.ability.extra.chips * joker_count, card.ability.extra.mult * joker_count }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local joker_count = estate_pos(card)
+            return {
+                chips = card.ability.extra.chips * joker_count,
+                mult = card.ability.extra.mult * joker_count
+            }
+        end
+    end
+}

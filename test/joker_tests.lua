@@ -2368,3 +2368,54 @@ if Talisman then
     }
 end
 --#endregion
+
+--#region Estate
+Balatest.TestPlay {
+    name = 'estate_one',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30)
+    end
+}
+Balatest.TestPlay {
+    name = 'estate_two',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_to_the_moon', 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        Balatest.assert_chips(75)
+    end
+}
+Balatest.TestPlay {
+    name = 'estate_four',
+    category = { 'jokers', 'estate' },
+
+    jokers = { 'j_to_the_moon', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate', 'j_Bakery_Estate' },
+    deck = { cards = {
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' },
+        { r = '2', s = 'D', e = 'm_Bakery_Curse' } -- Prevent game over due to no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2D' }
+    end,
+    assert = function()
+        Balatest.assert_chips(15 * 145)
+    end
+}
+--#endregion
