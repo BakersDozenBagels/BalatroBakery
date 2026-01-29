@@ -742,6 +742,7 @@ Bakery_API.guard(function()
             trigger = "immediate",
             func = function()
                 error(message or "Forced crash via Bakery_API.crash()")
+                return true
             end
         })
     end
@@ -804,7 +805,7 @@ Bakery_API.guard(function()
                         key = 'v_Bakery_by',
                         vars = { creator.name }
                     }
-                return
+                    return
                 end
             end
             if blind.artist then
@@ -855,7 +856,7 @@ Bakery_API.guard(function()
                 if blind.artist and Bakery_API.contributors[blind.artist] then
                     make("v_Bakery_artist", Bakery_API.contributors[blind.artist])
                 end
-                if blind.coder and Bakery_API.contributors[blind.coder]then
+                if blind.coder and Bakery_API.contributors[blind.coder] then
                     make("v_Bakery_coder", Bakery_API.contributors[blind.coder])
                 end
                 if blind.idea and Bakery_API.contributors[blind.idea] then

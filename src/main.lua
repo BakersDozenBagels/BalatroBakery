@@ -20,7 +20,7 @@ function Bakery_API.load(file)
     for _, part in ipairs(Bakery_API.load_stack) do
         path = path .. '/' .. part
     end
-    local ret = assert(SMODS.load_file('src/' .. path .. '.lua'))()
+    local ret = assert(SMODS.load_file('src' .. path .. '.lua'))()
     table.remove(Bakery_API.load_stack)
     return ret
 end
