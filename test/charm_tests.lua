@@ -1,15 +1,5 @@
 -- See https://github.com/BakersDozenBagels/Balatest/ for more information.
 
-local function equip(key)
-    Balatest.q(function()
-        G.FUNCS.Bakery_equip_from_shop { config = { ref_table = Card(G.Bakery_charm_area.T.x + G.Bakery_charm_area.T.w / 2, G.Bakery_charm_area.T.y, G.CARD_W, G.CARD_W,
-            G.P_CARDS.empty, G.P_CENTERS[key], {
-                bypass_discovery_center = true,
-                bypass_discovery_ui = true
-            }) } }
-    end)
-end
-
 --#region Palette
 Balatest.TestPlay {
     name = 'palette_normal',
@@ -17,7 +7,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_droll' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Palette'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Palette'
         Balatest.play_hand { '2S', '3S', '4S', '5S', '7S' }
     end,
     assert = function()
@@ -30,7 +20,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_droll' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Palette'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Palette'
         Balatest.play_hand { '2S', '3C', '4H', '5D', '7S' }
     end,
     assert = function()
@@ -43,8 +33,8 @@ Balatest.TestPlay {
 
     jokers = { 'j_droll' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Palette'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Palette'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.play_hand { '2S', '3C', '4H', '5D', '7S' }
     end,
     assert = function()
@@ -59,7 +49,7 @@ Balatest.TestPlay {
     category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S' }
     end,
     assert = function()
@@ -74,7 +64,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S', e = 'm_stone' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S' }
     end,
     assert = function()
@@ -88,7 +78,7 @@ Balatest.TestPlay {
     category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2H', '2C', '2D' }
     end,
     assert = function()
@@ -102,7 +92,7 @@ Balatest.TestPlay {
     category = { 'charms', 'anaglyph_lens' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2H', '2C', '2D', '6S' }
     end,
     assert = function()
@@ -117,7 +107,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H' }, { r = '2', s = 'C' }, { r = '2', s = 'D' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2H', '2C', '2D', '2S' }
     end,
     assert = function()
@@ -132,7 +122,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'C' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '2S', '2S', '8C' }
     end,
     assert = function()
@@ -147,7 +137,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '2S', '2S', '8S' }
     end,
     assert = function()
@@ -162,7 +152,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '8', s = 'C', e = 'm_stone' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '2S', '2S', '8C' }
     end,
     assert = function()
@@ -177,7 +167,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '2S', '2S', '2S' }
     end,
     assert = function()
@@ -192,7 +182,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'C' }, { r = '4', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '4C', '4D', '9S', '9S' }
     end,
     assert = function()
@@ -207,7 +197,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'S' }, { r = '4', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '4S', '4S', '9S', '9S' }
     end,
     assert = function()
@@ -222,7 +212,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '4', s = 'S' }, { r = '4', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '4S', '4D', '9S', '9S' }
     end,
     assert = function()
@@ -237,7 +227,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'D' }, { r = '9', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2D', '9D', '9S', '9S' }
     end,
     assert = function()
@@ -252,7 +242,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2s', '9D', '9S', '9S' }
     end,
     assert = function()
@@ -267,7 +257,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '2S', '9S', '9S' }
     end,
     assert = function()
@@ -282,7 +272,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '9S', '9S' }
     end,
     assert = function()
@@ -297,7 +287,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '3D', '9S', '9S' }
     end,
     assert = function()
@@ -312,7 +302,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D', e = 'm_stone' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
         Balatest.highlight { '2S', '2S', '3D', '9S', '9S' }
     end,
     assert = function()
@@ -329,7 +319,7 @@ Balatest.TestPlay {
     category = { 'charms', 'pedigree' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '2C', '2D', '3S', '3D' }
     end,
     assert = function()
@@ -343,7 +333,7 @@ Balatest.TestPlay {
     category = { 'charms', 'pedigree' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '3S', '4S', '7C', 'QC' }
     end,
     assert = function()
@@ -358,7 +348,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'C' }, { r = '8', s = 'C' }, { r = '8', s = 'C' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '2S', '2C', '8C', '8C' }
     end,
     assert = function()
@@ -373,7 +363,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S', e = 'm_wild' }, { r = '2', s = 'S', e = 'm_wild' }, { r = '2', s = 'C' }, { r = '8', s = 'C' }, { r = '8', s = 'C' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '2S', '2C', '8C', '8C' }
     end,
     assert = function()
@@ -388,7 +378,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' }, { r = '4', s = 'H' }, { r = '5', s = 'H' }, { r = '6', s = 'H' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '3S', '4H', '5H', '6H' }
     end,
     assert = function()
@@ -403,7 +393,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' }, { r = '4', s = 'H', e = 'm_wild' }, { r = '5', s = 'H', e = 'm_wild' }, { r = '6', s = 'H', e = 'm_wild' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '3S', '4H', '5H', '6H' }
     end,
     assert = function()
@@ -418,7 +408,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = 'T', s = 'S' }, { r = 'J', s = 'S' }, { r = 'Q', s = 'H', e = 'm_wild' }, { r = 'K', s = 'H', e = 'm_wild' }, { r = 'A', s = 'H', e = 'm_wild' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { 'TS', 'JS', 'QH', 'KH', 'AH' }
     end,
     assert = function()
@@ -433,7 +423,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H' }, { r = '2', s = 'H' }, { r = '2', s = 'H' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '2S', '2H', '2H', '2H' }
     end,
     assert = function()
@@ -448,7 +438,7 @@ Balatest.TestPlay {
 
     deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'H', e = 'm_wild' }, { r = '2', s = 'H', e = 'm_wild' }, { r = '2', s = 'H', e = 'm_wild' } } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Pedigree'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Pedigree'
         Balatest.highlight { '2S', '2S', '2H', '2H', '2H' }
     end,
     assert = function()
@@ -465,7 +455,7 @@ Balatest.TestPlay {
     category = { 'charms', 'epitaph' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Epitaph'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Epitaph'
         Balatest.play_hand { '2S', '3C' }
     end,
     assert = function()
@@ -477,7 +467,7 @@ Balatest.TestPlay {
     category = { 'charms', 'epitaph' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Epitaph'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Epitaph'
         Balatest.play_hand { '2S', '3C', '4D', '5H', '7S' }
     end,
     assert = function()
@@ -489,8 +479,8 @@ Balatest.TestPlay {
     category = { 'charms', 'epitaph' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Epitaph'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Epitaph'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.play_hand { '2S', '3C', '4D', '5H', '7S' }
     end,
     assert = function()
@@ -505,7 +495,7 @@ Balatest.TestPlay {
     category = { 'charms', 'rune' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Rune'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Rune'
     end,
     assert = function()
         local node = { config = {} }
@@ -519,7 +509,7 @@ Balatest.TestPlay {
 
     discards = 0,
     execute = function()
-        equip 'BakeryCharm_Bakery_Rune'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Rune'
     end,
     assert = function()
         local node = { config = {} }
@@ -533,9 +523,8 @@ Balatest.TestPlay {
 
     hand_size = 8,
     execute = function()
-        equip 'BakeryCharm_Bakery_Rune'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Rune'
         Balatest.q(G.FUNCS.Bakery_discard_zero)
-        Balatest.wait_for_input()
     end,
     assert = function()
         Balatest.assert_eq(#G.hand.cards, 10)
@@ -549,7 +538,7 @@ Balatest.TestPlay {
     dollars = 8,
     hand_size = 8,
     execute = function()
-        equip 'BakeryCharm_Bakery_Rune'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Rune'
         Balatest.q(G.FUNCS.Bakery_discard_zero)
         Balatest.end_round()
         Balatest.cash_out()
@@ -566,7 +555,7 @@ Balatest.TestPlay {
     category = { 'charms', 'obsession' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Obsession'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Obsession'
     end,
     assert = function()
         local node = { config = {} }
@@ -580,7 +569,7 @@ Balatest.TestPlay {
 
     discards = 0,
     execute = function()
-        equip 'BakeryCharm_Bakery_Obsession'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Obsession'
     end,
     assert = function()
         local node = { config = {} }
@@ -594,7 +583,7 @@ Balatest.TestPlay {
 
     dollars = 8,
     execute = function()
-        equip 'BakeryCharm_Bakery_Obsession'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Obsession'
         Balatest.q(G.FUNCS.Bakery_discard_zero)
         Balatest.wait_for_input()
     end,
@@ -610,7 +599,7 @@ Balatest.TestPlay {
     dollars = 8,
     hand_size = 8,
     execute = function()
-        equip 'BakeryCharm_Bakery_Obsession'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Obsession'
         Balatest.q(G.FUNCS.Bakery_discard_zero)
         Balatest.end_round()
         Balatest.cash_out()
@@ -627,7 +616,7 @@ Balatest.TestPlay {
     category = { 'charms', 'introversion' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Introversion'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Introversion'
     end,
     assert = function()
         Balatest.assert_eq(G.GAME.joker_rate, 0)
@@ -638,8 +627,8 @@ Balatest.TestPlay {
     category = { 'charms', 'introversion' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Introversion'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Introversion'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
     end,
     assert = function()
         Balatest.assert_eq(G.GAME.joker_rate, 20)
@@ -653,7 +642,7 @@ Balatest.TestPlay {
     category = { 'charms', 'extroversion' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Extroversion'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Extroversion'
     end,
     assert = function()
         Balatest.assert_eq(G.GAME.planet_rate, 0)
@@ -665,8 +654,8 @@ Balatest.TestPlay {
     category = { 'charms', 'extroversion' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Extroversion'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Extroversion'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
     end,
     assert = function()
         Balatest.assert_eq(G.GAME.planet_rate, 4)
@@ -683,7 +672,7 @@ Balatest.TestPlay {
     dollars = 10,
     execute = function()
         G.GAME.modifiers.no_interest = nil
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.end_round()
         Balatest.cash_out()
     end,
@@ -698,7 +687,7 @@ Balatest.TestPlay {
     dollars = 38,
     execute = function()
         G.GAME.modifiers.no_interest = nil
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.end_round()
         Balatest.cash_out()
     end,
@@ -714,7 +703,7 @@ Balatest.TestPlay {
     dollars = 18,
     execute = function()
         G.GAME.modifiers.no_interest = nil
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.end_round()
         Balatest.cash_out()
     end,
@@ -730,7 +719,7 @@ Balatest.TestPlay {
     dollars = 28,
     execute = function()
         G.GAME.modifiers.no_interest = nil
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.end_round()
         Balatest.cash_out()
     end,
@@ -746,7 +735,7 @@ Balatest.TestPlay {
     category = { 'charms', 'void' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Void'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Void'
     end,
     assert = function()
         Balatest.assert_eq(G.P_CENTERS.e_negative:get_weight(), 30)
@@ -757,8 +746,8 @@ Balatest.TestPlay {
     category = { 'charms', 'void' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Void'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Void'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
     end,
     assert = function()
         Balatest.assert_eq(G.P_CENTERS.e_negative:get_weight(), 3)
@@ -775,7 +764,7 @@ Balatest.TestPlay {
     no_auto_start = true,
     jokers = { 'j_cartomancer' },
     execute = function()
-        equip 'BakeryCharm_Bakery_PrintError'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PrintError'
         Balatest.start_round()
     end,
     assert = function()
@@ -790,7 +779,7 @@ Balatest.TestPlay {
     no_auto_start = true,
     jokers = { 'j_crv_printer' },
     execute = function()
-        equip 'BakeryCharm_Bakery_PrintError'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PrintError'
         Balatest.start_round()
     end,
     assert = function()
@@ -807,7 +796,7 @@ Balatest.TestPlay {
 
     consumeables = { 'c_pluto', 'c_death' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Posterization'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Posterization'
         Balatest.wait()
     end,
     assert = function()
@@ -822,7 +811,7 @@ Balatest.TestPlay {
 
     consumeables = { 'c_mf_black', 'c_mf_crimson' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Posterization'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Posterization'
         Balatest.wait()
     end,
     assert = function()
@@ -841,7 +830,7 @@ Balatest.TestPlay {
         G.GAME.planet_rate = 0
         G.GAME.tarot_rate = 0
         G.GAME.rotarot_rate = 0
-        equip 'BakeryCharm_Bakery_Posterization'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Posterization'
         Balatest.end_round()
         Balatest.cash_out()
         Balatest.buy(function() return G.shop_jokers.cards[2] end)
@@ -864,12 +853,12 @@ Balatest.TestPlay {
         G.GAME.planet_rate = 0
         G.GAME.tarot_rate = 0
         G.GAME.rotarot_rate = 0
-        equip 'BakeryCharm_Bakery_Posterization'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Posterization'
         Balatest.end_round()
         Balatest.cash_out()
         Balatest.buy(function() return G.shop_jokers.cards[2] end)
         Balatest.buy(function() return G.shop_jokers.cards[1] end)
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.wait()
     end,
     assert = function()
@@ -885,7 +874,7 @@ Balatest.TestPlay {
     required_mods = { 'Cryptid' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Marm'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Marm'
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -898,7 +887,7 @@ Balatest.TestPlay {
     required_mods = { 'Cryptid' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Marm'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Marm'
         Balatest.play_hand { '2S', '3S', '4S', '5S', '6S' }
     end,
     assert = function()
@@ -911,7 +900,7 @@ Balatest.TestPlay {
     required_mods = { 'Cryptid' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_Marm'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Marm'
         Balatest.play_hand { '2S', '3S', '4S', '5S', '7S' }
     end,
     assert = function()
@@ -925,7 +914,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_jolly' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Marm'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Marm'
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -942,7 +931,7 @@ Balatest.TestPlay {
 
     dollars = 100,
     execute = function()
-        equip 'BakeryCharm_Bakery_DuctTape'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_DuctTape'
     end,
     assert = function()
         Balatest.assert_eq(SMODS.Rarities.Common:get_weight(), 0)
@@ -965,7 +954,7 @@ Balatest.TestPlay {
         { r = 'A', s = 'S' }
     } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Virus'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Virus'
         Balatest.play_hand { '5D' }
         Balatest.wait_for_input()
     end,
@@ -984,7 +973,7 @@ Balatest.TestPlay {
         { r = 'A', s = 'S', e = 'm_wild' }
     } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Virus'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Virus'
         Balatest.play_hand { '5D' }
         Balatest.wait_for_input()
     end,
@@ -1003,7 +992,7 @@ Balatest.TestPlay {
         { r = 'A', s = 'S', e = 'm_garb_infected' }
     } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Virus'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Virus'
         Balatest.play_hand { '5D' }
         Balatest.wait_for_input()
     end,
@@ -1022,7 +1011,7 @@ Balatest.TestPlay {
         { r = 'A', s = 'D' },
     } },
     execute = function()
-        equip 'BakeryCharm_Bakery_Virus'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Virus'
         Balatest.play_hand { 'AD' }
         Balatest.wait_for_input()
     end,
@@ -1038,7 +1027,7 @@ Balatest.TestPlay {
     category = { 'charms', 'petri_dish' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_PetriDish'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PetriDish'
         Balatest.wait()
     end,
     assert = function()
@@ -1050,8 +1039,10 @@ Balatest.TestPlay {
     category = { 'charms', 'petri_dish' },
 
     execute = function()
-        equip 'BakeryCharm_Bakery_PetriDish'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PetriDish'
+        Balatest.wait()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
+        Balatest.wait()
     end,
     assert = function()
         Balatest.assert_eq(G.consumeables.config.card_limit, 2)
@@ -1064,7 +1055,7 @@ Balatest.TestPlay {
     blind = 'bl_Bakery_Lammed',
     no_auto_start = true,
     execute = function()
-        equip 'BakeryCharm_Bakery_PetriDish'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PetriDish'
         Balatest.start_round()
     end,
     assert = function()
@@ -1078,7 +1069,7 @@ Balatest.TestPlay {
     blind = 'bl_Bakery_Lammed',
     no_auto_start = true,
     execute = function()
-        equip 'BakeryCharm_Bakery_PetriDish'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PetriDish'
         Balatest.start_round()
         Balatest.end_round()
     end,
@@ -1096,7 +1087,7 @@ Balatest.TestPlay {
     execute = function()
         Balatest.end_round()
         Balatest.cash_out()
-        equip 'BakeryCharm_Bakery_Cogwheel'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Cogwheel'
         Balatest.wait_for_input()
     end,
     assert = function()
@@ -1111,8 +1102,8 @@ Balatest.TestPlay {
     execute = function()
         Balatest.end_round()
         Balatest.cash_out()
-        equip 'BakeryCharm_Bakery_Cogwheel'
-        equip 'BakeryCharm_Bakery_Coin'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Cogwheel'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
         Balatest.wait_for_input()
     end,
     assert = function()
@@ -1128,7 +1119,7 @@ Balatest.TestPlay {
     execute = function()
         Balatest.end_round()
         Balatest.cash_out()
-        equip 'BakeryCharm_Bakery_Cogwheel'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Cogwheel'
         Balatest.exit_shop()
         Balatest.start_round()
         Balatest.wait_for_input()
@@ -1146,7 +1137,7 @@ Balatest.TestPlay {
     execute = function()
         Balatest.end_round()
         Balatest.cash_out()
-        equip 'BakeryCharm_Bakery_Cogwheel'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Cogwheel'
         Balatest.exit_shop()
         Balatest.start_round()
         Balatest.end_round()
@@ -1167,7 +1158,7 @@ Balatest.TestPlay {
     jokers = { 'j_business' },
     dollars = 8,
     execute = function()
-        equip 'BakeryCharm_Bakery_OopsAll20s'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_OopsAll20s'
         Balatest.play_hand { 'KS', 'QS', 'JS', 'AS', 'TS' }
     end,
     assert = function()
@@ -1181,7 +1172,7 @@ Balatest.TestPlay {
     jokers = { 'j_oops', 'j_space', 'j_space', 'j_space', 'j_space' },
     dollars = 8,
     execute = function()
-        equip 'BakeryCharm_Bakery_OopsAll20s'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_OopsAll20s'
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1198,7 +1189,7 @@ Balatest.TestPlay {
     jokers = { 'j_oops', 'j_oops', 'j_joker', 'j_joker', 'j_joker' },
     consumeables = { 'c_wheel_of_fortune', 'c_wheel_of_fortune', 'c_wheel_of_fortune', 'c_wheel_of_fortune', 'c_wheel_of_fortune' },
     execute = function()
-        equip 'BakeryCharm_Bakery_Fortuna'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Fortuna'
         for i = 1, 5 do
             Balatest.use(G.consumeables.cards[i])
         end
@@ -1223,7 +1214,7 @@ Balatest.TestPlay {
             end
             return orig(a, b, c, d, e, f, key, ...)
         end)
-        equip 'BakeryCharm_Bakery_MementoMori'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.q(function()
             G.GAME.joker_rate = 0
             G.GAME.planet_rate = 0
@@ -1253,7 +1244,7 @@ Balatest.TestPlay {
             end
             return orig(a, b, c, d, e, f, key, ...)
         end)
-        equip 'BakeryCharm_Bakery_MementoMori'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.end_round()
         Balatest.cash_out()
         Balatest.use(function() return G.shop_booster.cards[1] end)
@@ -1277,7 +1268,7 @@ Balatest.TestPlay {
             end
             return orig(a, b, c, d, e, f, key, ...)
         end)
-        equip 'BakeryCharm_Bakery_MementoMori'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.start_round()
     end,
     assert = function()
@@ -1300,7 +1291,7 @@ Balatest.TestPlay {
             end
             return orig(a, b, c, d, e, f, key, ...)
         end)
-        equip 'BakeryCharm_Bakery_MementoMori'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.start_round()
         Balatest.play_hand { '2S' }
         Balatest.play_hand { '2H' }

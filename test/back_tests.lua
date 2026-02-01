@@ -101,7 +101,6 @@ Balatest.TestPlay {
         Balatest.end_round()
         Balatest.cash_out()
         Balatest.buy(function() return G.shop_jokers.cards[1] end)
-        Balatest.wait()
     end,
     assert = function()
         Balatest.assert_eq(G.GAME.dollars, 1)
@@ -157,9 +156,6 @@ Balatest.TestPlay {
 
     back = 'Dominion',
     hand_size = 8,
-    execute = function()
-        Balatest.wait_for_input()
-    end,
     assert = function()
         Balatest.assert_eq(#G.jokers.cards, 3)
         for _, card in ipairs(G.jokers.cards) do

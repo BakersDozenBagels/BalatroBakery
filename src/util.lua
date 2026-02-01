@@ -108,7 +108,7 @@ Bakery_API.guard(function()
 
     --- Creates a `Reset` function, which when called resets the table to {}.
     ---@param table table @The table to modify.
-    ---@return table, function
+    ---@return table, function, ...
     function Bakery_API.reset_table(table, ...)
         key = key or 'Reset'
         local function reset()
@@ -927,6 +927,25 @@ Bakery_API.guard(function()
                 blind = blind
             })
         end
+    end
+
+    function Bakery_API.Balatest_equip(key)
+        Balatest.q(function()
+            G.FUNCS.Bakery_equip_from_shop { config = { ref_table = Card(G.Bakery_charm_area.T.x + G.Bakery_charm_area.T.w / 2, G.Bakery_charm_area.T.y, G.CARD_W, G.CARD_W,
+                G.P_CARDS.empty, G.P_CENTERS[key], {
+                    bypass_discovery_center = true,
+                    bypass_discovery_ui = true
+                }) } }
+        end)
+    end
+
+    function Bakery_API.Balatest_use_joker(joker)
+        Balatest.q(function()
+            if type(joker) == "function" then
+                joker = joker()
+            end
+            G.FUNCS.Bakery_use_joker { config = { ref_table = joker } }
+        end)
     end
 end)
 -- END_KEEP_LITE

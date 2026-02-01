@@ -76,7 +76,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_Auctioneer' },
     dollars = 0,
-    execute = function() end,
     assert = function()
         Balatest.assert_eq(G.GAME.dollars, 0)
         Balatest.assert_eq(#G.jokers.cards, 1)
@@ -88,7 +87,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_Auctioneer', 'j_joker' },
     dollars = 0,
-    execute = function() end,
     assert = function()
         Balatest.assert_eq(G.GAME.dollars, 3)
         Balatest.assert_eq(#G.jokers.cards, 1)
@@ -100,7 +98,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_Auctioneer', 'j_caino' },
     dollars = 0,
-    execute = function() end,
     assert = function()
         Balatest.assert_eq(G.GAME.dollars, 30)
         Balatest.assert_eq(#G.jokers.cards, 1)
@@ -112,8 +109,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_Auctioneer', 'j_joker', 'j_joker' },
     dollars = 0,
-    execute = function()
-    end,
     assert = function()
         Balatest.assert_eq(G.GAME.dollars, 3)
         Balatest.assert_eq(#G.jokers.cards, 2)
@@ -1057,38 +1052,17 @@ Balatest.TestPlay {
 --#endregion
 
 --#region Card Sleeve
-local function wait_for_sleeve() -- I am going to commit a crime
-    local done = false
+local function highlight_sleeved_card(index)
     Balatest.q(function()
-        done = false
-        G.E_MANAGER:add_event(Event {
-            func = function()
-                G.E_MANAGER:add_event(Event {
-                    func = function()
-                        G.E_MANAGER:add_event(Event {
-                            func = function()
-                                done = true
-                                return true
-                            end
-                        })
-                        return true
-                    end
-                })
-                return true
-            end
-        })
-    end)
-    Balatest.q(function()
-        return done
+        G["Bakery_sleeve_" .. G.jokers.cards[index].ability.extra.key]:add_to_highlighted(
+            G["Bakery_sleeve_" .. G.jokers.cards[index].ability.extra.key].cards[1], true)
     end)
 end
-
 Balatest.TestPlay {
     name = 'card_sleeve_can_use_null',
     category = { 'jokers', 'card_sleeve' },
 
     jokers = { 'j_Bakery_CardSleeve' },
-    execute = function() end,
     assert = function()
         Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
     end
@@ -1124,8 +1098,8 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert(G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
@@ -1140,8 +1114,8 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.highlight { '3S', '4S', '5S' }
     end,
     assert = function()
@@ -1155,10 +1129,10 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert(G.jokers.cards[1].ability.extra.key == nil)
@@ -1173,10 +1147,10 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function() G.FUNCS.sell_card { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        Balatest.sell(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert_eq(#G.hand.cards, 52)
@@ -1190,8 +1164,8 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.end_round()
         Balatest.cash_out()
     end,
@@ -1208,12 +1182,12 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.end_round()
         Balatest.cash_out()
-        Balatest.q(function() G.FUNCS.sell_card { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Balatest.sell(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert_eq(#G.deck.cards, 52)
@@ -1229,8 +1203,8 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '3S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.end_round()
     end,
     assert = function()
@@ -1246,11 +1220,11 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.highlight { '3S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[2] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[2])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert_eq(#G.hand.cards, 2)
@@ -1265,13 +1239,13 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.highlight { '3S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[2] } } end)
-        wait_for_sleeve()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[2])
+        Balatest.wait(2)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert_eq(#G.hand.cards, 3)
@@ -1287,12 +1261,9 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.use(G.consumeables.cards[1])
     end,
     assert = function()
@@ -1310,15 +1281,12 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.use(G.consumeables.cards[1])
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert(G.hand.cards[2].config.center.key == 'm_steel')
@@ -1334,12 +1302,9 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.use(G.consumeables.cards[1])
         Balatest.highlight { '3S' }
     end,
@@ -1358,16 +1323,13 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.use(G.consumeables.cards[1])
         Balatest.highlight { '3S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert(G.jokers.cards[1].ability.extra.occupied)
@@ -1384,12 +1346,9 @@ Balatest.TestPlay {
     dollars = 0,
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.end_round()
         Balatest.use(G.consumeables.cards[1])
     end,
@@ -1410,8 +1369,8 @@ Balatest.TestPlay {
         Balatest.cash_out()
         Balatest.use(function() return G.shop_booster.cards[2] end)
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert(G.jokers.cards[1].ability.extra.occupied)
@@ -1430,10 +1389,10 @@ Balatest.TestPlay {
         Balatest.cash_out()
         Balatest.use(function() return G.shop_booster.cards[2] end)
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert(not G.jokers.cards[1].ability.extra.occupied)
@@ -1452,10 +1411,10 @@ Balatest.TestPlay {
         Balatest.cash_out()
         Balatest.use(function() return G.shop_booster.cards[2] end)
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function() G.FUNCS.sell_card { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        Balatest.sell(G.jokers.cards[1])
+        Balatest.wait(2)
     end,
     assert = function()
         Balatest.assert_eq(#G.jokers.cards, 0)
@@ -1477,12 +1436,9 @@ Balatest.TestPlay {
         Balatest.cash_out()
         Balatest.use(function() return G.shop_booster.cards[2] end)
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.highlight { '3S' }
         Balatest.use(function() return G.pack_cards.cards[1] end)
     end,
@@ -1497,7 +1453,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.end_round()
         Balatest.reload()
         Balatest.cash_out()
@@ -1516,7 +1472,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CardSleeve', 'j_Bakery_CardSleeve' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.end_round()
         Balatest.reload()
         Balatest.cash_out()
@@ -1569,8 +1525,8 @@ Balatest.TestPlay {
     consumeables = { 'c_Bakery_Scribe' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         G.jokers:add_to_highlighted(G.jokers.cards[1], true)
         Balatest.use(G.consumeables.cards[1])
     end,
@@ -1588,12 +1544,9 @@ Balatest.TestPlay {
     consumeables = { 'c_Bakery_Scribe' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
     end,
     assert = function()
         Balatest.assert(G.consumeables.cards[1]:can_use_consumeable())
@@ -1607,12 +1560,9 @@ Balatest.TestPlay {
     consumeables = { 'c_Bakery_Scribe' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
+        highlight_sleeved_card(1)
         Balatest.use(G.consumeables.cards[1])
     end,
     assert = function()
@@ -1627,15 +1577,12 @@ Balatest.TestPlay {
     consumeables = { 'c_Bakery_Scribe' },
     execute = function()
         Balatest.highlight { '2S' }
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        wait_for_sleeve()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait(2)
         Balatest.end_round()
         Balatest.cash_out()
         Balatest.wait()
-        Balatest.q(function()
-            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
-                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
-        end)
+        highlight_sleeved_card(1)
         Balatest.use(G.consumeables.cards[1])
     end,
     assert = function()
@@ -1717,7 +1664,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 10,
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1732,9 +1679,9 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 10,
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
-        Balatest.q(function() return Bakery_API.default_can_use(G.jokers.cards[1]) end)
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+        Balatest.wait()
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1748,7 +1695,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 0,
-    execute = function() end,
     assert = function()
         Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
     end
@@ -1760,7 +1706,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 0,
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1775,7 +1721,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot', 'j_credit_card' },
     dollars = 0,
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1792,7 +1738,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_Pyrite' },
     hand_size = 5,
-    execute = function() end,
     assert = function()
         Balatest.assert_eq(#G.hand.cards, 8)
     end
@@ -1804,7 +1749,6 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_Pyrite' },
     deck = { cards = { { s = 'S', r = 'A' } } },
     hand_size = 1,
-    execute = function() end,
     assert = function()
         Balatest.assert_eq(#G.hand.cards, 1)
     end
@@ -1861,7 +1805,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_GetOutOfJailFreeCard' },
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1874,7 +1818,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_GetOutOfJailFreeCard' },
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
         Balatest.next_round()
         Balatest.play_hand { '2S' }
     end,
@@ -1888,7 +1832,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_GetOutOfJailFreeCard' },
     execute = function()
-        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Bakery_API.Balatest_use_joker(G.jokers.cards[1])
     end,
     assert = function()
         Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))

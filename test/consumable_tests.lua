@@ -7,7 +7,6 @@ Balatest.TestPlay {
 
     jokers = { 'j_joker' },
     consumeables = { 'c_Bakery_Scribe' },
-    execute = function() end,
     assert = function()
         Balatest.assert(not G.consumeables.cards[1]:can_use_consumeable())
     end
@@ -148,7 +147,6 @@ Balatest.TestPlay {
     execute = function()
         G.jokers.cards[1]:set_edition('e_foil', true)
         G.jokers:add_to_highlighted(G.jokers.cards[1], true)
-        Balatest.q(function() end) -- Wait a frame for the edition to be applied? IDK why this is necessary tbh
     end,
     assert = function()
         Balatest.assert(G.consumeables.cards[1]:can_use_consumeable())
@@ -254,7 +252,6 @@ Balatest.TestPlay {
     category = { 'consumables', 'time_machine' },
 
     consumeables = { 'c_Bakery_TimeMachine' },
-    execute = function() end,
     assert = function()
         Balatest.assert(not G.consumeables.cards[1]:can_use_consumeable())
     end
@@ -406,7 +403,6 @@ Balatest.TestPlay {
     category = { 'consumeables', 'boids' },
 
     consumeables = { 'c_Bakery_Boids' },
-    execute = function() end,
     assert = function()
         Balatest.assert(not G.consumeables.cards[1]:can_use_consumeable())
     end
