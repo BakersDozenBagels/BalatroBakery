@@ -767,263 +767,270 @@ Balatest.TestPlay {
 --#endregion
 
 --#region Print Error
-if next(SMODS.find_mod "RevosVault") then
-    Balatest.TestPlay {
-        name = 'print_error_cartomancer',
-        category = { 'charms', 'print_error', 'revos_vault' },
+Balatest.TestPlay {
+    name = 'print_error_cartomancer',
+    category = { 'charms', 'print_error', 'revos_vault' },
+    required_mods = { 'RevosValut' },
 
-        no_auto_start = true,
-        jokers = { 'j_cartomancer' },
-        execute = function()
-            equip 'BakeryCharm_Bakery_PrintError'
-            Balatest.start_round()
-        end,
-        assert = function()
-            Balatest.assert_eq(#G.consumeables.cards, 1)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'print_error_blueprinter',
-        category = { 'charms', 'print_error', 'revos_vault' },
+    no_auto_start = true,
+    jokers = { 'j_cartomancer' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_PrintError'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'print_error_blueprinter',
+    category = { 'charms', 'print_error', 'revos_vault' },
+    required_mods = { 'RevosValut' },
 
-        no_auto_start = true,
-        jokers = { 'j_crv_printer' },
-        execute = function()
-            equip 'BakeryCharm_Bakery_PrintError'
-            Balatest.start_round()
-        end,
-        assert = function()
-            Balatest.assert_eq(#G.jokers.cards, 3)
-        end
-    }
-end
+    no_auto_start = true,
+    jokers = { 'j_crv_printer' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_PrintError'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 3)
+    end
+}
 --#endregion
 
 --#region Posterization
-if next(SMODS.find_mod "MoreFluff") then
-    Balatest.TestPlay {
-        name = 'posterization_planet_tarot',
-        category = { 'charms', 'posterization', 'morefluff' },
+Balatest.TestPlay {
+    name = 'posterization_planet_tarot',
+    category = { 'charms', 'posterization', 'morefluff' },
+    required_mods = { "MoreFluff" },
 
-        consumeables = { 'c_pluto', 'c_death' },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Posterization'
-            Balatest.wait()
-        end,
-        assert = function()
-            Balatest.assert_eq(G.consumeables.config.card_limit, 2)
-            Balatest.assert_eq(G.consumeables.config.Bakery_visual_card_limit, 2)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'posterization_retroactive',
-        category = { 'charms', 'posterization', 'morefluff' },
+    consumeables = { 'c_pluto', 'c_death' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Posterization'
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 2)
+        Balatest.assert_eq(G.consumeables.config.Bakery_visual_card_limit, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'posterization_retroactive',
+    category = { 'charms', 'posterization', 'morefluff' },
+    required_mods = { "MoreFluff" },
 
-        consumeables = { 'c_mf_black', 'c_mf_crimson' },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Posterization'
-            Balatest.wait()
-        end,
-        assert = function()
-            Balatest.assert_eq(G.consumeables.config.card_limit, 3)
-            Balatest.assert_eq(G.consumeables.config.Bakery_visual_card_limit, 2)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'posterization_proactive',
-        category = { 'charms', 'posterization', 'morefluff' },
+    consumeables = { 'c_mf_black', 'c_mf_crimson' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Posterization'
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 3)
+        Balatest.assert_eq(G.consumeables.config.Bakery_visual_card_limit, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'posterization_proactive',
+    category = { 'charms', 'posterization', 'morefluff' },
+    required_mods = { "MoreFluff" },
 
-        dollars = 100,
-        execute = function()
-            G.GAME.joker_rate = 0
-            G.GAME.planet_rate = 0
-            G.GAME.tarot_rate = 0
-            G.GAME.rotarot_rate = 0
-            equip 'BakeryCharm_Bakery_Posterization'
-            Balatest.end_round()
-            Balatest.cash_out()
-            Balatest.buy(function() return G.shop_jokers.cards[2] end)
-            Balatest.buy(function() return G.shop_jokers.cards[1] end)
-            Balatest.wait()
-        end,
-        assert = function()
-            Balatest.assert_eq(G.consumeables.config.card_limit, 3)
-            Balatest.assert_eq(G.consumeables.config.Bakery_visual_card_limit, 2)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'posterization_unequip',
-        category = { 'charms', 'posterization', 'morefluff' },
+    dollars = 100,
+    execute = function()
+        G.GAME.joker_rate = 0
+        G.GAME.planet_rate = 0
+        G.GAME.tarot_rate = 0
+        G.GAME.rotarot_rate = 0
+        equip 'BakeryCharm_Bakery_Posterization'
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[2] end)
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 3)
+        Balatest.assert_eq(G.consumeables.config.Bakery_visual_card_limit, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'posterization_unequip',
+    category = { 'charms', 'posterization', 'morefluff' },
+    required_mods = { "MoreFluff" },
 
-        dollars = 100,
-        execute = function()
-            G.GAME.joker_rate = 0
-            G.GAME.planet_rate = 0
-            G.GAME.tarot_rate = 0
-            G.GAME.rotarot_rate = 0
-            equip 'BakeryCharm_Bakery_Posterization'
-            Balatest.end_round()
-            Balatest.cash_out()
-            Balatest.buy(function() return G.shop_jokers.cards[2] end)
-            Balatest.buy(function() return G.shop_jokers.cards[1] end)
-            equip 'BakeryCharm_Bakery_Coin'
-            Balatest.wait()
-        end,
-        assert = function()
-            Balatest.assert_eq(G.consumeables.config.card_limit, 2)
-        end
-    }
-end
+    dollars = 100,
+    execute = function()
+        G.GAME.joker_rate = 0
+        G.GAME.planet_rate = 0
+        G.GAME.tarot_rate = 0
+        G.GAME.rotarot_rate = 0
+        equip 'BakeryCharm_Bakery_Posterization'
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[2] end)
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        equip 'BakeryCharm_Bakery_Coin'
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.consumeables.config.card_limit, 2)
+    end
+}
 --#endregion
 
-if next(SMODS.find_mod 'Cryptid') then
-    --#region Marm
-    Balatest.TestPlay {
-        name = 'marm_single',
-        category = { 'charms', 'marm', 'cryptid' },
+--#region Marm
+Balatest.TestPlay {
+    name = 'marm_single',
+    category = { 'charms', 'marm', 'cryptid' },
+    required_mods = { 'Cryptid' },
 
-        execute = function()
-            equip 'BakeryCharm_Bakery_Marm'
-            Balatest.play_hand { '2S' }
-        end,
-        assert = function()
-            Balatest.assert_chips(24)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'marm_straight_flush',
-        category = { 'charms', 'marm', 'cryptid' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Marm'
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(24)
+    end
+}
+Balatest.TestPlay {
+    name = 'marm_straight_flush',
+    category = { 'charms', 'marm', 'cryptid' },
+    required_mods = { 'Cryptid' },
 
-        execute = function()
-            equip 'BakeryCharm_Bakery_Marm'
-            Balatest.play_hand { '2S', '3S', '4S', '5S', '6S' }
-        end,
-        assert = function()
-            Balatest.assert_chips(154)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'marm_junk',
-        category = { 'charms', 'marm', 'cryptid' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Marm'
+        Balatest.play_hand { '2S', '3S', '4S', '5S', '6S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(154)
+    end
+}
+Balatest.TestPlay {
+    name = 'marm_junk',
+    category = { 'charms', 'marm', 'cryptid' },
+    required_mods = { 'Cryptid' },
 
-        execute = function()
-            equip 'BakeryCharm_Bakery_Marm'
-            Balatest.play_hand { '2S', '3S', '4S', '5S', '7S' }
-        end,
-        assert = function()
-            Balatest.assert_chips(158)
-        end
-    }
-    Balatest.TestPlay {
-        name = 'marm_jolly',
-        category = { 'charms', 'marm', 'cryptid' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Marm'
+        Balatest.play_hand { '2S', '3S', '4S', '5S', '7S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(158)
+    end
+}
+Balatest.TestPlay {
+    name = 'marm_jolly',
+    category = { 'charms', 'marm', 'cryptid' },
+    required_mods = { 'Cryptid' },
 
-        jokers = { 'j_jolly' },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Marm'
-            Balatest.play_hand { '2S' }
-        end,
-        assert = function()
-            Balatest.assert_chips(120)
-        end
-    }
-    --#endregion
+    jokers = { 'j_jolly' },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Marm'
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(120)
+    end
+}
+--#endregion
 
-    --#region Duct Tape
-    Balatest.TestPlay {
-        name = 'duct_tape',
-        category = { 'charms', 'duct_tape', 'cryptid' },
+--#region Duct Tape
+Balatest.TestPlay {
+    name = 'duct_tape',
+    category = { 'charms', 'duct_tape', 'cryptid' },
+    required_mods = { 'Cryptid' },
 
-        dollars = 100,
-        execute = function()
-            equip 'BakeryCharm_Bakery_DuctTape'
-        end,
-        assert = function()
-            Balatest.assert_eq(SMODS.Rarities.Common:get_weight(), 0)
-            Balatest.assert_eq(SMODS.Rarities.Uncommon:get_weight(), 0)
-            local e = { config = {} }
-            G.FUNCS.Bakery_can_equip(e)
-            Balatest.assert(e.config.button == nil)
-        end
-    }
-    --#endregion
-end
+    dollars = 100,
+    execute = function()
+        equip 'BakeryCharm_Bakery_DuctTape'
+    end,
+    assert = function()
+        Balatest.assert_eq(SMODS.Rarities.Common:get_weight(), 0)
+        Balatest.assert_eq(SMODS.Rarities.Uncommon:get_weight(), 0)
+        local e = { config = {} }
+        G.FUNCS.Bakery_can_equip(e)
+        Balatest.assert(e.config.button == nil)
+    end
+}
+--#endregion
 
-if next(SMODS.find_mod 'GARBPACK') then -- Garbshit
-    --#region Virus
-    Balatest.TestPlay {
-        name = 'virus',
-        category = { 'charms', 'virus', 'garbshit' },
+--#region Virus
+Balatest.TestPlay {
+    name = 'virus',
+    category = { 'charms', 'virus', 'garbshit' },
+    required_mods = { 'GARBPACK' },
 
-        deck = { cards = {
-            { r = '5', s = 'D' },
-            { r = 'A', s = 'S' }
-        } },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Virus'
-            Balatest.play_hand { '5D' }
-            Balatest.wait_for_input()
-        end,
-        assert = function()
-            Balatest.assert_eq(#G.hand.cards, 1)
-            Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
-        end
-    }
-    Balatest.TestPlay {
-        name = 'virus_enhanced',
-        category = { 'charms', 'virus', 'garbshit' },
+    deck = { cards = {
+        { r = '5', s = 'D' },
+        { r = 'A', s = 'S' }
+    } },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Virus'
+        Balatest.play_hand { '5D' }
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 1)
+        Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
+    end
+}
+Balatest.TestPlay {
+    name = 'virus_enhanced',
+    category = { 'charms', 'virus', 'garbshit' },
+    required_mods = { 'GARBPACK' },
 
-        deck = { cards = {
-            { r = '5', s = 'D', e = 'm_wild' },
-            { r = 'A', s = 'S', e = 'm_wild' }
-        } },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Virus'
-            Balatest.play_hand { '5D' }
-            Balatest.wait_for_input()
-        end,
-        assert = function()
-            Balatest.assert_eq(#G.hand.cards, 1)
-            Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
-        end
-    }
-    Balatest.TestPlay {
-        name = 'virus_infected',
-        category = { 'charms', 'virus', 'garbshit' },
+    deck = { cards = {
+        { r = '5', s = 'D', e = 'm_wild' },
+        { r = 'A', s = 'S', e = 'm_wild' }
+    } },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Virus'
+        Balatest.play_hand { '5D' }
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 1)
+        Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
+    end
+}
+Balatest.TestPlay {
+    name = 'virus_infected',
+    category = { 'charms', 'virus', 'garbshit' },
+    required_mods = { 'GARBPACK' },
 
-        deck = { cards = {
-            { r = '5', s = 'D', e = 'm_garb_infected' },
-            { r = 'A', s = 'S', e = 'm_garb_infected' }
-        } },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Virus'
-            Balatest.play_hand { '5D' }
-            Balatest.wait_for_input()
-        end,
-        assert = function()
-            Balatest.assert_eq(#G.hand.cards, 1)
-            Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
-        end
-    }
-    Balatest.TestPlay {
-        name = 'virus_no_cards',
-        category = { 'charms', 'virus', 'garbshit' },
+    deck = { cards = {
+        { r = '5', s = 'D', e = 'm_garb_infected' },
+        { r = 'A', s = 'S', e = 'm_garb_infected' }
+    } },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Virus'
+        Balatest.play_hand { '5D' }
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 1)
+        Balatest.assert_eq(G.hand.cards[1].ability.name, 'm_garb_infected')
+    end
+}
+Balatest.TestPlay {
+    name = 'virus_no_cards',
+    category = { 'charms', 'virus', 'garbshit' },
+    required_mods = { 'GARBPACK' },
 
-        jokers = { 'j_joker', 'j_joker', 'j_cavendish' },
-        deck = { cards = {
-            { r = 'A', s = 'D' },
-        } },
-        execute = function()
-            equip 'BakeryCharm_Bakery_Virus'
-            Balatest.play_hand { 'AD' }
-            Balatest.wait_for_input()
-        end,
-        assert = function()
-            Balatest.assert_eq(#G.hand.cards, 0)
-        end
-    }
-    --#endregion
-end
+    jokers = { 'j_joker', 'j_joker', 'j_cavendish' },
+    deck = { cards = {
+        { r = 'A', s = 'D' },
+    } },
+    execute = function()
+        equip 'BakeryCharm_Bakery_Virus'
+        Balatest.play_hand { 'AD' }
+        Balatest.wait_for_input()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 0)
+    end
+}
+--#endregion
 
 --#region Petri Dish
 Balatest.TestPlay {
