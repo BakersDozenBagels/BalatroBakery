@@ -1,16 +1,21 @@
 {
-  "id": "Bakery",
-  "name": "Bakery",
-  "author": ["BakersDozenBagels"],
-  "description": "Some miscellaneous additions:\n\nAdds Charms, Tags, Jokers, Blinds, and much more.",
-  "prefix": "Bakery",
-  "main_file": "src/main.lua",
-  "priority": 0,
-  "badge_colour": "EDD198",
-  "badge_text_colour": "362708",
-  "display_name": "Bakery",
-  "version": "2.21.0",
-  "dependencies": ["Steamodded (>=1.0.0~BETA-0711a)", "Lovely (>=0.6)"],
-  "conflicts": [],
-  "provides": []
+    "id": "Bakery",
+    "name": "Bakery",
+    "author": [
+        "BakersDozenBagels"
+    ],
+    "description": "Some miscellaneous additions:\n\nAdds Charms, Tags, Jokers, Blinds, and much more.",
+    "prefix": "Bakery",
+    "main_file": "src/main.lua",
+    "priority": 0,
+    "badge_colour": "EDD198",
+    "badge_text_colour": "362708",
+    "display_name": "Bakery",
+    "version": "2.20.5",
+    "dependencies": [
+        "Steamodded (>=1.0.0~BETA-0711a)",
+        "Lovely (>=0.6)"
+    ],
+    "conflicts": [],
+    "provides": []
 }

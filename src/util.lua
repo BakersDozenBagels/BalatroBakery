@@ -720,19 +720,16 @@ Bakery_API.guard(function()
 
     local raw_SMODS_calculate_repetitions = SMODS.calculate_repetitions
     SMODS.calculate_repetitions = function(card, context, reps, ...)
-        reps = raw_SMODS_calculate_repetitions(card, context, reps, ...)
-
         for i = 1, #G.GAME.tags do
             local eval = G.GAME.tags[i]:apply_to_run({
                 type = 'Bakery_add_repetitions_to_card',
                 context = context
             })
             if eval then
-                SMODS.insert_repetitions(reps, eval, G.GAME.tags[i])
+                reps[#reps + 1] = { key = eval }
             end
         end
-
-        return reps
+        return raw_SMODS_calculate_repetitions(card, context, reps, ...)
     end
 
     sendInfoMessage("SMODS.calculate_repetitions() patched. Reason: Up Tag", "Bakery")
@@ -744,37 +741,45 @@ Bakery_API.guard(function()
         if blind and (blind.artist or blind.coder or blind.idea) then
             self.loc_debuff_lines[#self.loc_debuff_lines + 1] = ""
             if blind.artist == blind.coder and blind.coder == blind.idea then
-                local creator = Bakery_API.contributors[blind.artist]
-                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
-                    type = 'variable',
-                    key = 'v_Bakery_by',
-                    vars = { creator.name }
-                }
+                if Bakery_API.contributors[blind.artist] then
+                    local creator = Bakery_API.contributors[blind.artist]
+                    self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                        type = 'variable',
+                        key = 'v_Bakery_by',
+                        vars = { creator.name }
+                    }
                 return
+                end
             end
             if blind.artist then
-                local artist = Bakery_API.contributors[blind.artist]
-                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
-                    type = 'variable',
-                    key = 'v_Bakery_artist',
-                    vars = { artist.name }
-                }
+                if Bakery_API.contributors[blind.artist] then
+                    local artist = Bakery_API.contributors[blind.artist]
+                    self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                        type = 'variable',
+                        key = 'v_Bakery_artist',
+                        vars = { artist.name }
+                    }
+                end
             end
             if blind.coder then
-                local coder = Bakery_API.contributors[blind.coder]
-                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
-                    type = 'variable',
-                    key = 'v_Bakery_coder',
-                    vars = { coder.name }
-                }
+                if Bakery_API.contributors[blind.coder] then
+                    local coder = Bakery_API.contributors[blind.coder]
+                    self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                        type = 'variable',
+                        key = 'v_Bakery_coder',
+                        vars = { coder.name }
+                    }
+                end
             end
             if blind.idea then
-                local idea = Bakery_API.contributors[blind.idea]
-                self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
-                    type = 'variable',
-                    key = 'v_Bakery_idea',
-                    vars = { idea.name }
-                }
+                if Bakery_API.contributors[blind.idea] then
+                    local idea = Bakery_API.contributors[blind.idea]
+                    self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+                        type = 'variable',
+                        key = 'v_Bakery_idea',
+                        vars = { idea.name }
+                    }
+                end
             end
         end
     end
@@ -788,16 +793,16 @@ Bakery_API.guard(function()
                 txt.nodes[#txt.nodes + 1] =
                 { n = G.UIT.R, config = { align = "cm" }, colour = contrib.bg, nodes = { { n = G.UIT.T, config = { text = localize { type = 'variable', key = kind, vars = { contrib.name } }, scale = 0.2, shadow = true, colour = contrib.fg } } } }
             end
-            if blind.artist == blind.coder and blind.coder == blind.idea then
+            if blind.artist == blind.coder and blind.coder == blind.idea and Bakery_API.contributors[blind.artist] then
                 make("v_Bakery_by", Bakery_API.contributors[blind.artist])
             else
-                if blind.artist then
+                if blind.artist and Bakery_API.contributors[blind.artist] then
                     make("v_Bakery_artist", Bakery_API.contributors[blind.artist])
                 end
-                if blind.coder then
+                if blind.coder and Bakery_API.contributors[blind.coder]then
                     make("v_Bakery_coder", Bakery_API.contributors[blind.coder])
                 end
-                if blind.idea then
+                if blind.idea and Bakery_API.contributors[blind.idea] then
                     make("v_Bakery_idea", Bakery_API.contributors[blind.idea])
                 end
             end

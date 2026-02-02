@@ -1239,6 +1239,61 @@ Bakery_API.Joker {
     end
 }
 
+-- KEEP_LITE
+-- from http://lua-users.org/wiki/SplitJoin
+local function Split(str, delim)
+    if string.find(str, delim) == nil then return { str } end
+    local result = {}
+    local pat = "(.-)" .. delim .. "()"
+    local nb = 0
+    local lastPos
+    for part, pos in string.gfind(str, pat) do
+        nb = nb + 1
+        result[nb] = part
+        lastPos = pos
+    end
+    result[nb + 1] = string.sub(str, lastPos)
+    return result
+end
+
+local MAX_NUM
+
+function Bakery_API.parse_hyper_e(num)
+    local split_array = num:sub(2)
+    local arr = {}
+    local current_run = 0
+    local i = 1
+    for _, str in ipairs(Split(split_array, "#")) do
+        current_run = current_run + 1
+        if #str ~= 0 then
+            local val = tonumber(str)
+            if current_run == 1 then
+                if i > 2 then val = val - 1 end
+                arr[i] = val
+            elseif current_run == 2 then
+                local last = arr[i - 1]
+                for _ = 1, val do
+                    arr[i] = last
+                    i = i + 1
+                end
+            else
+                -- Triple hash is unsupported. Bail.
+                return MAX_NUM, true
+            end
+            current_run = 0
+            i = i + 1
+            if i > 10010 then
+                -- Number is too big to fit in memory. Bail.
+                return MAX_NUM, true
+            end
+        end
+    end
+    return setmetatable({ array = arr, sign = 1 }, OmegaMeta)
+end
+
+MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+-- END_KEEP_LITE
+
 Bakery_API.Joker {
     key = "Lua",
     rarity = 2,
@@ -1262,19 +1317,40 @@ Bakery_API.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                x_mult = card.ability.extra.x_mult,
                 func = function()
-                    mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
-                    if Talisman then
-                        mult = to_big(mult)
+                    mult = mult * card.ability.extra.x_mult
+                    update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
+                    card_eval_status_text(
+                        card, 'x_mult', card.ability.extra.x_mult, percent
+                    )
+                    local too_big
+                    if type(mult) == 'table' and (
+                            (mult.isFinite and not mult:isFinite())
+                            or (mult.is_naneinf and mult:is_naneinf())
+                        ) then
+                        too_big = true
                     else
-                        mult = tonumber(mult)
+                        mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
+                        if Talisman then
+                            if mult:find("#") then
+                                mult, too_big = Bakery_API.parse_hyper_e(mult)
+                            else
+                                mult = Big:parse(mult)
+                            end
+                        else
+                            mult = tonumber(mult)
+                        end
+                        mult = mod_mult(mult)
                     end
-                    mult = mod_mult(mult)
 
                     update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
-                    card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
-                        { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"' })
+                    if too_big then
+                        card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
+                            { XMult_mod = true, message = '!?' })
+                    else
+                        card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
+                            { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"' })
+                    end
                 end
             }
         end
