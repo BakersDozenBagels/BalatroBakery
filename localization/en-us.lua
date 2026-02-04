@@ -351,8 +351,8 @@ return {
                 text = { "All {C:green}probabilities{} are", "rolled with {C:attention}advantage", "{C:inactive}(Roll twice, keep the better result)" }
             },
             sleeve_Bakery_DN_alt = {
-                name = "5eeve",
-                text = { "All {C:green}probabilities{} are", "rolled with {C:attention}double advantage", "{C:inactive}(Roll three times, keep the best result)" }
+                name = "D & Sleeve",
+                text = { "All {C:green}probabilities{} are rolled", "with {C:attention}double advantage{} instead", "{C:inactive}(Roll three times, keep the best result)" }
             },
             sleeve_Bakery_Dominion = {
                 name = "Dominion Sleeve",
