@@ -140,6 +140,22 @@ Balatest.TestPlay {
         end
     end
 }
+Balatest.TestPlay {
+    name = 'witch_chicot_chicot',
+    category = { 'blinds', 'witch' },
+
+    hand_size = 100,
+    jokers = { 'j_chicot', 'j_chicot' },
+    blind = 'bl_Bakery_Qof',
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 52)
+
+        for k, v in pairs(G.hand.cards) do
+            assert(v.config.center.key == 'c_base',
+                "Card " .. k .. " should have no enhancement, found " .. v.config.center.key)
+        end
+    end
+}
 Balatest.TestPlay { -- This test passes at 8x speed but fails at 16x or higher??? Manually, this works fine even at higher speeds.
     name = 'down_tag_witch',
     category = { 'tags', 'blinds', 'down_tag', 'witch' },

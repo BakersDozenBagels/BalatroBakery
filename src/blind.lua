@@ -142,11 +142,9 @@ SMODS.Blind {
         G.E_MANAGER:add_event(Event {
             func = function()
                 local done = {}
-                local todo = { unpack(G.deck.cards) }
-                for _, v in pairs(G.hand.cards) do todo[#todo + 1] = v end
-                for _, v in pairs(G.discard.cards) do todo[#todo + 1] = v end
-                for _, card in pairs(todo) do
-                    if card.config.center.key == 'm_Bakery_Curse' then
+                for _, card in pairs(G.playing_cards) do
+                    if card.config.center.key == 'm_Bakery_Curse' and not card.getting_sliced then
+                        card.getting_sliced = true
                         G.E_MANAGER:add_event(Event {
                             func = function()
                                 card.area:remove_card(card):start_dissolve()
@@ -159,7 +157,9 @@ SMODS.Blind {
                         end
                     end
                 end
-                SMODS.calculate_context { remove_playing_cards = true, removed = done }
+                if #done > 0 then
+                    SMODS.calculate_context { remove_playing_cards = true, removed = done }
+                end
                 return true
             end
         })
