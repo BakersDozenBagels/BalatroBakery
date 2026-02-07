@@ -2314,6 +2314,89 @@ Balatest.TestPlay {
 }
 --#endregion
 
+--#region Awarewolf
+Balatest.TestPlay {
+    name = 'awarewolf_neutral',
+    category = { 'jokers', 'awarewolf' },
+
+    hand_size = 8,
+    jokers = { 'j_Bakery_Awarewolf' },
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 9)
+    end
+}
+Balatest.TestPlay {
+    name = 'awarewolf_no_transform',
+    category = { 'jokers', 'awarewolf' },
+
+    hand_size = 8,
+    jokers = { 'j_Bakery_Awarewolf' },
+    execute = function()
+        Balatest.q(function()
+            G.hand:add_to_highlighted(G.hand.cards[1])
+            G.FUNCS.discard_cards_from_highlighted()
+        end)
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 9)
+    end
+}
+Balatest.TestPlay {
+    name = 'awarewolf_yes_transform',
+    category = { 'jokers', 'awarewolf' },
+
+    hand_size = 8,
+    jokers = { 'j_Bakery_Awarewolf' },
+    execute = function()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 10)
+    end
+}
+Balatest.TestPlay {
+    name = 'awarewolf_yes_transform_kept',
+    category = { 'jokers', 'awarewolf' },
+
+    hand_size = 8,
+    jokers = { 'j_Bakery_Awarewolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.q(function()
+            G.hand:add_to_highlighted(G.hand.cards[1])
+            G.FUNCS.discard_cards_from_highlighted()
+        end)
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 10)
+    end
+}
+Balatest.TestPlay {
+    name = 'awarewolf_yes_transform_lost',
+    category = { 'jokers', 'awarewolf' },
+
+    hand_size = 8,
+    jokers = { 'j_Bakery_Awarewolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.q(function()
+            G.hand:add_to_highlighted(G.hand.cards[1])
+            G.FUNCS.discard_cards_from_highlighted()
+        end)
+        Balatest.q(function()
+            G.hand:add_to_highlighted(G.hand.cards[1])
+            G.FUNCS.discard_cards_from_highlighted()
+        end)
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 9)
+    end
+}
+--#endregion
+
 --#region Estate
 Balatest.TestPlay {
     name = 'estate_one',
