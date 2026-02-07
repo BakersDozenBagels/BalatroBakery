@@ -1373,3 +1373,34 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Ordinary Stone
+Balatest.TestPlay {
+    name = 'ordinary_stone_play',
+    category = { 'charms', 'ordinary_stone' },
+
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_OrdinaryStone'
+        Balatest.play_hand { '2S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(G.deck.cards[1].base.value == '2')
+        Balatest.assert(G.deck.cards[1].base.suit == 'Spades')
+    end
+}
+Balatest.TestPlay {
+    name = 'ordinary_stone_discard',
+    category = { 'charms', 'ordinary_stone' },
+
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_OrdinaryStone'
+        Balatest.discard { '2S' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert(G.deck.cards[1].base.value == '2')
+        Balatest.assert(G.deck.cards[1].base.suit == 'Spades')
+    end
+}
+--#endregion
