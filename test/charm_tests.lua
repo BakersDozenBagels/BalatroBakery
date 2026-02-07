@@ -1450,3 +1450,61 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Milky Way
+Balatest.TestPlay {
+    name = 'milky_way_arcana_pack',
+    category = { 'charms', 'milky_way' },
+
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MilkyWay'
+        Balatest.hook(_G, 'get_pack', function() return { key = 'p_arcana_normal_1' } end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[2] end)
+    end,
+    assert = function()
+        Balatest.assert(G.pack_cards.cards[1].config.center.set == 'Planet')
+    end
+}
+Balatest.TestPlay {
+    name = 'milky_way_cartomancer',
+    category = { 'charms', 'milky_way' },
+
+    no_auto_start = true,
+    jokers = { 'j_cartomancer' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MilkyWay'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.set == 'Planet')
+    end
+}
+Balatest.TestPlay {
+    name = 'milky_way_purple_seal',
+    category = { 'charms', 'milky_way' },
+
+    deck = { cards = { { r = '2', s = 'S', g = 'Purple' }, { r = '3', s = 'S' } } },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MilkyWay'
+        Balatest.discard { '2s' }
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.set == 'Planet')
+    end
+}
+Balatest.TestPlay {
+    name = 'milky_way_used',
+    category = { 'charms', 'milky_way' },
+
+    consumeables = { 'c_pluto' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MilkyWay'
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.hands['High Card'].level, 3)
+    end
+}
+--#endregion
