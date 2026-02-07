@@ -1404,3 +1404,49 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Cracked Marble
+Balatest.TestPlay {
+    name = 'cracked_marble_equipped',
+    category = { 'charms', 'cracked_marble' },
+
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_CrackedMarble'
+        Balatest.hook(_G, 'pseudorandom', function(orig, ...)
+            return 1 - ((1 - 0.997) * 7.6)
+        end)
+        Balatest.q(function()
+            local card = create_card('Tarot', G.consumeables, nil, nil, nil, true)
+            card:add_to_deck()
+            G.consumeables:emplace(card)
+            card:start_materialize()
+        end)
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.key == 'c_soul')
+    end
+}
+Balatest.TestPlay {
+    name = 'cracked_marble_unequipped',
+    category = { 'charms', 'cracked_marble' },
+
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_CrackedMarble'
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
+        Balatest.hook(_G, 'pseudorandom', function(orig, ...)
+            return 1 - ((1 - 0.997) * 7.6)
+        end)
+        Balatest.q(function()
+            local card = create_card('Tarot', G.consumeables, nil, nil, nil, true)
+            card:add_to_deck()
+            G.consumeables:emplace(card)
+            card:start_materialize()
+        end)
+        Balatest.wait()
+    end,
+    assert = function()
+        Balatest.assert(G.consumeables.cards[1].config.center.key ~= 'c_soul')
+    end
+}
+--#endregion
