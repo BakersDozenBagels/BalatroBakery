@@ -1508,3 +1508,61 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Radiation
+Balatest.TestPlay {
+    name = 'radiation_52',
+    category = { 'charms', 'radiation' },
+
+    no_auto_start = true,
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Radiation'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 26)
+    end
+}
+Balatest.TestPlay {
+    name = 'radiation_52_twice',
+    category = { 'charms', 'radiation' },
+
+    no_auto_start = true,
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Radiation'
+        Balatest.start_round()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 13)
+    end
+}
+Balatest.TestPlay {
+    name = 'radiation_3',
+    category = { 'charms', 'radiation' },
+
+    no_auto_start = true,
+    deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '2', s = 'S' }, } },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Radiation'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'radiation_2',
+    category = { 'charms', 'radiation' },
+
+    no_auto_start = true,
+    deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, } },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Radiation'
+        Balatest.start_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 1)
+    end
+}
+--#endregion
