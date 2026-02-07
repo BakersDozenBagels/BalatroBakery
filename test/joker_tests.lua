@@ -2397,6 +2397,106 @@ Balatest.TestPlay {
 }
 --#endregion
 
+--#region Warewolf
+Balatest.TestPlay {
+    name = 'warewolf_neutral',
+    category = { 'jokers', 'warewolf' },
+
+    dollars = 0,
+    jokers = { 'j_Bakery_Warewolf' },
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 1)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.GAME.dollars, 0)
+    end
+}
+Balatest.TestPlay {
+    name = 'warewolf_twice',
+    category = { 'jokers', 'warewolf' },
+
+    dollars = 0,
+    jokers = { 'j_Bakery_Warewolf' },
+    execute = function()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 2)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.GAME.dollars, 0)
+    end
+}
+Balatest.TestPlay {
+    name = 'warewolf_thrice',
+    category = { 'jokers', 'warewolf' },
+
+    dollars = 0,
+    jokers = { 'j_Bakery_Warewolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 2)
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.GAME.dollars, 0)
+    end
+}
+Balatest.TestPlay {
+    name = 'warewolf_four_times',
+    category = { 'jokers', 'warewolf' },
+
+    dollars = 0,
+    jokers = { 'j_Bakery_Warewolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 1)
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.GAME.dollars, 8)
+    end
+}
+Balatest.TestPlay {
+    name = 'warewolf_five_times',
+    category = { 'jokers', 'warewolf' },
+
+    dollars = 0,
+    jokers = { 'j_Bakery_Warewolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 0)
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.GAME.dollars, 16)
+    end
+}
+Balatest.TestPlay {
+    name = 'warewolf_six_times',
+    category = { 'jokers', 'warewolf' },
+
+    dollars = 0,
+    jokers = { 'j_Bakery_Warewolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.consumeables.cards, 0)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.GAME.dollars, 16)
+    end
+}
+--#endregion
+
 --#region Estate
 Balatest.TestPlay {
     name = 'estate_one',
