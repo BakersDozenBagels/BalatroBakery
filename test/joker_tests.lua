@@ -2497,6 +2497,101 @@ Balatest.TestPlay {
 }
 --#endregion
 
+--#region Wherewolf
+Balatest.TestPlay {
+    name = 'wherewolf_neutral',
+    category = { 'jokers', 'wherewolf' },
+
+    hand_size = 8,
+    jokers = { 'j_Bakery_Wherewolf' },
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(#G.hand.cards, 9)
+    end
+}
+Balatest.TestPlay {
+    name = 'wherewolf_play_nonkey',
+    category = { 'jokers', 'wherewolf' },
+
+    jokers = { 'j_Bakery_Wherewolf' },
+    execute = function()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { '2s' }
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.hand.config.card_limit, 53)
+    end
+}
+Balatest.TestPlay {
+    name = 'wherewolf_play_key',
+    category = { 'jokers', 'wherewolf' },
+
+    jokers = { 'j_Bakery_Wherewolf' },
+    execute = function()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { 'As' }
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.hand.config.card_limit, 52)
+        Balatest.assert_chips(16)
+    end
+}
+Balatest.TestPlay {
+    name = 'wherewolf_play_key_twice',
+    category = { 'jokers', 'wherewolf' },
+
+    jokers = { 'j_Bakery_Wherewolf' },
+    execute = function()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { 'As' }
+        Balatest.next_round()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { 'As' }
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.hand.config.card_limit, 52)
+        Balatest.assert_chips(16 * 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'wherewolf_play_key_twice_kept',
+    category = { 'jokers', 'wherewolf' },
+
+    jokers = { 'j_Bakery_Wherewolf' },
+    execute = function()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { 'As' }
+        Balatest.next_round()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { 'As' }
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.hand.config.card_limit, 52)
+    end
+}
+Balatest.TestPlay {
+    name = 'wherewolf_play_key_lapse',
+    category = { 'jokers', 'wherewolf' },
+
+    jokers = { 'j_Bakery_Wherewolf' },
+    execute = function()
+        Balatest.hook_raw(G.GAME.current_round, 'Bakery_Wherewolf_card', { rank = 'Ace', suit = 'Spades', id = 14 })
+        Balatest.play_hand { 'As' }
+        Balatest.next_round()
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+        Balatest.assert_eq(G.hand.config.card_limit, 53)
+    end
+}
+--#endregion
+
 --#region Estate
 Balatest.TestPlay {
     name = 'estate_one',
