@@ -1302,3 +1302,74 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region Full Moon
+Balatest.TestPlay {
+    name = 'full_moon_flips',
+    category = { 'charms', 'full_moon' },
+
+    jokers = { 'j_Bakery_Werewolf' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_FullMoon'
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'full_moon_stops_flips',
+    category = { 'charms', 'full_moon' },
+
+    jokers = { 'j_Bakery_Werewolf' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_FullMoon'
+        Balatest.discard { '2S' }
+        Balatest.discard { '3S' }
+        Balatest.next_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'full_moon_proactively_flips',
+    category = { 'charms', 'full_moon' },
+
+    execute = function()
+        G.GAME.tarot_rate = 0
+        G.GAME.planet_rate = 0
+        Balatest.hook(_G, 'create_card', function(orig, t, a, l, r, k, s, forced_key, ...)
+            return orig(t, a, l, r, k, s, 'j_Bakery_Werewolf', ...)
+        end)
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_FullMoon'
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'full_moon_retroactive',
+    category = { 'charms', 'full_moon' },
+
+    jokers = { 'j_Bakery_Werewolf' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_FullMoon'
+        Balatest.discard { '2S' }
+        Balatest.discard { '3S' }
+        Balatest.next_round()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Coin'
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 3)
+    end
+}
+--#endregion
