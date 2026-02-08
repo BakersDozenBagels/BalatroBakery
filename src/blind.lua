@@ -16,7 +16,7 @@ SMODS.Blind {
     },
     boss_colour = HEX('a9e74b'),
     -- -1 Hand, -1 Discard
-    set_blind = function(self)
+    set_blind = function(self, blind)
         ease_discard(-1)
         ease_hands_played(-1)
     end,
@@ -59,6 +59,11 @@ SMODS.Blind {
     end,
     modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
         return mult - (G.GAME.round_resets.ante * self.config.extra.scale), hand_chips, true
+    end,
+    calculate = function(self, blind, context)
+        if context.debuff_hand then
+            blind.triggered = true
+        end
     end
 }
 
@@ -74,8 +79,8 @@ SMODS.Blind {
     },
     boss_colour = HEX('ffd78e'),
     -- Only one card scores
-    calculate = function(self, card, context)
-        if context.modify_scoring_hand and not card.disabled then
+    calculate = function(self, blind, context)
+        if context.modify_scoring_hand and not blind.disabled then
             local max = 1
             local max_rank = context.scoring_hand[1].base.nominal
             for i = 2, #context.scoring_hand do
@@ -85,6 +90,7 @@ SMODS.Blind {
                 end
             end
             if context.other_card ~= context.scoring_hand[max] then
+                blind.triggered = true
                 return { remove_from_hand = true }
             end
         end
@@ -180,6 +186,11 @@ SMODS.Blind {
     -- No base chips
     modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
         return mult, 0, hand_chips ~= 0
+    end,
+    calculate = function(self, blind, context)
+        if context.debuff_hand then
+            blind.triggered = true
+        end
     end
 }
 
@@ -199,11 +210,13 @@ Bakery_API.credit(SMODS.Blind {
     idea = 'Jack5',
     -- Cards with no rank or suit are debuffed
     recalc_debuff = function(self, card, from_blind)
-        return
+        local debuff =
             not G.GAME.blind.disabled and
             card.area ~= G.jokers and
             card.area ~= G.Bakery_charm_area and
             (SMODS.has_no_rank(card) or SMODS.has_no_suit(card))
+        if debuff then card.triggered = true end
+        return debuff
     end,
     -- Only appears if 1 in 6 cards have no rank or suit
     in_pool = function()

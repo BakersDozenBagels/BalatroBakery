@@ -39,6 +39,20 @@ Balatest.TestPlay {
     end
 }
 Balatest.TestPlay {
+    name = 'attrition_matador',
+    category = { 'blinds', 'attrition', 'matador' },
+
+    blind = 'bl_Bakery_Tsadi',
+    jokers = { 'j_matador' },
+    money = 0,
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 8)
+    end
+}
+Balatest.TestPlay {
     name = 'attrition_chicot',
     category = { 'blinds', 'attrition' },
 
@@ -65,6 +79,20 @@ Balatest.TestPlay {
     end
 }
 Balatest.TestPlay {
+    name = 'solo_single_matador',
+    category = { 'blinds', 'solo', 'matador' },
+
+    blind = 'bl_Bakery_He',
+    jokers = { 'j_matador' },
+    money = 0,
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 0)
+    end
+}
+Balatest.TestPlay {
     name = 'solo_double',
     category = { 'blinds', 'solo' },
 
@@ -74,6 +102,20 @@ Balatest.TestPlay {
     end,
     assert = function()
         Balatest.assert_chips(32 * 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'solo_double_matador',
+    category = { 'blinds', 'solo', 'matador' },
+
+    blind = 'bl_Bakery_He',
+    jokers = { 'j_matador' },
+    money = 0,
+    execute = function()
+        Balatest.play_hand { '2S', '2H', '2C' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 8)
     end
 }
 Balatest.TestPlay {
@@ -229,6 +271,20 @@ Balatest.TestPlay {
     end
 }
 Balatest.TestPlay {
+    name = 'build_matador',
+    category = { 'blinds', 'build', 'matador' },
+
+    blind = 'bl_Bakery_Kaf',
+    jokers = { 'j_matador' },
+    money = 0,
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 8)
+    end
+}
+Balatest.TestPlay {
     name = 'build_chicot',
     category = { 'blinds', 'build' },
 
@@ -259,6 +315,42 @@ Balatest.TestPlay {
     end
 }
 Balatest.TestPlay {
+    name = 'ruler_matador',
+    category = { 'blinds', 'ruler', 'matador' },
+
+    blind = 'bl_Bakery_Samekh',
+    jokers = { 'j_matador' },
+    money = 0,
+    deck = { cards = {
+        { r = '2', s = 'C', e = 'm_stone' },
+        { r = '2', s = 'D', e = 'm_stone' }, -- Prevent game over from no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2C' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 8)
+    end
+}
+Balatest.TestPlay {
+    name = 'ruler_matadornt',
+    category = { 'blinds', 'ruler', 'matador' },
+
+    blind = 'bl_Bakery_Samekh',
+    jokers = { 'j_matador' },
+    money = 0,
+    deck = { cards = {
+        { r = '2', s = 'C' },
+        { r = '2', s = 'D', e = 'm_stone' }, -- Prevent game over from no cards
+    } },
+    execute = function()
+        Balatest.play_hand { '2C' }
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 0)
+    end
+}
+Balatest.TestPlay {
     name = 'ruler_chicot',
     category = { 'blinds', 'ruler' },
 
@@ -275,7 +367,6 @@ Balatest.TestPlay {
         Balatest.assert_chips(55)
     end
 }
-
 Balatest.TestPlay {
     name = 'ruler_charm',
     category = { 'blinds', 'ruler' },
