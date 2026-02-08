@@ -2722,6 +2722,114 @@ Balatest.TestPlay {
 }
 --#endregion
 
+--#region Wearwolf
+Balatest.TestPlay {
+    name = 'wearwolf_scales',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2s', '2h', '3s', '3h' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30 * 2)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 4)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearwolf_scales_twice',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2s', '2h', '3s', '3h' }
+        Balatest.play_hand { '2c', '2d', '3c', '3d' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30 * 2 * 2)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 8)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearwolf_flips',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2s' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 0)
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearwolf_flips_back',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2s' }
+        Balatest.play_hand { '2c', '2d', '3c', '3d' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 + 30 * 2)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 0)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearwolf_scales_flips',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2c', '2d', '3c', '3d' }
+        Balatest.play_hand { '2s' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30 * 2 + 7)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 4)
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearwolf_scales_flips_scores',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2c', '2d', '3c', '3d' }
+        Balatest.play_hand { '2s' }
+        Balatest.play_hand { '2h' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30 * 2 + 7 + 7 * 5)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 4)
+        Balatest.assert(G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearwolf_scales_flips_back',
+    category = { 'jokers', 'wearwolf' },
+
+    jokers = { 'j_Bakery_Wearwolf' },
+    execute = function()
+        Balatest.play_hand { '2c', '2d', '3c', '3d' }
+        Balatest.play_hand { '2s' }
+        Balatest.play_hand { '3s', '3h', '4s', '4h' }
+    end,
+    assert = function()
+        Balatest.assert_chips(30 * 2 + 7 + 34 * 6)
+        Balatest.assert_eq(G.jokers.cards[1].ability.extra.mult, 4)
+        Balatest.assert(not G.jokers.cards[1].ability.extra.flipped)
+    end
+}
+--#endregion
+
 --#region Estate
 Balatest.TestPlay {
     name = 'estate_one',
