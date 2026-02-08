@@ -2592,6 +2592,136 @@ Balatest.TestPlay {
 }
 --#endregion
 
+--#region Wearywolf
+Balatest.TestPlay {
+    name = 'wearywolf_off',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.play_hand({ 'KS', 'KH', 'KC' }, true)
+    end,
+    assert = function()
+        Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearywolf_still_off',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand({ 'KS', 'KH', 'KC' }, true)
+    end,
+    assert = function()
+        Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearywolf_on_not_enough',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand({ '2S' }, true)
+    end,
+    assert = function()
+        Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearywolf_on',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand { 'KS', 'KH', 'KC' }
+    end,
+    assert = function()
+        Balatest.assert_neq(G.STATE, G.STATES.GAME_OVER)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearywolf_on_off',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.cash_out()
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.play_hand({ 'KS', 'KH', 'KC' }, true)
+    end,
+    assert = function()
+        Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearywolf_on_still_off',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.cash_out()
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand({ 'KS', 'KH', 'KC' }, true)
+    end,
+    assert = function()
+        Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
+    end
+}
+Balatest.TestPlay {
+    name = 'wearywolf_on_on',
+    category = { 'jokers', 'wearywolf' },
+
+    hands = 1,
+    jokers = { 'j_Bakery_Wearywolf' },
+    execute = function()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.cash_out()
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.play_hand { 'KS', 'KH', 'KC' }
+    end,
+    assert = function()
+        Balatest.assert_neq(G.STATE, G.STATES.GAME_OVER)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+    end
+}
+--#endregion
+
 --#region Estate
 Balatest.TestPlay {
     name = 'estate_one',
