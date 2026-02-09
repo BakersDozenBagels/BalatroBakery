@@ -622,8 +622,7 @@ local raw_two_pair_modify_display_text = SMODS.PokerHands['Two Pair'].modify_dis
 SMODS.PokerHand:take_ownership("Two Pair", {
     modify_display_text = function(cards, scoring_hand)
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens'
-            and #get_X_same(2, scoring_hand, true) >= 2 and
-            #get_X_same(2, scoring_hand, true) >= 2 then
+            and #scoring_hand == 5 and #get_X_same(2, scoring_hand, true) >= 2 and not SMODS.has_no_rank(scoring_hand[1]) then
             return "Bakery_ThreePair"
         end
         if raw_two_pair_modify_display_text then
@@ -695,7 +694,7 @@ SMODS.PokerHand:take_ownership("Flush", {
     modify_display_text = function(cards, scoring_hand)
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens'
             and #scoring_hand == 5 and
-            #get_X_same(2, scoring_hand, true) >= 2 and next(all_suits(5, scoring_hand)) then
+            #get_X_same(2, scoring_hand, true) >= 2 and not SMODS.has_no_rank(scoring_hand[1]) and next(all_suits(5, scoring_hand)) then
             return "Bakery_FlushThreePair"
         end
         if raw_flush_modify_display_text then
