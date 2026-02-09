@@ -726,6 +726,11 @@ Bakery_API.credit(Bakery_API.Charm {
             end
         end
         return count >= 9
+    end,
+    update = function()
+        if G.STATE == G.STATES.SELECTING_HAND and G.hand then
+            G.hand:parse_highlighted()
+        end
     end
 })
 

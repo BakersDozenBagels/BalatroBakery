@@ -311,6 +311,21 @@ Balatest.TestPlay {
         Balatest.assert(hand_name == 'Flush House')
     end
 }
+Balatest.TestPlay {
+    name = 'anaglyph_lens_flush_house_plus_one_alt_failed',
+    category = { 'charms', 'anaglyph_lens' },
+
+    deck = { cards = { { r = '2', s = 'S' }, { r = '2', s = 'S' }, { r = '3', s = 'D', e = 'm_stone' }, { r = '9', s = 'S' }, { r = '9', s = 'S' } } },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_AnaglyphLens'
+        Balatest.highlight { '3D', '2S', '2S', '9S', '9S' }
+    end,
+    assert = function()
+        local _, _, _, scoring_hand, hand_name = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+        Balatest.assert_eq(#scoring_hand, 4) -- Stone happens later
+        Balatest.assert(hand_name == 'Two Pair')
+    end
+}
 --#endregion
 
 --#region Pedigree
