@@ -631,15 +631,17 @@ return {
             b_Bakery_equip = "EQUIP",
             b_Bakery_ante = "(Ante)"
         },
-        -- END_KEEP_LITE
         v_dictionary = {
+        -- END_KEEP_LITE
             b_Bakery_deposit = "DEPOSIT $#1#",
             b_Bakery_ante_times = "(Ante*#1#)",
+            -- KEEP_LITE
             v_Bakery_artist = "Art: #1#",
             v_Bakery_coder = "Code: #1#",
             v_Bakery_idea = "Idea: #1#",
             v_Bakery_by = "Made by: #1#"
         },
+        -- END_KEEP_LITE
         labels = {
             Bakery_Carbon = "Carbon"
         },
