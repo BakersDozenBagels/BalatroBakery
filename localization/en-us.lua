@@ -620,11 +620,11 @@ return {
             b_Bakery_store = "STORE",
             b_Bakery_return = "GET",
             b_Bakery_shattered = "Shattered!",
-            k_Bakery_charm = "Charm",
-            k_Bakery_charms = "Charms",
             b_Bakery_double_tags = "Double Tags",
             ph_Bakery_Wearywolf = "Saved by Wearywolf",
             -- KEEP_LITE
+            k_Bakery_charm = "Charm",
+            k_Bakery_charms = "Charms",
             k_bakerycharm = "Charm",
             k_BakeryCharmInfo = { "Only one Charm may be equipped at a time.",
                 "Purchasing a new Charm replaces an old one." },
