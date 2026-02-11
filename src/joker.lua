@@ -1708,9 +1708,9 @@ Bakery_API.Joker {
     end
 }
 
-function estate_pos(card)
-    if not G.jokers then return 1 end
-    for i, v in ipairs(G.jokers.cards) do
+local function estate_pos(card)
+    if card.area ~= G.jokers and card.area.config.type ~= "title" then return 1 end
+    for i, v in ipairs(card.area.cards) do
         if v == card then
             return i
         end
