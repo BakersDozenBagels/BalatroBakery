@@ -153,7 +153,7 @@ end
 local raw_copy_card = copy_card
 function copy_card(other, new_card, card_scale, playing_card, strip_edition, ...)
     local k, o, v, a
-    if other.config.center.key == j_sleeve.key then
+    if other and other.config and other.config.center and other.config.center.key == j_sleeve.key then
         k = other.ability.extra.key
         o = other.ability.extra.occupied
         v = other.ability.extra.override
@@ -164,7 +164,7 @@ function copy_card(other, new_card, card_scale, playing_card, strip_edition, ...
         other.ability.extra.area = nil
     end
     local ret = raw_copy_card(other, new_card, card_scale, playing_card, strip_edition, ...)
-    if other.config.center.key == j_sleeve.key then
+    if other and other.config and other.config.center and other.config.center.key == j_sleeve.key then
         other.ability.extra.key = k
         other.ability.extra.occupied = o
         other.ability.extra.override = v
