@@ -1247,11 +1247,11 @@ Balatest.TestPlay {
     category = { 'charms', 'memento_mori' },
 
     execute = function()
-        Balatest.hook(_G, 'Card', function(orig, a, b, c, d, e, center, f, ...)
+        Balatest.hook(Card, 'init', function(orig, self, a, b, c, d, e, center, f, ...)
             if center.set == 'Booster' then
-                return orig(a, b, c, d, e, G.P_CENTERS.p_arcana_jumbo_1, f, ...)
+                return orig(self, a, b, c, d, e, G.P_CENTERS.p_arcana_jumbo_1, f, ...)
             end
-            return orig(a, b, c, d, e, center, f, ...)
+            return orig(self, a, b, c, d, e, center, f, ...)
         end)
         Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
             if key == 'c_death' then
