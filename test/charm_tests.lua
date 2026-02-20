@@ -1223,11 +1223,16 @@ Balatest.TestPlay {
     category = { 'charms', 'memento_mori' },
 
     execute = function()
-        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
-            if key == 'c_death' then
-                return orig(a, b, c, d, e, f, 'c_strength', ...)
+        Balatest.hook(_G, 'get_current_pool', function(orig, type, ...)
+            local r, k = orig(type, ...)
+            if type == 'Tarot' then
+                for i = #r, 1, -1 do
+                    if r[i] == 'c_death' then
+                        table.remove(r, i)
+                    end
+                end
             end
-            return orig(a, b, c, d, e, f, key, ...)
+            return r, k
         end)
         Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.q(function()
@@ -1238,8 +1243,8 @@ Balatest.TestPlay {
         Balatest.cash_out()
     end,
     assert = function()
-        Balatest.assert(G.shop_jokers.cards[1].config.center.key == 'c_death')
-        Balatest.assert(G.shop_jokers.cards[2].config.center.key == 'c_death')
+        Balatest.assert(G.shop_jokers.cards[1].config.center.key ~= 'c_death')
+        Balatest.assert(G.shop_jokers.cards[2].config.center.key ~= 'c_death')
     end
 }
 Balatest.TestPlay {
@@ -1253,11 +1258,16 @@ Balatest.TestPlay {
             end
             return orig(self, a, b, c, d, e, center, f, ...)
         end)
-        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
-            if key == 'c_death' then
-                return orig(a, b, c, d, e, f, 'c_strength', ...)
+        Balatest.hook(_G, 'get_current_pool', function(orig, type, ...)
+            local r, k = orig(type, ...)
+            if type == 'Tarot' then
+                for i = #r, 1, -1 do
+                    if r[i] == 'c_death' then
+                        table.remove(r, i)
+                    end
+                end
             end
-            return orig(a, b, c, d, e, f, key, ...)
+            return r, k
         end)
         Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.end_round()
@@ -1277,17 +1287,22 @@ Balatest.TestPlay {
     no_auto_start = true,
     jokers = { 'j_cartomancer' },
     execute = function()
-        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
-            if key == 'c_death' then
-                return orig(a, b, c, d, e, f, 'c_strength', ...)
+        Balatest.hook(_G, 'get_current_pool', function(orig, type, ...)
+            local r, k = orig(type, ...)
+            if type == 'Tarot' then
+                for i = #r, 1, -1 do
+                    if r[i] == 'c_death' then
+                        table.remove(r, i)
+                    end
+                end
             end
-            return orig(a, b, c, d, e, f, key, ...)
+            return r, k
         end)
         Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.start_round()
     end,
     assert = function()
-        Balatest.assert(G.consumeables.cards[1].config.center.key == 'c_death')
+        Balatest.assert(G.consumeables.cards[1].config.center.key ~= 'c_death')
     end
 }
 Balatest.TestPlay {
@@ -1299,12 +1314,16 @@ Balatest.TestPlay {
     blind = 'bl_Bakery_Lammed',
     no_auto_start = true,
     execute = function()
-        Balatest.hook(_G, 'create_card', function(orig, a, b, c, d, e, f, key, ...)
-            if key == 'c_death' then
-                -- TODO: fix this flaky hook
-                return orig(a, b, c, d, e, f, 'c_strength', ...)
+        Balatest.hook(_G, 'get_current_pool', function(orig, type, ...)
+            local r, k = orig(type, ...)
+            if type == 'Tarot' then
+                for i = #r, 1, -1 do
+                    if r[i] == 'c_death' then
+                        table.remove(r, i)
+                    end
+                end
             end
-            return orig(a, b, c, d, e, f, key, ...)
+            return r, k
         end)
         Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
         Balatest.start_round()

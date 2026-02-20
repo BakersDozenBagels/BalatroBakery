@@ -561,7 +561,7 @@ return {
             },
             BakeryCharm_Bakery_MementoMori = {
                 name = 'Memento Mori',
-                text = { 'All {C:tarot}Tarot{} cards', 'are {C:attention}#1#' },
+                text = { '{C:attention}Arcana Packs', 'only have {C:tarot}#1#' },
                 unlock = { 'Have {C:attention}every{} card in', 'your {C:attention}full deck', 'be identical' }
             },
             BakeryCharm_Bakery_FullMoon = {

@@ -1231,11 +1231,11 @@ Bakery_API.Charm {
 }
 
 local raw_create_card = create_card
-function create_card(_type, a, l, r, s, o, forced_key, ...)
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MementoMori' and _type == 'Tarot' then
-        return raw_create_card(_type, a, l, r, s, o, 'c_death', ...)
+function create_card(_type, area, l, r, s, o, forced_key, ...)
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MementoMori' and _type == 'Tarot' and area == G.pack_cards then
+        return raw_create_card(_type, area, l, r, s, o, 'c_death', ...)
     end
-    return raw_create_card(_type, a, l, r, s, o, forced_key, ...)
+    return raw_create_card(_type, area, l, r, s, o, forced_key, ...)
 end
 
 Bakery_API.Charm {
