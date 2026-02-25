@@ -385,22 +385,7 @@ Bakery_API.Joker {
     end,
     calculate = function(self, card, context)
         local other_joker = Bakery_API.get_proxied_joker()
-        if other_joker and other_joker ~= card and not context.no_blueprint then
-            context.blueprint = (context.blueprint and (context.blueprint + 1)) or 1
-            context.blueprint_card = context.blueprint_card or card
-            if context.blueprint > #G.jokers.cards + 1 then
-                return
-            end
-            local other_joker_ret = other_joker:calculate_joker(context)
-            context.blueprint = nil
-            local eff_card = context.blueprint_card or card
-            context.blueprint_card = nil
-            if other_joker_ret then
-                other_joker_ret.card = eff_card
-                other_joker_ret.colour = G.C.BLUE
-                return other_joker_ret
-            end
-        end
+        return SMODS.blueprint_effect(card, other_joker, context)
     end
 }
 
