@@ -310,24 +310,21 @@ end
 
 sendInfoMessage("Card:set_sprites() patched. Reason: Spinner Loading", "Bakery")
 
--- KEEP_LITE
-Bakery_API.guard(function()
-    function Bakery_API.get_proxied_joker()
-        if G.jokers and G.jokers.cards then
-            local other_joker = nil
-            local latest = -1
-            for _, other in pairs(G.jokers.cards) do
-                if other.config.center ~= G.P_CENTERS.j_Bakery_Proxy and other.ability.Bakery_purchase_index and
-                    other.ability.Bakery_purchase_index > latest and other.config.center.blueprint_compat then
-                    latest = other.ability.Bakery_purchase_index
-                    other_joker = other
-                end
+function Bakery_API.get_proxied_joker()
+    if G.jokers and G.jokers.cards then
+        local other_joker = nil
+        local latest = -1
+        for _, other in pairs(G.jokers.cards) do
+            if other.config.center ~= G.P_CENTERS.j_Bakery_Proxy and other.ability.Bakery_purchase_index and
+                other.ability.Bakery_purchase_index > latest and other.config.center.blueprint_compat then
+                latest = other.ability.Bakery_purchase_index
+                other_joker = other
             end
-            return other_joker
         end
+        return other_joker
     end
-end)
--- END_KEEP_LITE
+end
+
 Bakery_API.Joker {
     key = "Proxy",
     pos = {
