@@ -1245,7 +1245,7 @@ Bakery_API.Charm {
     unlocked = false,
     config = { extra = false },
     check_for_unlock = function(self, args)
-        if not G.jokers or #G.jokers.cards < 3 then return false end
+        if not G.jokers or not G.jokers.card or #G.jokers.cards < 3 then return false end
 
         local found = 0
         for _, card in pairs(G.jokers.cards) do
@@ -1413,7 +1413,7 @@ Bakery_API.Charm {
     unlocked = false,
     check_for_unlock = function()
         -- We love the moment before any cards are added to the deck at the start of the run in this household
-        if G.GAME and G.hand and G.discard and G.deck then
+        if G.GAME and G.hand and G.hand.cards and G.discard and G.discard.cards and G.deck and G.deck.cards then
             local any = #G.hand.cards + #G.discard.cards + #G.deck.cards ~= 0
             if G.GAME.Bakery_ever_had_any and not any then
                 return true

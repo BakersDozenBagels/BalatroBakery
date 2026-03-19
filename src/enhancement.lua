@@ -31,7 +31,7 @@ Bakery_API.credit(SMODS.Enhancement {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { card.ability.extra.hands }
+            vars = { card.ability.extra and card.ability.extra.hands }
         }
     end,
     calculate = function(self, card, context)
