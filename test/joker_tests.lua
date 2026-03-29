@@ -2712,6 +2712,9 @@ Balatest.TestPlay {
         Balatest.start_round()
         Balatest.next_round()
         Balatest.next_round()
+        Balatest.q(function ()
+            ease_ante(-1) -- To hit the chips threshold 
+        end)
         Balatest.next_round()
         Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
     end,
