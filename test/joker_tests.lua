@@ -2647,7 +2647,7 @@ Balatest.TestPlay {
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
     end,
     assert = function()
         Balatest.assert_neq(G.STATE, G.STATES.GAME_OVER)
@@ -2664,11 +2664,11 @@ Balatest.TestPlay {
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
         Balatest.cash_out()
         Balatest.exit_shop()
         Balatest.start_round()
-        Balatest.play_hand({ 'KS', 'KH', 'KC' }, true)
+        Balatest.play_hand({ 'KS', 'KH', 'KC', '2S', '2H' }, true)
     end,
     assert = function()
         Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
@@ -2684,13 +2684,13 @@ Balatest.TestPlay {
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
         Balatest.cash_out()
         Balatest.exit_shop()
         Balatest.start_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand({ 'KS', 'KH', 'KC' }, true)
+        Balatest.play_hand({ 'KS', 'KH', 'KC', '2S', '2H' }, true)
     end,
     assert = function()
         Balatest.assert_eq(G.STATE, G.STATES.GAME_OVER)
@@ -2706,14 +2706,14 @@ Balatest.TestPlay {
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
         Balatest.cash_out()
         Balatest.exit_shop()
         Balatest.start_round()
         Balatest.next_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.play_hand { 'KS', 'KH', 'KC' }
+        Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
     end,
     assert = function()
         Balatest.assert_neq(G.STATE, G.STATES.GAME_OVER)
