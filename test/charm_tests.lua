@@ -774,7 +774,7 @@ Balatest.TestPlay {
 Balatest.TestPlay {
     name = 'print_error_cartomancer',
     category = { 'charms', 'print_error', 'revos_vault' },
-    required_mods = { 'RevosValut' },
+    required_mods = { 'RevosVault' },
 
     no_auto_start = true,
     jokers = { 'j_cartomancer' },
@@ -789,7 +789,7 @@ Balatest.TestPlay {
 Balatest.TestPlay {
     name = 'print_error_blueprinter',
     category = { 'charms', 'print_error', 'revos_vault' },
-    required_mods = { 'RevosValut' },
+    required_mods = { 'RevosVault' },
 
     no_auto_start = true,
     jokers = { 'j_crv_printer' },

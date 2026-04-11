@@ -404,11 +404,11 @@ times = 1
 
 # Milky Way
 [[patches]]
-[patches.pattern]
+[patches.regex]
 target = 'functions/common_events.lua'
-pattern = "local front = ((_type=='Base' or _type == 'Enhanced') and pseudorandom_element(G.P_CARDS, pseudoseed('front'..(key_append or '')..G.GAME.round_resets.ante))) or nil"
+pattern = "local front = .+"
 position = 'before'
-payload = "center = Bakery_API.milkyway_resample(center)"
+payload = "center = Bakery_API.milkyway_resample(center)\n"
 match_indent = true
 times = 1
 

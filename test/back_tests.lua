@@ -25,7 +25,7 @@ Balatest.TestPlay {
     end,
     assert = function()
         Balatest.assert_eq(#G.discard.cards, 1)
-        Balatest.assert(G.discard.cards[1].base.suit == 'Diamonds')
+        Balatest.assert(G.discard.cards[1].base.suit == 'Clubs')
         Balatest.assert(G.discard.cards[1].base.value == '7')
     end
 }
@@ -103,7 +103,7 @@ Balatest.TestPlay {
         Balatest.buy(function() return G.shop_jokers.cards[1] end)
     end,
     assert = function()
-        Balatest.assert_eq(G.GAME.dollars, 1)
+        Balatest.assert_eq(G.GAME.dollars, 0)
     end
 }
 

@@ -217,6 +217,9 @@ Balatest.TestPlay { -- This test passes at 8x speed but fails at 16x or higher??
             assert(v.config.center.key == 'c_base',
                 "Card " .. k .. " should have no enhancement, found " .. v.config.center.key)
         end
+    end,
+    skip = function()
+        return "The test is flaky at high speeds"
     end
 }
 Balatest.TestPlay {
