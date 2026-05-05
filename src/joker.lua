@@ -1121,7 +1121,7 @@ Bakery_API.Joker {
     config = {
         extra = {
             mult = 0,
-            d_mult = 2,
+            d_mult = 3,
             len = 3
         }
     },
