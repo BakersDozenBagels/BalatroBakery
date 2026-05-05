@@ -5,6 +5,13 @@ SMODS.Atlas {
     py = 95
 }
 
+for _, v in pairs {"LuaBig", "LuaGain", "LuaLoss"} do
+    SMODS.Sound {
+        key = v,
+        path = v .. ".ogg",
+    }
+end
+
 -- KEEP_LITE
 Bakery_API.guard(function()
     local resets = {}
@@ -1283,6 +1290,7 @@ Bakery_API.Joker {
         if context.joker_main then
             return {
                 func = function()
+                    local previous_mult = tonumber(number_format(mult))
                     -- Prevent crash for huge numbers with Amulet
                     if not number_format(mult):find("#") then
                         mult = mult * card.ability.extra.x_mult
@@ -1299,25 +1307,25 @@ Bakery_API.Joker {
                         too_big = true
                     else
                         mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
-                        if Talisman then
-                            if mult:find("#") then
-                                mult, too_big = Bakery_API.parse_hyper_e(mult)
-                            else
-                                mult = Big:parse(mult)
-                            end
-                        else
+                        if not Talisman then
                             mult = tonumber(mult)
+                        elseif mult:find("#") then
+                            mult, too_big = Bakery_API.parse_hyper_e(mult)
+                        else
+                            mult = Big:parse(mult)
                         end
                         mult = mod_mult(mult)
                     end
-
+                    local step = 2 ^ (1 / 6)
+                    percent = percent * ((previous_mult and previous_mult > mult) and 1 / step or step)
                     update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
                     if too_big then
                         card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
-                            { XMult_mod = true, message = '!?' })
+                            { XMult_mod = true, message = '!!', sound = "Bakery_LuaBig" })
                     else
                         card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
-                            { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"' })
+                            { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"',
+                            sound = previous_mult and previous_mult > mult and "Bakery_LuaLoss" or "Bakery_LuaGain" })
                     end
                 end
             }
