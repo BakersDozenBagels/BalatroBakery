@@ -1251,10 +1251,12 @@ function Bakery_API.parse_hyper_e(num)
             end
         end
     end
-    return setmetatable({ array = arr, sign = 1 }, OmegaMeta)
+    return Big:new(arr)
 end
 
-MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+if Big then
+    MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+end
 -- END_KEEP_LITE
 
 Bakery_API.Joker {

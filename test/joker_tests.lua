@@ -2281,7 +2281,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(Big:parse 'e1e622')
+        Balatest.assert_chips(SMODS.Mods.Amulet and Big:parse 'e1e613' or Big:parse 'e1e622')
     end
 }
 Balatest.TestPlay {
@@ -2295,7 +2295,8 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(Bakery_API.parse_hyper_e 'e10#622')
+        Balatest.assert_chips(SMODS.Mods.Amulet and Bakery_API.parse_hyper_e 'e1e10#612' or
+            Bakery_API.parse_hyper_e 'e10#622')
     end
 }
 Balatest.TestPlay {
@@ -2309,7 +2310,8 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
     end,
     assert = function()
-        Balatest.assert_chips(Bakery_API.parse_hyper_e 'e10#10##622')
+        Balatest.assert_chips(SMODS.Mods.Amulet and Bakery_API.parse_hyper_e 'e1e10#10##622' or
+            Bakery_API.parse_hyper_e 'e10#10##622')
     end
 }
 --#endregion
@@ -2712,8 +2714,8 @@ Balatest.TestPlay {
         Balatest.start_round()
         Balatest.next_round()
         Balatest.next_round()
-        Balatest.q(function ()
-            ease_ante(-1) -- To hit the chips threshold 
+        Balatest.q(function()
+            ease_ante(-1) -- To hit the chips threshold
         end)
         Balatest.next_round()
         Balatest.play_hand { 'KS', 'KH', 'KC', '2S', '2H' }
