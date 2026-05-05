@@ -1281,7 +1281,10 @@ Bakery_API.Joker {
         if context.joker_main then
             return {
                 func = function()
-                    mult = mult * card.ability.extra.x_mult
+                    -- Prevent crash for huge numbers with Amulet
+                    if not number_format(mult):find("#") then
+                        mult = mult * card.ability.extra.x_mult
+                    end
                     update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
                     card_eval_status_text(
                         card, 'x_mult', card.ability.extra.x_mult, percent
