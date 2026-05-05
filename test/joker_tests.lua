@@ -2314,6 +2314,20 @@ Balatest.TestPlay {
             Bakery_API.parse_hyper_e 'e10#10##622')
     end
 }
+Balatest.TestPlay {
+    name = 'lua_joker_hardcapped',
+    category = { 'jokers', 'lua_joker', 'talisman' },
+
+    jokers = { 'j_joker', 'j_Bakery_Lua' },
+    required_mods = { 'Talisman' },
+    execute = function()
+        G.jokers.cards[1].ability.mult = Bakery_API.parse_hyper_e 'e10#10##5000'
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function ()
+        Balatest.assert_chips(Bakery_API.parse_hyper_e 'e10#10##10000')
+    end
+}
 --#endregion
 
 --#region Awarewolf
