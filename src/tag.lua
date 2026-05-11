@@ -247,7 +247,6 @@ SMODS.Tag {
                 G.jokers.config.card_limit = G.jokers.config.card_limit + 1
                 return true
             end)
-            return true
         end
     end
 }

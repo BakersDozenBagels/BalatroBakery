@@ -1245,7 +1245,7 @@ Bakery_API.Charm {
     unlocked = false,
     config = { extra = false },
     check_for_unlock = function(self, args)
-        if not G.jokers or not G.jokers.card or #G.jokers.cards < 3 then return false end
+        if not G.jokers or not G.jokers.cards or #G.jokers.cards < 3 then return false end
 
         local found = 0
         for _, card in pairs(G.jokers.cards) do
