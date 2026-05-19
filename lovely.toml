@@ -158,10 +158,10 @@ payload = "Bakery_API.interest_scale()"
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
-pattern = '>= (to_big)?\(5\)'
+pattern = '(to_big\(G.GAME.dollars\))?(G.GAME.dollars)? >= (to_big\(5\))?5? and not G.GAME.modifiers.no_interest'
 position = 'at'
 times = 1
-payload = ">= Bakery_API.interest_scale()"
+payload = "Bakery_API.big(G.GAME.dollars) >= Bakery_API.big(Bakery_API.interest_scale()) and not G.GAME.modifiers.no_interest"
 
 # cont.
 [[patches]]
@@ -362,18 +362,6 @@ payload = '''["Pair"] = (G.GAME.used_vouchers.v_cry_hyperspacetether or (G.GAME 
 match_indent = true
 times = 1
 
-# Debuff charms (The Stoic blind)
-[[patches]]
-[patches.pattern]
-target = 'blind.lua'
-pattern = '--add new debuffs'
-position = 'after'
-payload = '''for _, v in ipairs(G.Bakery_charm_area.cards) do
-    self:debuff_card(v)
-end'''
-match_indent = true
-times = 1
-
 # Oops! All 20s
 [[patches]]
 [patches.pattern]
@@ -381,5 +369,83 @@ target = '=[SMODS _ "src/overrides.lua"]'
 pattern = "_options = { 'e_negative', 'e_polychrome', 'e_holo', 'e_foil' }"
 position = 'after'
 payload = "if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Fortuna' then _options = { 'e_negative', 'e_polychrome' } end"
+match_indent = true
+times = 1
+
+# Cracked Marble
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = """
+if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+    forced_key = 'c_soul'
+end
+"""
+position = 'at'
+payload = """
+if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > Bakery_API.soul_rate() then
+    forced_key = 'c_soul'
+end
+"""
+match_indent = true
+times = 1
+
+# Milky Way
+[[patches]]
+[patches.regex]
+target = 'functions/common_events.lua'
+pattern = "local front = .+"
+position = 'before'
+payload = "center = Bakery_API.milkyway_resample(center)\n"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "elseif _c.set == 'Planet' then"
+position = 'after'
+payload = """
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_MilkyWay' and not _c.vars then
+        _c.vars = {
+            G.GAME.hands[cfg.hand_type].level, localize(cfg.hand_type, 'poker_hands'), G.GAME.hands[cfg.hand_type].l_mult * G.Bakery_charm_area.cards[1].ability.extra, G.GAME.hands[cfg.hand_type].l_chips * G.Bakery_charm_area.cards[1].ability.extra,
+            colours = {(G.GAME.hands[cfg.hand_type].level==1 and G.C.UI.TEXT_DARK or G.C.HAND_LEVELS[math.min(7, G.GAME.hands[cfg.hand_type].level)])}
+        }
+        G.E_MANAGER:add_event(Event { blocking = false, blockable = false, func = function() _c.vars = nil return true end })
+    end
+"""
+match_indent = true
+times = 1
+
+# Charm unlock toast
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = "if _achievement == 'b_challenge' then subtext = localize('k_challenges') end"
+position = 'before'
+payload = "if _type == 'BakeryCharm' then subtext = localize 'k_bakerycharm' end"
+match_indent = true
+times = 1
+
+# Usable Jokers on Controller
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "elseif args.type == 'buy_and_use' then"
+position = 'before'
+payload = '''
+elseif args.type == 'Bakery_use' then
+  button_contents = { n = G.UIT.T, config = { text = args.Bakery_loc, colour = G.C.WHITE, scale = 0.5 } }
+'''
+match_indent = true
+times = 1
+
+# Card Sleeve and Scribe + Controller
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "if G.CONTROLLER.HID.controller and self ~= G.hand then self:unhighlight_all() end"
+position = 'at'
+payload = '''if G.CONTROLLER.HID.controller and not Bakery_API.can_highlight_area(self) then self:unhighlight_all() end'''
 match_indent = true
 times = 1

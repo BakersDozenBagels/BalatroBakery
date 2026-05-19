@@ -86,51 +86,65 @@ Bakery_API.guard(function()
         }
     }
 
-    G.FUNCS.your_collection_Bakery_Charms_page = function(args)
-        if not args or not args.cycle_config then
-            return
-        end
-        for j = 1, #G.your_collection do
-            for i = #G.your_collection[j].cards, 1, -1 do
-                local c = G.your_collection[j]:remove_card(G.your_collection[j].cards[i])
-                c:remove()
-                c = nil
-            end
-        end
-        for i = 1, 5 do
-            for j = 1, #G.your_collection do
-                local center = G.P_CENTER_POOLS.BakeryCharm[i + (j - 1) * 5 +
-                (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
-                if not center then
-                    break
+    -- Collection code adapted from Card Sleeves https://github.com/larswijn/CardSleeves/blob/main/CardSleeves.lua
+    local function get_charm_tally_of(mod_id)
+        local tally, of = 0, 0
+        for _, charm in pairs(G.P_CENTER_POOLS.BakeryCharm) do
+            if charm.mod.id == mod_id or mod_id == nil then
+                of = of + 1
+                if charm.discovered then
+                    tally = tally + 1
                 end
-                local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y,
-                    G.CARD_W, G.CARD_W, G.P_CARDS.empty, center)
-                card.sticker = get_joker_win_sticker(center)
-                G.your_collection[j]:emplace(card)
             end
         end
-        INIT_COLLECTION_CARD_ALERTS()
+        return { tally = tally, of = of }
+    end
+
+    local function create_charm_button(tally)
+        return UIBox_button {
+            count = { tally = tally.tally, of = tally.of },
+            minw = 5,
+            button = 'your_collection_Bakery_Charms',
+            label = { localize("k_Bakery_charms") },
+            id = 'your_collection_Bakery_Charms'
+        }
+    end
+
+    local raw_smods_create_UIBox_Other_GameObjects = create_UIBox_Other_GameObjects
+    function create_UIBox_Other_GameObjects()
+        local mod_has_charms = false
+        local raw_mod_custom_collection_tabs
+        if G.ACTIVE_MOD_UI then
+            local mod_id = G.ACTIVE_MOD_UI.id
+            local tally = get_charm_tally_of(mod_id)
+            mod_has_charms = tally.of > 0
+            if mod_has_charms then
+                raw_mod_custom_collection_tabs = G.ACTIVE_MOD_UI.custom_collection_tabs
+                G.ACTIVE_MOD_UI.custom_collection_tabs = function()
+                    local res = raw_mod_custom_collection_tabs and raw_mod_custom_collection_tabs() or {}
+                    if mod_id == 'Bakery' then
+                        res[1] = create_charm_button(tally)
+                    else
+                        res[#res + 1] = create_charm_button(tally)
+                    end
+                    return res
+                end
+            end
+        end
+
+        local res = raw_smods_create_UIBox_Other_GameObjects()
+
+        if mod_has_charms then
+            G.ACTIVE_MOD_UI.custom_collection_tabs = raw_mod_custom_collection_tabs
+        end
+
+        return res
     end
 
     SMODS.current_mod.custom_collection_tabs = function()
-        local tally = 0
-        for _, v in pairs(G.P_CENTER_POOLS.BakeryCharm) do
-            if v.discovered or G.PROFILES[G.SETTINGS.profile].all_unlocked then
-                tally = tally + 1
-            end
-        end
-        return { UIBox_button {
-            button = 'your_collection_Bakery_Charms',
-            id = 'your_collection_Bakery_Charms',
-            label = { localize('k_Bakery_charms') },
-            count = {
-                tally = tally,
-                of = #G.P_CENTER_POOLS.BakeryCharm
-            },
-            minw = 5
-        } }
+        return { create_charm_button(get_charm_tally_of()) }
     end
+
     function G.FUNCS.your_collection_Bakery_Charms()
         G.SETTINGS.paused = true
         G.FUNCS.overlay_menu {
@@ -345,7 +359,34 @@ Bakery_API.guard(function()
         }))
     end
 
-    function Card:Bakery_equip()
+    local raw_G_FUNCS_redeem_from_shop = G.FUNCS.redeem_from_shop
+    function G.FUNCS.redeem_from_shop(e, ...)
+        if e.config.ref_table.config.center.set == 'BakeryCharm' then
+            return G.FUNCS.Bakery_equip_from_shop(e, ...)
+        end
+        return raw_G_FUNCS_redeem_from_shop(e, ...)
+    end
+
+    local raw_G_FUNCS_can_redeem = G.FUNCS.can_redeem
+    function G.FUNCS.can_redeem(e, ...)
+        if e.config.ref_table.config.center.set == 'BakeryCharm' then
+            return G.FUNCS.Bakery_can_equip(e, ...)
+        end
+        return raw_G_FUNCS_can_redeem(e, ...)
+    end
+
+    local raw_CardArea_emplace = CardArea.emplace
+    function CardArea:emplace(card, ...)
+        if self == G.consumeables and card.ability.set == 'BakeryCharm' then
+            card:remove_from_area()
+            card:Bakery_equip(true)
+            return
+        end
+
+        return raw_CardArea_emplace(self, card, ...)
+    end
+
+    function Card:Bakery_equip(not_bought)
         if self.config.center.set ~= 'BakeryCharm' then
             return
         end
@@ -369,7 +410,7 @@ Bakery_API.guard(function()
         G.GAME.Bakery_charm = self.config.center_key
         G.GAME.used_jokers[self.config.center_key] = true
         G.Bakery_charm_area:emplace(self)
-        if self.cost ~= 0 then
+        if self.cost ~= 0 and not not_bought then
             ease_dollars(-self.cost)
             inc_career_stat('c_shop_dollars_spent', self.cost)
         end
@@ -379,12 +420,14 @@ Bakery_API.guard(function()
 
         self.config.center:equip(self)
         delay(0.6)
-        SMODS.calculate_context({
-            buying_card = true,
-            card = self
-        })
+        if not not_bought then
+            SMODS.calculate_context({
+                buying_card = true,
+                card = self
+            })
+        end
 
-        if G.GAME.modifiers.inflation then
+        if G.GAME.modifiers.inflation and not not_bought then
             G.GAME.inflation = G.GAME.inflation + 1
             G.E_MANAGER:add_event(Event({
                 func = function()
@@ -454,3 +497,11 @@ Bakery_API.guard(function()
         return val
     end
 end)
+function Bakery_API.soul_rate()
+    return 1 - 0.003
+end
+
+function Bakery_API.milkyway_resample(center)
+    return center
+end
+

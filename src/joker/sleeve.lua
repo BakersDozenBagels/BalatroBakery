@@ -67,6 +67,21 @@ Bakery_API.guard(function()
         return ret
     end
 
+    local raw_G_UIDEF_card_focus_ui = G.UIDEF.card_focus_ui
+    function G.UIDEF.card_focus_ui(card)
+        local ret = raw_G_UIDEF_card_focus_ui(card)
+        local card_width = card.T.w + (card.ability.consumeable and -0.1 or card.ability.set == 'Voucher' and -0.16 or 0)
+        local base_attach = ret:get_UIE_by_ID('ATTACH_TO_ME')
+        if (card.area == G.jokers and G.jokers) and card.config.center.Bakery_use_joker then
+            base_attach.children.use = G.UIDEF.card_focus_button {
+                card = card, parent = base_attach, type = 'Bakery_use',
+                Bakery_loc = card.config.center.Bakery_use_button_text and card.config.center:Bakery_use_button_text(card) or localize 'b_use',
+                func = 'Bakery_can_use_joker', button = 'use_card', card_width = card_width
+            }
+        end
+        return ret
+    end
+
     local raw_Card_remove = Card.remove
     function Card:remove()
         raw_Card_remove(self)
@@ -129,11 +144,24 @@ Bakery_API.guard(function()
     end
 
     function Bakery_API.rehighlight(card)
+        if G.CONTROLLER.HID.controller then
+            if card.children.focused_ui then
+                card.children.focused_ui:remove()
+                card.children.focused_ui = nil
+            end
+            card:stop_hover()
+            card:hover()
+        end
+
         local highlighted = card.highlighted
         if card.children.use_button then
             card.children.use_button:remove()
             card.children.use_button = nil
         end
         card:highlight(highlighted)
+    end
+
+    function Bakery_API.can_highlight_area(area)
+        return area == G.hand
     end
 end)

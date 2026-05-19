@@ -1,4 +1,6 @@
 Bakery_API.guard(function()
+    local resets = {}
+
     function Bakery_API.Joker(o)
         o.name = o.name or o.key
         o.atlas = o.atlas or 'Bakery'
@@ -6,22 +8,15 @@ Bakery_API.guard(function()
             x = 0.5,
             y = 0.5
         }
+        if o.reset_game_globals then
+            resets[#resets + 1] = o.reset_game_globals
+        end
         return Bakery_API.credit(SMODS.Joker(o))
     end
-end)
-Bakery_API.guard(function()
-    function Bakery_API.get_proxied_joker()
-        if G.jokers and G.jokers.cards then
-            local other_joker = nil
-            local latest = -1
-            for _, other in pairs(G.jokers.cards) do
-                if other.config.center ~= G.P_CENTERS.j_Bakery_Proxy and other.ability.Bakery_purchase_index and
-                    other.ability.Bakery_purchase_index > latest and other.config.center.blueprint_compat then
-                    latest = other.ability.Bakery_purchase_index
-                    other_joker = other
-                end
-            end
-            return other_joker
+
+    function SMODS.current_mod.reset_game_globals(...)
+        for _, f in ipairs(resets) do
+            f(...)
         end
     end
 end)
@@ -130,7 +125,9 @@ function Bakery_API.parse_hyper_e(num)
             end
         end
     end
-    return setmetatable({ array = arr, sign = 1 }, OmegaMeta)
+    return Big:new(arr)
 end
 
-MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+if Big then
+    MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+end

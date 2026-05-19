@@ -21,11 +21,19 @@ return {
             ch_c_Bakery_Sprint_Big = { "{C:attention}Big Blinds{} must be skipped" },
         },
         dictionary = {
+            k_Bakery_charm = "Charm",
+            k_Bakery_charms = "Charms",
             k_bakerycharm = "Charm",
             k_BakeryCharmInfo = { "Only one Charm may be equipped at a time.",
                 "Purchasing a new Charm replaces an old one." },
             b_Bakery_equip = "EQUIP",
             b_Bakery_ante = "(Ante)"
+        },
+        v_dictionary = {
+            v_Bakery_artist = "Art: #1#",
+            v_Bakery_coder = "Code: #1#",
+            v_Bakery_idea = "Idea: #1#",
+            v_Bakery_by = "Made by: #1#"
         },
     }
 }

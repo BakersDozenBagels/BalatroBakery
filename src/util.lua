@@ -107,7 +107,7 @@ Bakery_API.guard(function()
 
     --- Creates a `Reset` function, which when called resets the table to {}.
     ---@param table table @The table to modify.
-    ---@return table, function
+    ---@return table, function, ...
     function Bakery_API.reset_table(table, ...)
         key = key or 'Reset'
         local function reset()
@@ -482,10 +482,43 @@ Bakery_API.guard(function()
     Bakery_API.double_sided_jokers = {
         j_Bakery_Werewolf = true,
         j_Bakery_Weerewolf = true,
+        j_Bakery_Awarewolf = true,
+        j_Bakery_Warewolf = true,
+        j_Bakery_Wherewolf = true,
+        j_Bakery_Wearywolf = true,
+        j_Bakery_Wearwolf = true
+    }
+    -- Cards affected by Full Moon
+    Bakery_API.werewolves = {
+        j_Bakery_Werewolf = true,
+        j_Bakery_Weerewolf = true,
+        j_Bakery_Awarewolf = true,
+        j_Bakery_Warewolf = true,
+        j_Bakery_Wherewolf = true,
+        j_Bakery_Wearywolf = true,
+        j_Bakery_Wearwolf = true
     }
 
     -- Flips a double-sided card.
     function Bakery_API.flip_double_sided(card)
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon' and not G.Bakery_charm_area.cards[1].ability.extra then
+            G.E_MANAGER:add_event(Event {
+                trigger = 'before',
+                delay = 0.2,
+                func = function()
+                    card:juice_up(0.3, 0.3)
+                    G.Bakery_charm_area.cards[1]:juice_up(0.3, 0.3)
+                    return true
+                end
+            })
+            return
+        end
+
+        if card.config.center.on_flip then
+            card.config.center:on_flip(card, not card.ability.extra.flipped)
+        end
+
+        card.ability.extra.flipping = true
         G.E_MANAGER:add_event(Event {
             trigger = 'before',
             delay = 0.2,
@@ -500,9 +533,11 @@ Bakery_API.guard(function()
         G.E_MANAGER:add_event(Event {
             trigger = 'immediate',
             func = function()
+                if card.REMOVED then return true end
                 if card.VT.w <= 0 then
                     card.pinch.x = false
                     card.ability.extra.flipped = not card.ability.extra.flipped
+                    card.ability.extra.flipping = false
                     return true
                 end
                 return false
@@ -512,6 +547,7 @@ Bakery_API.guard(function()
             trigger = 'immediate',
             blocking = false,
             func = function()
+                if card.REMOVED then return true end
                 if card.VT.w >= card.T.w then
                     play_sound('tarot2')
                     card:juice_up(0.3, 0.3)
@@ -520,6 +556,26 @@ Bakery_API.guard(function()
                 return false
             end
         })
+    end
+
+    function Bakery_API.werewolf_ui(back_key)
+        return function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+            local key = self.key
+            if card and card.ability.extra.flipped then
+                self.key = back_key
+            end
+            SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+            info_queue[#info_queue + 1] = {
+                generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                    if not card or not card.ability.extra.flipped then
+                        self.key = back_key
+                    end
+                    SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                    self.key = key
+                end
+            }
+            self.key = key
+        end
     end
 
     local raw_Card_draw = Card.draw
@@ -602,6 +658,7 @@ Bakery_API.guard(function()
             trigger = "immediate",
             func = function()
                 error(message or "Forced crash via Bakery_API.crash()")
+                return true
             end
         })
     end
@@ -664,7 +721,7 @@ Bakery_API.guard(function()
                         key = 'v_Bakery_by',
                         vars = { creator.name }
                     }
-                return
+                    return
                 end
             end
             if blind.artist then
@@ -715,7 +772,7 @@ Bakery_API.guard(function()
                 if blind.artist and Bakery_API.contributors[blind.artist] then
                     make("v_Bakery_artist", Bakery_API.contributors[blind.artist])
                 end
-                if blind.coder and Bakery_API.contributors[blind.coder]then
+                if blind.coder and Bakery_API.contributors[blind.coder] then
                     make("v_Bakery_coder", Bakery_API.contributors[blind.coder])
                 end
                 if blind.idea and Bakery_API.contributors[blind.idea] then
@@ -786,5 +843,24 @@ Bakery_API.guard(function()
                 blind = blind
             })
         end
+    end
+
+    function Bakery_API.Balatest_equip(key)
+        Balatest.q(function()
+            G.FUNCS.Bakery_equip_from_shop { config = { ref_table = Card(G.Bakery_charm_area.T.x + G.Bakery_charm_area.T.w / 2, G.Bakery_charm_area.T.y, G.CARD_W, G.CARD_W,
+                G.P_CARDS.empty, G.P_CENTERS[key], {
+                    bypass_discovery_center = true,
+                    bypass_discovery_ui = true
+                }) } }
+        end)
+    end
+
+    function Bakery_API.Balatest_use_joker(joker)
+        Balatest.q(function()
+            if type(joker) == "function" then
+                joker = joker()
+            end
+            G.FUNCS.Bakery_use_joker { config = { ref_table = joker } }
+        end)
     end
 end)
