@@ -105,7 +105,8 @@ local b_house = SMODS.Back {
     unlocked = false,
     discovered = false,
     check_for_unlock = function(self, args)
-        return get_deck_win_stake('b_erratic') > 0
+        local a, b = pcall(function() return get_deck_win_stake('b_erratic') > 0 end)
+        return a and b
     end,
     locked_loc_vars = function(self, back)
         if G.P_CENTERS['b_erratic'].discovered then
