@@ -402,10 +402,6 @@ return {
                     "or suit are debuffed"
                 }
             },
-            bl_Bakery_Lammed = {
-                name = "The Stoic",
-                text = { "Charm is debuffed" }
-            }
         },
         Spectral = {
             c_Bakery_Astrology = {

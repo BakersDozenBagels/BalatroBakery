@@ -11,7 +11,7 @@ Current contents:
 - 20 Tags
 - 5 Decks
 - 5 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
-- 7 Blinds
+- 6 Blinds
 - 3 Challenges
 - 1 Tarot Card
 - 3 Spectral Cards

@@ -1063,35 +1063,6 @@ Balatest.TestPlay {
         Balatest.assert_eq(G.consumeables.config.card_limit, 2)
     end
 }
-Balatest.TestPlay {
-    name = 'petri_dish_debuff',
-    category = { 'charms', 'petri_dish', 'stoic' },
-
-    blind = 'bl_Bakery_Lammed',
-    no_auto_start = true,
-    execute = function()
-        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PetriDish'
-        Balatest.start_round()
-    end,
-    assert = function()
-        Balatest.assert_eq(G.consumeables.config.card_limit, 2)
-    end
-}
-Balatest.TestPlay {
-    name = 'petri_dish_undebuff',
-    category = { 'charms', 'petri_dish', 'stoic' },
-
-    blind = 'bl_Bakery_Lammed',
-    no_auto_start = true,
-    execute = function()
-        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_PetriDish'
-        Balatest.start_round()
-        Balatest.end_round()
-    end,
-    assert = function()
-        Balatest.assert_eq(G.consumeables.config.card_limit, 4)
-    end
-}
 --#endregion
 
 --#region Cogwheel
@@ -1124,43 +1095,6 @@ Balatest.TestPlay {
     assert = function()
         Balatest.assert_eq(G.GAME.round_resets.ante, 1)
         Balatest.assert_eq(G.GAME.shop.joker_max, 2)
-    end
-}
-Balatest.TestPlay {
-    name = 'cogwheel_debuff',
-    category = { 'charms', 'cogwheel', 'blinds', 'stoic' },
-
-    blind = 'bl_Bakery_Lammed',
-    execute = function()
-        Balatest.end_round()
-        Balatest.cash_out()
-        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Cogwheel'
-        Balatest.exit_shop()
-        Balatest.start_round()
-        Balatest.wait_for_input()
-    end,
-    assert = function()
-        Balatest.assert_eq(G.GAME.round_resets.ante, 2)
-        Balatest.assert_eq(G.GAME.shop.joker_max, 2)
-    end
-}
-Balatest.TestPlay {
-    name = 'cogwheel_undebuff',
-    category = { 'charms', 'cogwheel', 'blinds', 'stoic' },
-
-    blind = 'bl_Bakery_Lammed',
-    execute = function()
-        Balatest.end_round()
-        Balatest.cash_out()
-        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Cogwheel'
-        Balatest.exit_shop()
-        Balatest.start_round()
-        Balatest.end_round()
-        Balatest.wait_for_input()
-    end,
-    assert = function()
-        Balatest.assert_eq(G.GAME.round_resets.ante, 1)
-        Balatest.assert_eq(G.GAME.shop.joker_max, 1)
     end
 }
 --#endregion
@@ -1303,36 +1237,6 @@ Balatest.TestPlay {
     end,
     assert = function()
         Balatest.assert(G.consumeables.cards[1].config.center.key ~= 'c_death')
-    end
-}
-Balatest.TestPlay {
-    name = 'memento_mori_vagabond_stoic',
-    category = { 'charms', 'memento_mori', 'blinds', 'stoic' },
-
-    jokers = { 'j_vagabond' },
-    dollars = 0,
-    blind = 'bl_Bakery_Lammed',
-    no_auto_start = true,
-    execute = function()
-        Balatest.hook(_G, 'get_current_pool', function(orig, type, ...)
-            local r, k = orig(type, ...)
-            if type == 'Tarot' then
-                for i = #r, 1, -1 do
-                    if r[i] == 'c_death' then
-                        table.remove(r, i)
-                    end
-                end
-            end
-            return r, k
-        end)
-        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
-        Balatest.start_round()
-        Balatest.play_hand { '2S' }
-        Balatest.play_hand { '2H' }
-    end,
-    assert = function()
-        Balatest.assert(G.consumeables.cards[1].config.center.key ~= 'c_death')
-        Balatest.assert(G.consumeables.cards[2].config.center.key ~= 'c_death')
     end
 }
 --#endregion
