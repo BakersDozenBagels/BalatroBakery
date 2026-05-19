@@ -1406,6 +1406,37 @@ Balatest.TestPlay {
         Balatest.assert_chips(7 * 3)
     end
 }
+Balatest.TestPlay {
+    name = 'full_moon_scribe',
+    category = { 'charms', 'full_moon', 'consumables', 'scribe' },
+
+    jokers = { 'j_Bakery_Werewolf' },
+    consumables = { 'c_Bakery_Scribe' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_FullMoon'
+        G.jokers:add_to_highlighted(G.jokers.cards[1], true)
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 9)
+    end
+}
+Balatest.TestPlay {
+    name = 'full_moon_ankh',
+    category = { 'charms', 'full_moon' },
+
+    jokers = { 'j_Bakery_Werewolf' },
+    consumables = { 'c_ankh' },
+    execute = function()
+        Bakery_API.Balatest_equip 'BakeryCharm_Bakery_FullMoon'
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7 * 9)
+    end
+}
 --#endregion
 
 --#region Ordinary Stone

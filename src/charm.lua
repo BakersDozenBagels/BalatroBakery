@@ -1271,11 +1271,33 @@ Bakery_API.Charm {
     end
 }
 
+local copying_werewolf = false
+local raw_copy_card = copy_card
+function copy_card(other, ...)
+    if other and other.config and other.config.center and
+        Bakery_API.werewolves[other.config.center.key]
+        and other.ability
+        and other.ability.extra
+        and (other.ability.extra.flipped
+            or other.ability.extra.flipping) then
+        copying_werewolf = true
+    end
+    local ret = { raw_copy_card(other, ...) }
+    copying_werewolf = false
+    return unpack(ret)
+end
+
 local raw_Card_set_ability = Card.set_ability
 function Card:set_ability(center, initial, ...)
     raw_Card_set_ability(self, center, initial, ...)
 
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon' and Bakery_API.werewolves[center.key] then
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon'
+        and Bakery_API.werewolves[center.key]
+        and (not self.ability.extra or
+            (not self.ability.extra.flipped
+                and not self.ability.extra.flipping))
+        and not copying_werewolf
+    then
         G.Bakery_charm_area.cards[1].ability.extra = true
         Bakery_API.flip_double_sided(self)
         G.Bakery_charm_area.cards[1].ability.extra = false
