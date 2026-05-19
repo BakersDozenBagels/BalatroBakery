@@ -94,6 +94,10 @@ j_sleeve = SMODS.Joker {
     end,
     Bakery_remove_card = function(self, card, force)
         if card.ability.extra.occupied and not card.ability.extra.override then
+            if not card.ability.extra or not card.ability.extra.key or not G["Bakery_sleeve_" .. card.ability.extra.key] then
+                sendErrorMessage('Sleeve ' .. card.ability.extra.key .. ' has no card area', 'Bakery')
+                return
+            end
             if not G["Bakery_sleeve_" .. card.ability.extra.key].cards then
                 sendErrorMessage('Sleeve ' .. card.ability.extra.key .. ' has no cards table', 'Bakery')
                 return
