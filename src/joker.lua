@@ -1704,7 +1704,7 @@ Bakery_API.Joker {
 }
 
 local function estate_pos(card)
-    if card.area ~= G.jokers and card.area.config.type ~= "title" then return 1 end
+    if not card.area or (card.area ~= G.jokers and card.area.config.type ~= "title") then return 1 end
     for i, v in ipairs(card.area.cards) do
         if v == card then
             return i

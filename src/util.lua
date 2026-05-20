@@ -735,7 +735,16 @@ Bakery_API.guard(function()
         return ret
     end
 
-    sendInfoMessage("G.FUNCS.buy_from_shop() patched. Reason: Proxy", "Bakery")
+    local raw_copy_card = copy_card
+    function copy_card(...)
+        local ret = raw_copy_card(...)
+        if ret and ret.ability then
+            ret.ability.Bakery_purchase_index = nil
+        end
+        return ret
+    end
+
+    sendInfoMessage("G.FUNCS.buy_from_shop() and copy_card() patched. Reason: Proxy", "Bakery")
 
     function Bakery_API.crash(message)
         G.E_MANAGER:add_event(Event {
