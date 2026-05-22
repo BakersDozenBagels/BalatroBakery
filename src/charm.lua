@@ -921,19 +921,25 @@ Bakery_API.Charm({
 	unlocked = false,
 	config = {
 		extra = {
-			xmult = 2,
+			dollars = 3,
 		},
 	},
 	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
 		return {
-			vars = { card.ability.extra.xmult },
+			vars = { card.ability.extra.dollars },
 		}
 	end,
 	calculate = function(self, card, context)
-		if not card.debuff and context.individual and context.cardarea == "unscored" then
+		if
+			not card.debuff
+			and context.individual
+			and context.cardarea == G.play
+			and context.other_card.config.center.key == "m_stone"
+		then
 			juice_card(card)
 			return {
-				x_mult = card.ability.extra.xmult,
+				dollars = card.ability.extra.dollars,
 				card = context.other_card,
 			}
 		end

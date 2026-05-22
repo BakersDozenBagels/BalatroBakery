@@ -598,7 +598,7 @@ return {
 			},
 			BakeryCharm_Bakery_Epitaph = {
 				name = "Epitaph",
-				text = { "{C:attention}Unscored{} played cards", "give {X:mult,C:white}X#1#{} Mult" },
+				text = { "Played {C:attention}Stone{} cards", "earn {C:money}$#1#{} when scored" },
 				unlock = { "Have only {C:attention}always-scoring", "cards in your deck" },
 			},
 			BakeryCharm_Bakery_Rune = {

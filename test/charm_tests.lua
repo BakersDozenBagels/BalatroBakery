@@ -645,37 +645,51 @@ Balatest.TestPlay({
 	name = "epitaph_one",
 	category = { "charms", "epitaph" },
 
+	deck = { cards = { { r = "2", s = "S" }, { r = "3", s = "S", e = "m_stone" }, { r = "2", s = "H" } } },
+	dollars = 8,
 	execute = function()
 		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Epitaph")
-		Balatest.play_hand({ "2S", "3C" })
+		Balatest.play_hand({ "2S", "3S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(16)
+		Balatest.assert_dollars(3)
 	end,
 })
 Balatest.TestPlay({
 	name = "epitaph_four",
 	category = { "charms", "epitaph" },
 
+	deck = {
+		cards = {
+			{ r = "2", s = "S" },
+			{ r = "3", s = "S", e = "m_stone" },
+			{ r = "4", s = "S", e = "m_stone" },
+			{ r = "5", s = "S", e = "m_stone" },
+			{ r = "6", s = "S", e = "m_stone" },
+			{ r = "2", s = "H" },
+		},
+	},
+	dollars = 8,
 	execute = function()
 		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Epitaph")
-		Balatest.play_hand({ "2S", "3C", "4D", "5H", "7S" })
+		Balatest.play_hand({ "2S", "3S", "4S", "5S", "6S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(12 * 16)
+		Balatest.assert_dollars(12)
 	end,
 })
 Balatest.TestPlay({
-	name = "epitaph_unequipped",
+	name = "epitaph_held",
 	category = { "charms", "epitaph" },
 
+	deck = { cards = { { r = "2", s = "S" }, { r = "3", s = "S", e = "m_stone" } } },
+	dollars = 8,
 	execute = function()
 		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Epitaph")
-		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Coin")
-		Balatest.play_hand({ "2S", "3C", "4D", "5H", "7S" })
+		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(12)
+		Balatest.assert_dollars(0)
 	end,
 })
 --#endregion
