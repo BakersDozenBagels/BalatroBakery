@@ -449,3 +449,22 @@ position = 'at'
 payload = '''if G.CONTROLLER.HID.controller and not Bakery_API.can_highlight_area(self) then self:unhighlight_all() end'''
 match_indent = true
 times = 1
+
+# Serpent Charm
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+if G.GAME.blind.name == 'The Serpent' and
+    G.STATE == G.STATES.DRAW_TO_HAND and
+    not G.GAME.blind.disabled and
+'''
+position = 'at'
+match_indent = true
+times = 1
+payload = '''
+if ((G.GAME.blind.name == 'The Serpent' and
+    not G.GAME.blind.disabled) or
+    G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Serpent') and
+    G.STATE == G.STATES.DRAW_TO_HAND and
+'''
