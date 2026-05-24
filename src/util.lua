@@ -793,8 +793,109 @@ Bakery_API.guard(function()
     end
 
     function Bakery_API.credit(obj)
+        if obj.set == "Back" or obj.set == "Sleeve" then
+            if not obj.artist and not obj.coder and not obj.idea then
+                return
+            end
+            G.E_MANAGER:add_event(Event {
+                blocking = false,
+                blockable = false,
+                func = function()
+                    local loc = G.localization.descriptions[obj.set][obj.key].text
+
+                    if type(loc[1]) ~= "string" then
+                        sendWarnMessage(
+                            "Crediting a " .. obj.set .. " with multiboxes is not supported. (" .. obj.key .. ")",
+                            "Bakery")
+                        return true
+                    end
+                    for _, s in ipairs(loc) do
+                        if s:find("B:") or s:find("V:") then
+                            sendWarnMessage(
+                                "Crediting a " .. obj.set .. " with dynamic colors is not supported. (" .. obj.key .. ")",
+                                "Bakery")
+                            return true
+                        end
+                    end
+
+                    loc[#loc + 1] = "{C:white}-"
+                    local colours = {}
+                    local lookup = {}
+                    local index = 1
+
+                    local function loc_tag(key)
+                        local contrib = Bakery_API.contributors[key]
+                        if not contrib.fg and not contrib.bg then return "" end
+                        local tag = "{"
+                        if contrib.fg then
+                            G.ARGS.LOC_COLOURS["Bakery_credit_fg_" .. obj.artist] = contrib.fg
+                            tag = tag .. "C:Bakery_credit_fg_" .. key
+                        end
+                        if contrib.bg then
+                            local i = lookup[key]
+                            if not i then
+                                i = index
+                                lookup[key] = index
+                                index = index + 1
+                                colours[i] = contrib.bg
+                            end
+                            if contrib.fg then
+                                tag = tag .. ","
+                            end
+                            tag = tag .. "B:" .. i
+                        end
+                        return tag .. "}"
+                    end
+
+                    if obj.artist == obj.coder and obj.coder == obj.idea then
+                        local creator = Bakery_API.contributors[obj.artist]
+                        loc[#loc + 1] = loc_tag(obj.artist) .. localize {
+                            type = 'variable',
+                            key = 'v_Bakery_by',
+                            vars = { creator.name }
+                        }
+                    else
+                        if obj.artist then
+                            local artist = Bakery_API.contributors[obj.artist]
+                            loc[#loc + 1] = loc_tag(obj.artist) .. localize {
+                                type = 'variable',
+                                key = 'v_Bakery_artist',
+                                vars = { artist.name }
+                            }
+                        end
+                        if obj.coder then
+                            local coder = Bakery_API.contributors[obj.coder]
+                            loc[#loc + 1] = loc_tag(obj.coder) .. localize {
+                                type = 'variable',
+                                key = 'v_Bakery_coder',
+                                vars = { coder.name }
+                            }
+                        end
+                        if obj.idea then
+                            local idea = Bakery_API.contributors[obj.idea]
+                            loc[#loc + 1] = loc_tag(obj.idea) .. localize {
+                                type = 'variable',
+                                key = 'v_Bakery_idea',
+                                vars = { idea.name }
+                            }
+                        end
+                    end
+
+                    local raw_obj_loc_vars = obj.loc_vars
+                    function obj.loc_vars(...)
+                        local ret = raw_obj_loc_vars and raw_obj_loc_vars(...) or {}
+                        ret.vars = ret.vars or {}
+                        ret.vars.colours = colours
+                        return ret
+                    end
+
+                    return true
+                end
+            })
+            return obj
+        end
         local raw_obj_set_badges = obj.set_badges
-        obj.set_badges = function(self, card, badges)
+        obj.set_badges = function(self, card, badges, ...)
             if self.set == "Enhanced" or self.discovered or card.bypass_discovery_center then
                 if self.artist and self.artist == self.coder and self.coder == self.idea then
                     local creator = Bakery_API.contributors[self.artist]
@@ -831,7 +932,7 @@ Bakery_API.guard(function()
                 end
             end
             if raw_obj_set_badges then
-                raw_obj_set_badges(self, card, badges)
+                return raw_obj_set_badges(self, card, badges, ...)
             end
         end
         return obj
