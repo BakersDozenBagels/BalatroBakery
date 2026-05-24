@@ -1577,6 +1577,7 @@ Bakery_API.Charm({
 	end,
 })
 
+loc_colour() -- Make sure the following table is initialized
 G.ARGS.LOC_COLOURS.Bakery_serpent = G.P_BLINDS.bl_serpent.boss_colour
 
 local raw_SMODS_blind_modifies_draw = SMODS.blind_modifies_draw

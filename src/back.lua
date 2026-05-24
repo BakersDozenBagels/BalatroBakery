@@ -339,7 +339,7 @@ local function is_double_dominion()
         (G.GAME.selected_back_key and G.GAME.selected_back_key.key) or
         G.GAME.selected_back.key) == 'b_Bakery_Dominion'
 end
-local b_dominion = SMODS.Back {
+local b_dominion = Bakery_API.credit(SMODS.Back {
     key = "Dominion",
     name = "Dominion",
     config = {
@@ -427,7 +427,7 @@ local b_dominion = SMODS.Back {
             self.config.extra.highest_ante_yet = G.GAME.round_resets.ante
         end
     end
-}
+})
 
 if CardSleeves then
     SMODS.Atlas {
@@ -565,7 +565,7 @@ if CardSleeves then
         end
     }
 
-    CardSleeves.Sleeve {
+    Bakery_API.credit(CardSleeves.Sleeve {
         key = "Dominion",
         atlas = "BakerySleeves",
         pos = {
@@ -665,5 +665,5 @@ if CardSleeves then
             end
         end,
         calculate = b_dominion.calculate,
-    }
+    })
 end
