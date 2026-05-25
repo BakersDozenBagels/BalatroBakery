@@ -973,4 +973,11 @@ Bakery_API.guard(function()
             G.FUNCS.Bakery_use_joker { config = { ref_table = joker } }
         end)
     end
+
+    if AltTextures_Utils then
+        AltTextures_Utils.dimensions.BakeryCharm = {px = 68, py = 68}
+        AltTextures_Utils.default_atlas.BakeryCharm = "Bakery_Charms"
+        AltTextures_Utils.texture_types[#AltTextures_Utils.texture_types+1] = "BakeryCharm"
+        AltTextures_Utils.loc_keys.BakeryCharm = "k_Bakery_charms"
+    end
 end)
