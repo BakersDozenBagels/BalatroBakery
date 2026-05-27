@@ -7,7 +7,7 @@
     "description": "Some miscellaneous additions:\n\nAdds Charms, Tags, Jokers, Blinds, and much more.",
     "prefix": "Bakery",
     "main_file": "src/main.lua",
-    "icon_path": "icon.png",
+    "icon_path": "Icon.png",
     "priority": 0,
     "badge_colour": "EDD198",
     "badge_text_colour": "362708",
