@@ -7,18 +7,18 @@
   "description": "The API-only version of Bakery.",
   "prefix": "Bakery",
   "main_file": "src/main.lua",
-  "icon_path": "icon.png",
+  "icon_path": "Icon.png",
   "priority": 0,
   "badge_colour": "EDD198",
   "badge_text_colour": "362708",
   "display_name": "Bakery (Lite)",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "dependencies": [
     "Steamodded (>=1.0.0~BETA-0711a)",
     "Lovely (>=0.6)"
   ],
   "conflicts": [],
   "provides": [
-    "Bakery (3.1.2)"
+    "Bakery (3.1.3)"
   ]
 }
