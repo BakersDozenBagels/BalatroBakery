@@ -21,7 +21,6 @@ Balatest.TestPlay {
         G.GAME.tarot_rate = 0
         G.GAME.planet_rate = 0
         Balatest.skip_blind 'tag_Bakery_RetriggerTag'
-        Balatest.hook_raw(Bakery_API, 'retrigger_jokers', Bakery_API.sized_table { j_mime = true })
         Balatest.start_round()
         Balatest.end_round()
         Balatest.cash_out()
@@ -29,20 +28,19 @@ Balatest.TestPlay {
     assert = function()
         Balatest.assert_eq(#G.GAME.tags, 0)
         Balatest.assert_eq(G.shop_jokers.cards[1].cost, 0)
-        Balatest.assert(G.shop_jokers.cards[1].config.center.key == 'j_mime')
+        Balatest.assert(G.shop_jokers.cards[1]:has_attribute('retrigger'))
     end
 }
 Balatest.TestPlay {
     name = 'retrigger_tag_exhausted',
     category = { 'tags', 'retrigger_tag' },
 
-    jokers = { 'j_mime' },
+    jokers = { 'j_mime', 'j_sock_and_buskin', 'j_hack', 'j_selzer', 'j_dusk', 'j_hanging_chad' },
     no_auto_start = true,
     execute = function()
         G.GAME.tarot_rate = 0
         G.GAME.planet_rate = 0
         Balatest.skip_blind 'tag_Bakery_RetriggerTag'
-        Balatest.hook_raw(Bakery_API, 'retrigger_jokers', Bakery_API.sized_table { j_mime = true })
         Balatest.start_round()
         Balatest.end_round()
         Balatest.cash_out()

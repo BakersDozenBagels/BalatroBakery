@@ -559,29 +559,46 @@ Bakery_API.guard(function()
 
     sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve", "Bakery")
 
-    -- Any card whose center's key is true in this table will be rendered double sided.
-    -- The front sprite of the card should be specified in `config.extra.front_pos`, and the back in `config.extra.back_pos`.
-    -- `config.extra.flipped` will be indicate whether the card has been flipped with `Bakery_API.flip_double_sided(card)`.
-    -- `config.extra.flipped` does NOT include effects like Amber Acorn.
-    Bakery_API.double_sided_jokers = {
-        j_Bakery_Werewolf = true,
-        j_Bakery_Weerewolf = true,
-        j_Bakery_Awarewolf = true,
-        j_Bakery_Warewolf = true,
-        j_Bakery_Wherewolf = true,
-        j_Bakery_Wearywolf = true,
-        j_Bakery_Wearwolf = true
-    }
+    Bakery_API.double_sided_jokers = setmetatable({}, {
+        __index = function(_, k)
+            sendWarnMessage(
+                "Accessing Bakery_API.double_sided_jokers is deprecated. Use Card:has_attribute('bakery_double_sided') instead.",
+                "Bakery")
+            return (G.P_CENTERS[k].attributes or {}).bakery_double_sided
+        end,
+        __newindex = function(_, k, v)
+            sendWarnMessage(
+                "Accessing Bakery_API.double_sided_jokers is deprecated. Add the 'bakery_double_sided' attribute instead.",
+                "Bakery")
+            if v == true then
+                G.P_CENTERS[k].attributes = G.P_CENTERS[k].attributes or {}
+                G.P_CENTERS[k].attributes[#G.P_CENTERS[k].attributes + 1] = 'bakery_double_sided'
+                G.P_CENTERS[k].attributes.bakery_double_sided = true
+                SMODS.Attributes.bakery_double_sided.keys = SMODS.merge_lists({ SMODS.Attributes.bakery_double_sided
+                .keys or {}, { k } })
+            end
+        end
+    })
     -- Cards affected by Full Moon
-    Bakery_API.werewolves = {
-        j_Bakery_Werewolf = true,
-        j_Bakery_Weerewolf = true,
-        j_Bakery_Awarewolf = true,
-        j_Bakery_Warewolf = true,
-        j_Bakery_Wherewolf = true,
-        j_Bakery_Wearywolf = true,
-        j_Bakery_Wearwolf = true
-    }
+    Bakery_API.werewolves = setmetatable({}, {
+        __index = function(_, k)
+            sendWarnMessage(
+                "Accessing Bakery_API.werewolves is deprecated. Use Card:has_attribute('bakery_werewolf') instead.",
+                "Bakery")
+            return (G.P_CENTERS[k].attributes or {}).bakery_werewolf
+        end,
+        __newindex = function(_, k, v)
+            sendWarnMessage(
+                "Accessing Bakery_API.werewolves is deprecated. Add the 'bakery_werewolf' attribute instead.",
+                "Bakery")
+            if v == true then
+                G.P_CENTERS[k].attributes = G.P_CENTERS[k].attributes or {}
+                G.P_CENTERS[k].attributes[#G.P_CENTERS[k].attributes + 1] = 'bakery_werewolf'
+                G.P_CENTERS[k].attributes.bakery_werewolf = true
+                SMODS.Attributes.bakery_werewolf.keys = SMODS.merge_lists({ SMODS.Attributes.bakery_werewolf.keys or {}, { k } })
+            end
+        end
+    })
 
     -- Flips a double-sided card.
     function Bakery_API.flip_double_sided(card)
@@ -664,8 +681,7 @@ Bakery_API.guard(function()
 
     local raw_Card_draw = Card.draw
     function Card:draw(layer)
-        if self.config.center and (self.config.center.discovered or self.params.bypass_discovery_center) and
-            Bakery_API.double_sided_jokers[self.config.center.key] then
+        if self.config.center and (self.config.center.discovered or self.params.bypass_discovery_center) and self:has_attribute('bakery_double_sided') then
             local sprite_facing = self.sprite_facing
             self.sprite_facing = "front"
             self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or
@@ -1059,9 +1075,9 @@ Bakery_API.guard(function()
     end
 
     if AltTextures_Utils then
-        AltTextures_Utils.dimensions.BakeryCharm = {px = 68, py = 68}
+        AltTextures_Utils.dimensions.BakeryCharm = { px = 68, py = 68 }
         AltTextures_Utils.default_atlas.BakeryCharm = "Bakery_Charms"
-        AltTextures_Utils.texture_types[#AltTextures_Utils.texture_types+1] = "BakeryCharm"
+        AltTextures_Utils.texture_types[#AltTextures_Utils.texture_types + 1] = "BakeryCharm"
         AltTextures_Utils.loc_keys.BakeryCharm = "k_Bakery_charms"
     end
 end)

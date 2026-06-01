@@ -5,7 +5,7 @@ SMODS.Atlas {
     py = 95
 }
 
-for _, v in pairs {"LuaBig", "LuaGain", "LuaLoss"} do
+for _, v in pairs { "LuaBig", "LuaGain", "LuaLoss" } do
     SMODS.Sound {
         key = v,
         path = v .. ".ogg",
@@ -48,6 +48,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'mult', 'scaling', 'reset', 'discard' },
     config = {
         extra = {
             mult = 0,
@@ -113,6 +114,7 @@ Bakery_API.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'economy', 'destroy_card', 'sell_value' },
     config = {
         extra = {
             scale = 3
@@ -155,6 +157,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'xmult', 'economy' },
     config = {
         extra = {
             x_mult = 3,
@@ -184,6 +187,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     artist = "SadCube",
+    attributes = { 'xmult', 'discard', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         extra = {
             front = 2,
@@ -247,6 +251,7 @@ local j_spinner = Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'mult', 'chips', 'xmult', 'economy' },
     config = {
         extra = {
             effect = {
@@ -344,6 +349,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     unlocked = false,
+    attributes = { 'copying' },
     config = {
         extra = {}
     },
@@ -405,6 +411,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     unlocked = false,
+    attributes = { 'xmult' },
     config = {
         extra = {
             x_mult = 1.5
@@ -473,6 +480,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     unlocked = false,
+    attributes = { 'mult', 'chips', 'hand_type' },
     config = {
         extra = {
             unlock_level = 20
@@ -507,6 +515,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     unlocked = false,
+    attributes = { 'mult', 'chips', 'hand_type' },
     config = {
         extra = {
             unlock_level = 20
@@ -558,6 +567,7 @@ Bakery_API.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'rank', 'two', 'four', 'six', 'eight', 'ten', 'destroy_card' },
     calculate = function(self, card, context)
         if context.destroy_card and context.cardarea == G.play then
             if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card.base.value] ==
@@ -580,6 +590,7 @@ Bakery_API.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'rank', 'ace', 'three', 'five', 'seven', 'nine', 'destroy_card' },
     calculate = function(self, card, context)
         if context.destroy_card and context.cardarea == G.play then
             if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card.base.value] ==
@@ -607,15 +618,16 @@ Bakery_API.Joker {
     },
     rarity = 2,
     cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = false,
+    attributes = { 'chips', 'scaling' },
     config = {
         extra = {
             mult = 0,
             mult_gain = 5
         }
     },
-    blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = false,
     loc_vars = function(self, info_queue, card)
         return {
             vars = { card.ability.extra.mult_gain, card.ability.extra.mult }
@@ -668,6 +680,7 @@ Bakery_API.Joker {
     },
     rarity = 2,
     cost = 7,
+    attributes = { 'xmult', 'suit' },
     config = {
         extra = {
             xmult = 2
@@ -704,6 +717,7 @@ Bakery_API.Joker {
     },
     rarity = 2,
     cost = 1,
+    attributes = { 'mult', 'scaling' },
     config = {
         extra = {
             mult = 0,
@@ -768,6 +782,7 @@ Bakery_API.Joker {
     },
     rarity = 1,
     cost = 5,
+    attributes = { 'hand_size' },
     config = {
         extra = {
             cards = 3
@@ -800,6 +815,7 @@ Bakery_API.Joker {
     artist = "SadCube",
     rarity = 3,
     cost = 8,
+    attributes = { 'chips', 'scaling' },
     config = {
         extra = {
             chips = 0,
@@ -846,6 +862,7 @@ Bakery_API.Joker {
     artist = "GhostSalt",
     rarity = 2,
     cost = 7,
+    attributes = { 'xmult' },
     config = {
         extra = {
             used = false,
@@ -935,6 +952,7 @@ Bakery_API.Joker {
     },
     rarity = 1,
     cost = 4,
+    attributes = { 'mult', 'suit' },
     config = {
         extra = {
             mult = 6
@@ -993,6 +1011,7 @@ Bakery_API.Joker {
     },
     rarity = 3,
     cost = 8,
+    attributes = { 'xmult', 'joker' },
     config = {
         extra = {
             xmult = 1
@@ -1034,6 +1053,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'xmult', 'tag' },
     config = {
         extra = {
             x_mult = 2
@@ -1064,6 +1084,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = false,
     perishable_compat = true,
+    attributes = { 'xmult' },
     config = {
         extra = {
             x_mult = 3,
@@ -1125,6 +1146,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = false,
+    attributes = { 'mult', 'scaling' },
     config = {
         extra = {
             mult = 0,
@@ -1161,6 +1183,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     artist = "SadCube",
+    attributes = { 'mult', 'xmult', 'discard', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         extra = {
             flipped = false,
@@ -1277,6 +1300,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'xmult' },
     config = {
         extra = {
             x_mult = 0.2,
@@ -1324,8 +1348,11 @@ Bakery_API.Joker {
                             { XMult_mod = true, message = '!!', sound = "Bakery_LuaBig" })
                     else
                         card_eval_status_text(card, 'extra', card.ability.extra.concat_mult, percent, nil,
-                            { XMult_mod = true, message = '.."' .. card.ability.extra.concat_mult .. '"',
-                            sound = previous_mult and previous_mult > mult and "Bakery_LuaLoss" or "Bakery_LuaGain" })
+                            {
+                                XMult_mod = true,
+                                message = '.."' .. card.ability.extra.concat_mult .. '"',
+                                sound = previous_mult and previous_mult > mult and "Bakery_LuaLoss" or "Bakery_LuaGain"
+                            })
                     end
                 end
             }
@@ -1341,6 +1368,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     artist = "SadCube",
+    attributes = { 'hand_size', 'discard', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         h_size = 1,
         extra = {
@@ -1397,6 +1425,7 @@ Bakery_API.Joker {
     eternal_compat = true,
     perishable_compat = true,
     artist = "GhostSalt",
+    attributes = { 'tarot', 'card_destruction', 'economy', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         extra = {
             flipped = false,
@@ -1480,6 +1509,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'hand_size', 'x_mult', 'suit', 'rank', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         h_size = 1,
         extra = {
@@ -1564,6 +1594,7 @@ Bakery_API.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'prevents_death', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         extra = {
             rounds = 3,
@@ -1624,6 +1655,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = false,
+    attributes = { 'mult', 'scaling', 'hand_type', 'reset', 'bakery_double_sided', 'bakery_werewolf' },
     config = {
         extra = {
             mult = 0,
@@ -1727,6 +1759,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    attributes = { 'mult', 'chips' },
     config = {
         extra = {
             chips = 10,

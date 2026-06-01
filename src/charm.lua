@@ -991,9 +991,9 @@ local raw_Game_update_draw_to_hand = Game.update_draw_to_hand
 function Game:update_draw_to_hand(dt)
 	local function condition()
 		juicing = (
-			G.GAME.Bakery_charm == "BakeryCharm_Bakery_Obsession"
-			or G.GAME.Bakery_charm == "BakeryCharm_Bakery_Rune"
-		)
+				G.GAME.Bakery_charm == "BakeryCharm_Bakery_Obsession"
+				or G.GAME.Bakery_charm == "BakeryCharm_Bakery_Rune"
+			)
 			and G.GAME.current_round
 			and G.GAME.current_round.discards_left > 0
 			and G.STATE ~= G.STATES.ROUND_EVAL
@@ -1313,7 +1313,7 @@ Bakery_API.Charm({
 
 		local found = 0
 		for _, card in pairs(G.jokers.cards) do
-			if Bakery_API.werewolves[card.config.center.key] then
+			if card:has_attribute('bakery_werewolf') then
 				found = found + 1
 				if found >= 3 then
 					return true
@@ -1325,8 +1325,7 @@ Bakery_API.Charm({
 	equip = function(self, charm)
 		charm.ability.extra = true
 		for _, card in pairs(G.jokers.cards) do
-			if
-				Bakery_API.werewolves[card.config.center.key]
+			if card:has_attribute('bakery_werewolf')
 				and not card.ability.extra.flipped
 				and not card.ability.extra.flipping
 			then
@@ -1344,7 +1343,7 @@ function copy_card(other, ...)
 		other
 		and other.config
 		and other.config.center
-		and Bakery_API.werewolves[other.config.center.key]
+		and other:has_attribute('bakery_werewolf')
 		and other.ability
 		and other.ability.extra
 		and (other.ability.extra.flipped or other.ability.extra.flipping)
@@ -1362,7 +1361,7 @@ function Card:set_ability(center, initial, ...)
 
 	if
 		G.GAME.Bakery_charm == "BakeryCharm_Bakery_FullMoon"
-		and Bakery_API.werewolves[center.key]
+		and (center.attributes or {}).bakery_werewolf
 		and (not self.ability.extra or (not self.ability.extra.flipped and not self.ability.extra.flipping))
 		and not copying_werewolf
 	then
@@ -1460,15 +1459,15 @@ Bakery_API.Charm({
 				}) or localize("k_unknown"),
 				10,
 				G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology
-						and G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count
-					or 0,
+				and G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count
+				or 0,
 			},
 		}
 	end,
 	check_for_unlock = function()
 		return (
 			G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology
-				and G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count
+			and G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count
 			or 0
 		) >= 10
 	end,
