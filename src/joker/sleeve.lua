@@ -13,7 +13,7 @@ Bakery_API.guard(function()
         end,
         __index = function(t, k)
             sendWarnMessage("A mod is trying to get Bakery_API.usable_jokers." .. k ..
-                ". This table will be removed in a future version of Bakery.", "Bakery")
+                ". This table will be removed in a future version of Bakery. Use Card:has_attribute('bakery_usable') instead.", "Bakery")
             return raw_usable_jokers[k]
         end
     })

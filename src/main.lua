@@ -21,6 +21,7 @@ function Bakery_API.load(file)
     return ret
 end
 
+Bakery_API.load('attribute')
 Bakery_API.load('util')
 Bakery_API.load('contributor')
 Bakery_API.load('joker')
