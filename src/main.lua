@@ -48,13 +48,4 @@ if Balatest then
 	assert(SMODS.load_file("test/tag_tests.lua"))()
 	assert(SMODS.load_file("test/charm_tests.lua"))()
 end
-
-Bakery_API.guard(function()
-	SMODS.Atlas({
-		key = "modicon",
-		path = "Icon.png",
-		px = 34,
-		py = 34,
-	})
-end)
 -- END_KEEP_LITE
