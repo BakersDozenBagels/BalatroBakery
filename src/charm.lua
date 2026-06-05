@@ -153,7 +153,7 @@ Bakery_API.guard(function()
 				hide_single_page = true,
 				collapse_single_page = true,
 				h_mod = 0.65,
-				modify_card = function(card, center, i, j)
+				modify_card = function(card)
 					card.T.h = card.T.w
 				end,
 			}),
@@ -201,7 +201,7 @@ Bakery_API.guard(function()
 	end
 
 	function Bakery_API.get_next_charms(ret, count)
-		local ret = ret or {
+		ret = ret or {
 			spawn = {},
 		}
 		local _pool, _pool_key = get_current_pool("BakeryCharm")
@@ -214,7 +214,7 @@ Bakery_API.guard(function()
 				already = already + 1
 			end
 		end
-		for i = 1, math.min(SMODS.size_of_pool(_pool) - already, count or Bakery_API.get_charm_count()) do
+		for _ = 1, math.min(SMODS.size_of_pool(_pool) - already, count or Bakery_API.get_charm_count()) do
 			local center = pseudorandom_element(_pool, pseudoseed(_pool_key))
 			local it = 1
 			while center == "UNAVAILABLE" or G.GAME.current_round.Bakery_charm.spawn[center] do
@@ -315,12 +315,11 @@ Bakery_API.guard(function()
 			e.config.button = "Bakery_equip_from_shop"
 		end
 	end
-	G.FUNCS.Bakery_equip_from_shop = function(e, mute, nosave)
+	G.FUNCS.Bakery_equip_from_shop = function(e)
 		e.config.button = nil
 		local card = e.config.ref_table
 		local area = card.area
 		local prev_state = G.STATE
-		local delay_fac = 1
 
 		G.TAROT_INTERRUPT = G.STATE
 		G.STATE = (G.STATE == G.STATES.TAROT_PACK and G.STATES.TAROT_PACK)
@@ -376,7 +375,7 @@ Bakery_API.guard(function()
 	local raw_G_FUNCS_redeem_from_shop = G.FUNCS.redeem_from_shop
 	function G.FUNCS.redeem_from_shop(e, ...)
 		if e.config.ref_table.config.center.set == "BakeryCharm" then
-			return G.FUNCS.Bakery_equip_from_shop(e, ...)
+			return G.FUNCS.Bakery_equip_from_shop(e)
 		end
 		return raw_G_FUNCS_redeem_from_shop(e, ...)
 	end
@@ -384,7 +383,7 @@ Bakery_API.guard(function()
 	local raw_G_FUNCS_can_redeem = G.FUNCS.can_redeem
 	function G.FUNCS.can_redeem(e, ...)
 		if e.config.ref_table.config.center.set == "BakeryCharm" then
-			return G.FUNCS.Bakery_can_equip(e, ...)
+			return G.FUNCS.Bakery_can_equip(e)
 		end
 		return raw_G_FUNCS_can_redeem(e, ...)
 	end
@@ -445,7 +444,7 @@ Bakery_API.guard(function()
 			G.GAME.inflation = G.GAME.inflation + 1
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					for k, v in pairs(G.I.CARD) do
+					for _, v in pairs(G.I.CARD) do
 						if v.set_cost then
 							v:set_cost()
 						end
@@ -544,17 +543,16 @@ Bakery_API.Charm({
 	},
 	atlas = "Charms",
 	unlocked = false,
-	locked_loc_vars = function(self, info_queue, card)
+	locked_loc_vars = function()
 		return {
 			vars = { 52 },
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function(_, args)
 		if args.type ~= "modify_deck" or not G.playing_cards then
 			return
 		end
 		local suits = SMODS.Suit.obj_buffer
-		local suit = nil
 		for _, s in pairs(suits) do
 			local count = 0
 			for _, v in pairs(G.playing_cards) do
@@ -613,7 +611,7 @@ end
 
 local raw_five_of_a_kind_modify_display_text = SMODS.PokerHands["Five of a Kind"].modify_display_text
 SMODS.PokerHand:take_ownership("Five of a Kind", {
-	modify_display_text = function(cards, scoring_hand)
+	modify_display_text = function(_, scoring_hand)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens" and next(get_X_same(5, scoring_hand, true)) then
 			return "Bakery_SixOfAKind"
 		end
@@ -632,7 +630,7 @@ SMODS.PokerHand:take_ownership("Five of a Kind", {
 
 local raw_flush_five_modify_display_text = SMODS.PokerHands["Flush Five"].modify_display_text
 SMODS.PokerHand:take_ownership("Flush Five", {
-	modify_display_text = function(cards, scoring_hand)
+	modify_display_text = function(_, scoring_hand)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens" and next(get_X_same(5, scoring_hand, true)) then
 			return "Bakery_FlushSix"
 		end
@@ -651,7 +649,7 @@ SMODS.PokerHand:take_ownership("Flush Five", {
 
 local raw_two_pair_modify_display_text = SMODS.PokerHands["Two Pair"].modify_display_text
 SMODS.PokerHand:take_ownership("Two Pair", {
-	modify_display_text = function(cards, scoring_hand)
+	modify_display_text = function(_, scoring_hand)
 		if
 			G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens"
 			and #scoring_hand == 5
@@ -677,7 +675,7 @@ SMODS.PokerHand:take_ownership("Flush House", {
 		local val = raw_Flush_House_evaluate(parts)
 		return Bakery_API.maximus_full_house_compat(parts, val, true)
 	end,
-	modify_display_text = function(cards, scoring_hand)
+	modify_display_text = function(_, scoring_hand)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens" and #scoring_hand == 5 then
 			local dup = scoring_hand[1]
 			local x = scoring_hand[1].T.x
@@ -730,7 +728,7 @@ SMODS.PokerHand:take_ownership("Flush House", {
 
 local raw_flush_modify_display_text = SMODS.PokerHands["Flush"].modify_display_text
 SMODS.PokerHand:take_ownership("Flush", {
-	modify_display_text = function(cards, scoring_hand)
+	modify_display_text = function(_, scoring_hand)
 		if
 			G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens"
 			and #scoring_hand == 5
@@ -755,12 +753,12 @@ Bakery_API.credit(Bakery_API.Charm({
 	atlas = "Charms",
 	artist = "SadCube",
 	unlocked = false,
-	locked_loc_vars = function(info_queue, card)
+	locked_loc_vars = function()
 		return {
 			vars = { 9, G.P_TAGS.tag_double.discovered and localize("b_Bakery_double_tags") or localize("k_unknown") },
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function()
 		local count = 0
 		for _, v in ipairs(G.GAME.tags) do
 			if v.key == "tag_double" then
@@ -778,7 +776,7 @@ Bakery_API.credit(Bakery_API.Charm({
 
 -- KEEP_LITE
 Bakery_API.guard(function()
-	function Bakery_API.maximus_full_house_compat(parts, val)
+	function Bakery_API.maximus_full_house_compat(_, val)
 		return val
 	end
 end)
@@ -803,7 +801,7 @@ SMODS.PokerHand:take_ownership("Full House", {
 		local val = raw_Full_House_evaluate(parts)
 		return Bakery_API.maximus_full_house_compat(parts, val)
 	end,
-	modify_display_text = function(cards, scoring_hand)
+	modify_display_text = function(_, scoring_hand)
 		if
 			G.GAME.Bakery_charm == "BakeryCharm_Bakery_Pedigree"
 			and #all_suits(3, scoring_hand) >= 1
@@ -856,7 +854,7 @@ end
 
 sendInfoMessage("G.FUNCS.can_discard() patched. Reason: Discarding zero cards", "Bakery")
 
-G.FUNCS.Bakery_discard_zero = function(e)
+G.FUNCS.Bakery_discard_zero = function()
 	if not can_discard_zero() then
 		return
 	end
@@ -865,7 +863,7 @@ G.FUNCS.Bakery_discard_zero = function(e)
 	G.CONTROLLER.interrupt.focus = true
 	G.CONTROLLER:save_cardarea_focus("hand")
 
-	for k, v in ipairs(G.playing_cards) do
+	for _, v in ipairs(G.playing_cards) do
 		v.ability.forced_selection = nil
 	end
 
@@ -924,13 +922,13 @@ Bakery_API.Charm({
 			dollars = 3,
 		},
 	},
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
 		return {
 			vars = { card.ability.extra.dollars },
 		}
 	end,
-	calculate = function(self, card, context)
+	calculate = function(_, card, context)
 		if
 			not card.debuff
 			and context.individual
@@ -944,7 +942,7 @@ Bakery_API.Charm({
 			}
 		end
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function(_, args)
 		if args.type ~= "modify_deck" or not G.playing_cards or #G.playing_cards == 0 then
 			return
 		end
@@ -971,17 +969,17 @@ Bakery_API.credit(Bakery_API.Charm({
 			cards = 2,
 		},
 	},
-	locked_loc_vars = function(info_queue, card)
+	locked_loc_vars = function()
 		return {
 			vars = { 26 },
 		}
 	end,
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return {
 			vars = { card.ability.extra.cards },
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function()
 		return G.hand and #G.hand.cards >= 26
 	end,
 }))
@@ -1020,12 +1018,12 @@ Bakery_API.Charm({
 			money = 3,
 		},
 	},
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return {
 			vars = { card.ability.extra.money },
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function(_, args)
 		return args.type == "win" and G.GAME.round_scores.cards_discarded.amt == 0
 	end,
 })
@@ -1041,11 +1039,11 @@ Bakery_API.credit(Bakery_API.Charm({
 	config = {
 		extra = {},
 	},
-	equip = function(self, card)
+	equip = function(_, card)
 		card.ability.extra.prior = G.GAME.joker_rate
 		G.GAME.joker_rate = 0
 	end,
-	unequip = function(self, card)
+	unequip = function(_, card)
 		G.GAME.joker_rate = card.ability.extra.prior
 	end,
 }))
@@ -1061,13 +1059,13 @@ Bakery_API.credit(Bakery_API.Charm({
 	config = {
 		extra = {},
 	},
-	equip = function(self, card)
+	equip = function(_, card)
 		card.ability.extra.prior_t = G.GAME.tarot_rate
 		card.ability.extra.prior_p = G.GAME.planet_rate
 		G.GAME.tarot_rate = 0
 		G.GAME.planet_rate = 0
 	end,
-	unequip = function(self, card)
+	unequip = function(_, card)
 		G.GAME.tarot_rate = card.ability.extra.prior_t
 		G.GAME.planet_rate = card.ability.extra.prior_p
 	end,
@@ -1085,7 +1083,7 @@ Bakery_API.Charm({
 			mod = 2,
 		},
 	},
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return {
 			vars = { card.ability.extra.mod },
 		}
@@ -1116,17 +1114,17 @@ Bakery_API.Charm({
 			mod = 10,
 		},
 	},
-	locked_loc_vars = function(info_queue, card)
+	locked_loc_vars = function()
 		return {
 			vars = { 10 },
 		}
 	end,
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return {
 			vars = { card.ability.extra.mod },
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function(_, args)
 		if args.type ~= "modify_jokers" or not G.jokers then
 			return
 		end
@@ -1142,7 +1140,7 @@ Bakery_API.Charm({
 	config = {
 		extra = 2,
 	},
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return { vars = { card.ability.extra } }
 	end,
 	locked_loc_vars = function()
@@ -1161,13 +1159,13 @@ Bakery_API.Charm({
 			},
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function(_, args)
 		return args.type == "Bakery_Scribe_Joker" and args.key == "j_perkeo"
 	end,
-	equip = function(self, card)
+	equip = function(_, card)
 		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra
 	end,
-	unequip = function(self, card)
+	unequip = function(_, card)
 		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra
 	end,
 })
@@ -1178,22 +1176,22 @@ Bakery_API.Charm({
 	atlas = "Charms",
 	unlocked = false,
 	config = { extra = { antes = 2, cards = 1 } },
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return { vars = { card.ability.extra.antes, card.ability.extra.cards } }
 	end,
 	locked_loc_vars = function()
 		return { vars = { 16 } }
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function()
 		return G.GAME.round_resets.ante > 16
 	end,
-	equip = function(self, card)
+	equip = function(_, card)
 		ease_ante(-card.ability.extra.antes)
 		G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
 		G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - card.ability.extra.antes
 		change_shop_size(-card.ability.extra.cards)
 	end,
-	unequip = function(self, card)
+	unequip = function(_, card)
 		ease_ante(card.ability.extra.antes)
 		G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
 		G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante + card.ability.extra.antes
@@ -1205,7 +1203,7 @@ Bakery_API.Charm({
 	key = "OopsAll20s",
 	pos = { x = 2, y = 3 },
 	atlas = "Charms",
-	calculate = function(self, card, context)
+	calculate = function(_, _, context)
 		if context.mod_probability then
 			return { numerator = context.numerator * 2 }
 		end
@@ -1216,7 +1214,7 @@ Bakery_API.Charm({
 	key = "Fortuna",
 	pos = { x = 3, y = 3 },
 	atlas = "Charms",
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS.c_wheel_of_fortune
 		return {
 			vars = {
@@ -1245,7 +1243,7 @@ Bakery_API.Charm({
 	pos = { x = 4, y = 3 },
 	atlas = "Charms",
 	unlocked = false,
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS.c_death
 		return {
 			vars = {
@@ -1257,7 +1255,7 @@ Bakery_API.Charm({
 			},
 		}
 	end,
-	check_for_unlock = function(self, args)
+	check_for_unlock = function()
 		if not G.playing_cards or #G.playing_cards < 2 then
 			return false
 		end
@@ -1306,7 +1304,7 @@ Bakery_API.Charm({
 	atlas = "Charms",
 	unlocked = false,
 	config = { extra = false },
-	check_for_unlock = function(self, args)
+	check_for_unlock = function()
 		if not G.jokers or not G.jokers.cards or #G.jokers.cards < 3 then
 			return false
 		end
@@ -1322,7 +1320,7 @@ Bakery_API.Charm({
 		end
 		return false
 	end,
-	equip = function(self, charm)
+	equip = function(_, charm)
 		charm.ability.extra = true
 		for _, card in pairs(G.jokers.cards) do
 			if
@@ -1424,7 +1422,7 @@ Bakery_API.Charm({
 	unlocked = true,
 	config = { extra = 7.7 },
 
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, info_queue, card)
 		if G.P_CENTERS.c_soul.discovered then
 			info_queue[#info_queue + 1] = G.P_CENTERS.c_soul
 		end
@@ -1447,10 +1445,10 @@ Bakery_API.Charm({
 	atlas = "Charms",
 	unlocked = false,
 	config = { extra = 2 },
-	loc_vars = function(self, info_queue, card)
+	loc_vars = function(_, _, card)
 		return { vars = { card.ability.extra } }
 	end,
-	locked_loc_vars = function(self, info_queue, card)
+	locked_loc_vars = function()
 		return {
 			vars = {
 				G.P_CENTERS.c_Bakery_Astrology.discovered and localize({
@@ -1525,7 +1523,7 @@ Bakery_API.Charm({
 		return false
 	end,
 
-	calculate = function(self, card, context)
+	calculate = function(_, _, context)
 		if context.setting_blind then
 			local count = math.ceil(#G.deck.cards / 2)
 			local temp = {}
@@ -1569,7 +1567,7 @@ Bakery_API.Charm({
 			},
 		}
 	end,
-	check_for_unlock = function(self, context)
+	check_for_unlock = function(_, context)
 		return context.Bakery_lost_to_blind == "bl_serpent"
 	end,
 	unequip = function()
@@ -1602,12 +1600,12 @@ if next(SMODS.find_mod("RevosVault")) then
 		},
 		atlas = "Charms",
 		unlocked = false,
-		locked_loc_vars = function(info_queue, card)
+		locked_loc_vars = function()
 			return {
 				vars = { 5 },
 			}
 		end,
-		check_for_unlock = function(self, args)
+		check_for_unlock = function()
 			if not G.consumeables or #G.consumeables.cards < 5 then
 				return false
 			end
@@ -1634,12 +1632,12 @@ if next(SMODS.find_mod("MoreFluff")) then
 		},
 		atlas = "Charms",
 		unlocked = false,
-		locked_loc_vars = function(info_queue, card)
+		locked_loc_vars = function()
 			return {
 				vars = { 20 },
 			}
 		end,
-		check_for_unlock = function(self, args)
+		check_for_unlock = function(_, args)
 			if args.type == "mf_ten_colour_rounds" then
 				for _, v in pairs(G.consumeables.cards) do
 					if v.config.center.set == "Colour" and v.ability.val >= 20 then
@@ -1704,7 +1702,7 @@ if next(SMODS.find_mod("MoreFluff")) then
 
 	local raw_CardArea_update = CardArea.update
 	function CardArea:update(...)
-		local ret = { raw_CardArea_update(self, card, ...) }
+		local ret = { raw_CardArea_update(self, ...) }
 		if G.GAME and G.GAME.Bakery_charm == "BakeryCharm_Bakery_Posterization" then
 			local x = 0
 			for _, v in pairs(self.cards) do
@@ -1746,7 +1744,7 @@ if next(SMODS.find_mod("Cryptid")) then
 		},
 		atlas = "Charms",
 		unlocked = false,
-		check_for_unlock = function(self, args)
+		check_for_unlock = function(_, args)
 			if args.type == "win" then
 				for k, v in pairs(G.GAME.hands) do
 					if k ~= "Pair" and v.played ~= 0 then
@@ -1767,7 +1765,7 @@ if next(SMODS.find_mod("Cryptid")) then
 		local ret = raw_evaluate_poker_hand(cards, ...)
 		if G.GAME and G.GAME.Bakery_charm == "BakeryCharm_Bakery_Marm" then
 			local any = false
-			for k, v in pairs(ret) do
+			for k in pairs(ret) do
 				if #ret[k] > 0 then
 					any = true
 				end
@@ -1795,7 +1793,7 @@ if next(SMODS.find_mod("Cryptid")) then
 			return G.GAME and G.GAME.Bakery_charm == "BakeryCharm_Bakery_DuctTape" and 0 or raw_get_weight(...)
 		end,
 	}, true)
-	local raw_get_weight = SMODS.Rarities.Common.get_weight
+	local raw_get_weight = SMODS.Rarities.Uncommon.get_weight
 	SMODS.Rarity:take_ownership("Uncommon", {
 		get_weight = function(...)
 			return G.GAME and G.GAME.Bakery_charm == "BakeryCharm_Bakery_DuctTape" and 0 or raw_get_weight(...)
@@ -1815,10 +1813,10 @@ if next(SMODS.find_mod("GARBPACK")) then -- Garbshit
 		coder = "Jack5",
 		idea = "Jack5",
 		unlocked = false,
-		loc_vars = function(self, info_queue, card)
+		loc_vars = function(_, info_queue)
 			info_queue[#info_queue + 1] = G.P_CENTERS["m_garb_infected"]
 		end,
-		calculate = function(self, card, context)
+		calculate = function(_, card, context)
 			if context.after and not card.debuff and #G.hand.cards >= 1 then
 				local uninfected_cards = {}
 				for i = 1, #G.hand.cards do
@@ -1846,7 +1844,7 @@ if next(SMODS.find_mod("GARBPACK")) then -- Garbshit
 				return
 			end
 		end,
-		check_for_unlock = function(self, args)
+		check_for_unlock = function()
 			if G.playing_cards and #G.playing_cards >= 1 then
 				for i = 1, #G.playing_cards do
 					if G.playing_cards[i].ability.name ~= "m_garb_infected" then
