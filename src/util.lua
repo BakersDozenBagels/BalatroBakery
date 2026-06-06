@@ -26,7 +26,7 @@ Bakery_API.guard(function()
 	function Bakery_API.sized_table(table, key, ...)
 		key = key or "Length"
 		local count = 0
-		for k in pairs(table) do
+		for _ in pairs(table) do
 			count = count + 1
 		end
 		return setmetatable({}, {
@@ -59,7 +59,6 @@ Bakery_API.guard(function()
 	---@param table table @The table to modify.
 	---@param value string @The value to use.
 	function Bakery_API.default_table(table, value, ...)
-		local count = 0
 		local keys = {}
 		for k in pairs(table) do
 			keys[k] = true
@@ -89,7 +88,6 @@ Bakery_API.guard(function()
 	---@param table table @The table to modify.
 	---@param value string @The value to use.
 	function Bakery_API.aggressive_default_table(table, value, ...)
-		local count = 0
 		return setmetatable({}, {
 			__index = function(_, k)
 				local v = table[k]
@@ -288,10 +286,12 @@ Bakery_API.guard(function()
 					delay = 0.8125,
 					func = function()
 						attention_text({
-							text = (amt < -0.01 and "-" or "") .. localize("$") .. tostring(math.abs(amt)),
+							text = (anim.dollars < -0.01 and "-" or "") .. localize("$") .. tostring(
+								math.abs(anim.dollars)
+							),
 							scale = 1,
 							hold = 0.6125,
-							backdrop_colour = amt < -0.01 and G.C.RED or G.C.MONEY,
+							backdrop_colour = anim.dollars < -0.01 and G.C.RED or G.C.MONEY,
 							major = anim.card.HUD_tag,
 						})
 						play_sound("coin3", 0.845 + 0.04 * math.random(), 0.7)
@@ -386,13 +386,13 @@ Bakery_API.guard(function()
 			Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
 		end
 
-		for k, v in ipairs(G.jokers.cards) do
+		for _, v in ipairs(G.jokers.cards) do
 			if v.config.center.key == "j_Bakery_CardSleeve" and v.ability.extra.occupied then
 				local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
 				if area then
-					for k, v in ipairs(area.cards) do
-						if v.facing == "back" then
-							v:flip()
+					for _, c in ipairs(area.cards) do
+						if c.facing == "back" then
+							c:flip()
 						end
 					end
 				end
@@ -615,7 +615,7 @@ Bakery_API.guard(function()
 			end
 			SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
 			info_queue[#info_queue + 1] = {
-				generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+				generate_ui = function(_, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
 					if not card or not card.ability.extra.flipped then
 						self.key = back_key
 					end

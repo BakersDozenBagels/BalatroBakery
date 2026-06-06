@@ -152,7 +152,7 @@ Bakery_API.guard(function()
 				hide_single_page = true,
 				collapse_single_page = true,
 				h_mod = 0.65,
-				modify_card = function(card, center, i, j)
+				modify_card = function(card)
 					card.T.h = card.T.w
 				end,
 			}),
@@ -200,7 +200,7 @@ Bakery_API.guard(function()
 	end
 
 	function Bakery_API.get_next_charms(ret, count)
-		local ret = ret or {
+		ret = ret or {
 			spawn = {},
 		}
 		local _pool, _pool_key = get_current_pool("BakeryCharm")
@@ -213,7 +213,7 @@ Bakery_API.guard(function()
 				already = already + 1
 			end
 		end
-		for i = 1, math.min(SMODS.size_of_pool(_pool) - already, count or Bakery_API.get_charm_count()) do
+		for _ = 1, math.min(SMODS.size_of_pool(_pool) - already, count or Bakery_API.get_charm_count()) do
 			local center = pseudorandom_element(_pool, pseudoseed(_pool_key))
 			local it = 1
 			while center == "UNAVAILABLE" or G.GAME.current_round.Bakery_charm.spawn[center] do
@@ -314,12 +314,11 @@ Bakery_API.guard(function()
 			e.config.button = "Bakery_equip_from_shop"
 		end
 	end
-	G.FUNCS.Bakery_equip_from_shop = function(e, mute, nosave)
+	G.FUNCS.Bakery_equip_from_shop = function(e)
 		e.config.button = nil
 		local card = e.config.ref_table
 		local area = card.area
 		local prev_state = G.STATE
-		local delay_fac = 1
 
 		G.TAROT_INTERRUPT = G.STATE
 		G.STATE = (G.STATE == G.STATES.TAROT_PACK and G.STATES.TAROT_PACK)
@@ -375,7 +374,7 @@ Bakery_API.guard(function()
 	local raw_G_FUNCS_redeem_from_shop = G.FUNCS.redeem_from_shop
 	function G.FUNCS.redeem_from_shop(e, ...)
 		if e.config.ref_table.config.center.set == "BakeryCharm" then
-			return G.FUNCS.Bakery_equip_from_shop(e, ...)
+			return G.FUNCS.Bakery_equip_from_shop(e)
 		end
 		return raw_G_FUNCS_redeem_from_shop(e, ...)
 	end
@@ -383,7 +382,7 @@ Bakery_API.guard(function()
 	local raw_G_FUNCS_can_redeem = G.FUNCS.can_redeem
 	function G.FUNCS.can_redeem(e, ...)
 		if e.config.ref_table.config.center.set == "BakeryCharm" then
-			return G.FUNCS.Bakery_can_equip(e, ...)
+			return G.FUNCS.Bakery_can_equip(e)
 		end
 		return raw_G_FUNCS_can_redeem(e, ...)
 	end
@@ -444,7 +443,7 @@ Bakery_API.guard(function()
 			G.GAME.inflation = G.GAME.inflation + 1
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					for k, v in pairs(G.I.CARD) do
+					for _, v in pairs(G.I.CARD) do
 						if v.set_cost then
 							v:set_cost()
 						end
@@ -506,7 +505,7 @@ Bakery_API.guard(function()
 	})
 end)
 Bakery_API.guard(function()
-	function Bakery_API.maximus_full_house_compat(parts, val)
+	function Bakery_API.maximus_full_house_compat(_, val)
 		return val
 	end
 end)
