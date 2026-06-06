@@ -159,7 +159,7 @@ Bakery_API.credit(SMODS.Consumable({
 		y = 0,
 	},
 	artist = "GhostSalt",
-	cost = 4,
+	cost = 3,
 	config = {
 		extra = {
 			hl = 1,
