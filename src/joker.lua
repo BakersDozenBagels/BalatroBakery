@@ -287,7 +287,7 @@ local j_spinner = Bakery_API.Joker({
 			return card.ability.extra.effect[math.floor(card.ability.extra.rotation or 0) % 4]
 		end
 
-		if context.Bakery_after_eval then
+		if context.Bakery_after_eval and not context.blueprint then
 			G.E_MANAGER:add_event(Event({
 				trigger = "before",
 				delay = 0.2,
