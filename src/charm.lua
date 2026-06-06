@@ -839,7 +839,13 @@ Bakery_API.Charm({
 local function can_discard_zero()
 	return G.GAME.current_round.discards_left > 0
 		and #G.hand.highlighted <= 0
-		and (G.GAME.Bakery_charm == "BakeryCharm_Bakery_Rune" or G.GAME.Bakery_charm == "BakeryCharm_Bakery_Obsession")
+		and (
+			G.GAME.Bakery_charm == "BakeryCharm_Bakery_Obsession"
+			or (
+				G.GAME.Bakery_charm == "BakeryCharm_Bakery_Rune"
+				and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit
+			)
+		)
 end
 
 local raw_G_FUNCS_can_discard = G.FUNCS.can_discard
@@ -883,10 +889,17 @@ G.FUNCS.Bakery_discard_zero = function()
 		juice_card(G.Bakery_charm_area.cards[1])
 	end
 	if G.GAME.Bakery_charm == "BakeryCharm_Bakery_Rune" then
-		local count = G.Bakery_charm_area.cards[1].ability.extra.cards
-		for i = 1, count do
-			draw_card(G.deck, G.hand, i * 100 / count, "up", true)
-		end
+		G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				SMODS.add_card({
+					set = "Tarot",
+					key_append = "BakeryCharm_Bakery_Rune",
+				})
+				G.GAME.consumeable_buffer = 0
+				return true
+			end,
+		}))
 	elseif G.GAME.Bakery_charm == "BakeryCharm_Bakery_Obsession" then
 		ease_dollars(G.Bakery_charm_area.cards[1].ability.extra.money)
 	end
@@ -964,19 +977,9 @@ Bakery_API.credit(Bakery_API.Charm({
 	atlas = "Charms",
 	artist = "GhostSalt",
 	unlocked = false,
-	config = {
-		extra = {
-			cards = 2,
-		},
-	},
 	locked_loc_vars = function()
 		return {
 			vars = { 26 },
-		}
-	end,
-	loc_vars = function(_, _, card)
-		return {
-			vars = { card.ability.extra.cards },
 		}
 	end,
 	check_for_unlock = function()

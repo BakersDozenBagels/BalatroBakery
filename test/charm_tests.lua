@@ -723,6 +723,20 @@ Balatest.TestPlay({
 	end,
 })
 Balatest.TestPlay({
+	name = "rune_cant_discard_zero_full",
+	category = { "charms", "rune" },
+
+	consumeables = { "c_strength", "c_strength" },
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Rune")
+	end,
+	assert = function()
+		local node = { config = {} }
+		G.FUNCS.can_discard(node)
+		Balatest.assert(node.config.button ~= "Bakery_discard_zero")
+	end,
+})
+Balatest.TestPlay({
 	name = "rune_discard_zero",
 	category = { "charms", "rune" },
 
@@ -732,7 +746,9 @@ Balatest.TestPlay({
 		Balatest.q(G.FUNCS.Bakery_discard_zero)
 	end,
 	assert = function()
-		Balatest.assert_eq(#G.hand.cards, 10)
+		Balatest.assert_eq(#G.hand.cards, 8)
+		Balatest.assert_eq(#G.consumeables.cards, 1)
+		Balatest.assert(G.consumeables.cards[1].config.center.set == "Tarot")
 	end,
 })
 Balatest.TestPlay({

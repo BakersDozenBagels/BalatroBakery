@@ -605,8 +605,9 @@ return {
 				name = "Rune",
 				text = {
 					"You can {C:attention}discard",
-					"{C:attention}0 cards{} to draw",
-					"{C:attention}#1#{} extra cards",
+					"{C:attention}0 cards{} to create",
+					"a {C:tarot}Tarot{} card",
+					"{C:inactive}(Must have room)",
 				},
 				unlock = { "Have at least {C:attention}#1#", "cards in your hand" },
 			},
