@@ -834,9 +834,7 @@ Bakery_API.Joker({
 	calculate = function(self, card, context)
 		if context.first_hand_drawn then
 			juice_card(context.blueprint_card or card)
-			for i = 1, card.ability.extra.cards do
-				draw_card(G.deck, G.hand, i * 100 / card.ability.extra.cards, "up", true)
-			end
+			SMODS.draw_cards(card.ability.extra.cards)
 		end
 	end,
 })
