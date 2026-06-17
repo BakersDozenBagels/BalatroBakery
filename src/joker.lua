@@ -781,7 +781,7 @@ Bakery_API.Joker({
 				)
 	end,
 	Bakery_use_joker = function(self, card)
-		-- G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
+		G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
 		ease_dollars(-card.ability.extra.cost)
 		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 		card_eval_status_text(card, "extra", nil, math.random(0, 100), nil, {
@@ -792,12 +792,14 @@ Bakery_API.Joker({
 				vars = { card.ability.extra.mult },
 			}),
 		})
-		-- G.E_MANAGER:add_event(Event({
-		--     func = (function()
-		--         G.GAME.dollar_buffer = G.GAME.dollar_buffer + card.ability.extra.cost
-		--         return true
-		--     end)
-		-- }))
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				if Bakery_API.big(G.GAME.dollar_buffer or 0) < Bakery_API.big(0) then
+					G.GAME.dollar_buffer = G.GAME.dollar_buffer + card.ability.extra.cost
+				end
+				return true
+			end,
+		}))
 		Bakery_API.rehighlight(card)
 	end,
 	Bakery_use_button_text = function(self, card)

@@ -1804,6 +1804,40 @@ Balatest.TestPlay({
 	end,
 })
 Balatest.TestPlay({
+	name = "coin_slot_no_debt_aggressively",
+	category = { "jokers", "coin_slot" },
+
+	jokers = { "j_Bakery_CoinSlot" },
+	dollars = 5,
+	execute = function()
+		Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+		Bakery_API.Balatest_use_joker(G.jokers.cards[1])
+		Balatest.play_hand({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.dollars, 0)
+		Balatest.assert_chips(7 * 4)
+	end,
+})
+Balatest.TestPlay({
+	name = "coin_slot_no_debt_even_more_aggressively",
+	category = { "jokers", "coin_slot" },
+
+	jokers = { "j_Bakery_CoinSlot" },
+	dollars = 5,
+	execute = function()
+		Balatest.q(function()
+			G.FUNCS.Bakery_use_joker({ config = { ref_table = G.jokers.cards[1] } })
+			G.FUNCS.Bakery_use_joker({ config = { ref_table = G.jokers.cards[1] } })
+		end)
+		Balatest.play_hand({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.dollars, 0)
+		Balatest.assert_chips(7 * 4)
+	end,
+})
+Balatest.TestPlay({
 	name = "coin_slot_yes_debt",
 	category = { "jokers", "coin_slot" },
 
