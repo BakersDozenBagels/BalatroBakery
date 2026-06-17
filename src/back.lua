@@ -128,11 +128,15 @@ local b_house = SMODS.Back({
 			vars = { localize("k_unknown") },
 		}
 	end,
-	loc_vars = function(self)
+	loc_vars = function(self, info_queue, card)
 		return {
 			vars = {
-				(G.GAME and G.GAME.probabilities.normal or 1) * (is_double_house() and 2 or 1),
-				self.config.extra.odds_bottom,
+				-- SMODS.get_probability_vars(
+				-- 	self,
+				-- 	is_double_house() and 2 or 1,
+				-- 	self.config.extra.odds_bottom,
+				-- 	"b_Bakery_House"
+				-- ),
 			},
 		}
 	end,
@@ -143,11 +147,14 @@ local b_house = SMODS.Back({
 			local double = is_double_house()
 
 			for i = 1, #G.play.cards do
-				local choice = pseudorandom(pseudoseed("HouseDeck"), 0, self.config.extra.odds_bottom)
-				if double then
-					choice = choice / 2
-				end
-				if choice <= (G.GAME and G.GAME.probabilities.normal or 1) then
+				if
+					SMODS.pseudorandom_probability(
+						self,
+						"b_Bakery_House",
+						double and 2 or 1,
+						self.config.extra.odds_bottom
+					)
+				then
 					table.insert(anim, G.play.cards[i])
 				end
 			end
@@ -191,7 +198,7 @@ local b_house = SMODS.Back({
 						card:set_base(G.P_CARDS[suit .. "_" .. rank])
 						if double then
 							if not card.edition then
-								local ed = poll_edition("HouseDeck", nil, true)
+								local ed = SMODS.poll_edition({ key = "HouseDeck", no_negative = true })
 								if ed then
 									card:set_edition(ed)
 								end
@@ -495,7 +502,6 @@ if CardSleeves then
 		},
 		config = b_house.config,
 		calculate = function(self, sleeve, context)
-			local key, vars
 			if self.get_current_deck_key() ~= "b_Bakery_House" then
 				return b_house.calculate(self, sleeve, context)
 			end
