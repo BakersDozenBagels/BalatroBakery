@@ -20,11 +20,12 @@ Bakery_API.guard(function()
 
 	local function process(center)
 		if (center.attributes or {}).bakery_usable then
-			sendErrorMessage(
+			sendWarnMessage(
 				center.key
-					.. " manually specified the 'bakery_usable' attribute. This attribute is applied automatically.",
+					.. " manually specified the 'bakery_usable' attribute (or you reloaded a profile). This attribute is applied automatically.",
 				"Bakery"
 			)
+			return
 		end
 		if type(center.Bakery_use_joker) == "function" then
 			center.attributes = center.attributes or {}
@@ -39,6 +40,7 @@ Bakery_API.guard(function()
 		process(v)
 	end
 
+	---@type fun(...: ...): [...]
 	local raw_SMODS_Center_inject = SMODS.Center.inject
 	function SMODS.Center:inject(...)
 		local ret = { raw_SMODS_Center_inject(self, ...) }
