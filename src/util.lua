@@ -865,7 +865,7 @@ Bakery_API.guard(function()
 	function Bakery_API.credit(obj)
 		if obj.set == "Back" or obj.set == "Sleeve" then
 			if not obj.artist and not obj.coder and not obj.idea then
-				return
+				return obj
 			end
 			G.E_MANAGER:add_event(Event({
 				blocking = false,
