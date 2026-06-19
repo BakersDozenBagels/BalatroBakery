@@ -131,12 +131,12 @@ local b_house = SMODS.Back({
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = {
-				-- SMODS.get_probability_vars(
-				-- 	self,
-				-- 	is_double_house() and 2 or 1,
-				-- 	self.config.extra.odds_bottom,
-				-- 	"b_Bakery_House"
-				-- ),
+				SMODS.get_probability_vars(
+					self,
+					is_double_house() and 2 or 1,
+					self.config.extra.odds_bottom,
+					"b_Bakery_House"
+				),
 			},
 		}
 	end,
