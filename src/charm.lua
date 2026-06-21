@@ -1596,6 +1596,243 @@ function Game:update_game_over(...)
 	return raw_Game_update_game_over(self, ...)
 end
 
+local resetting_round = false
+local raw_new_round = new_round
+function new_round(...)
+	resetting_round = true
+	local ret = raw_new_round(...)
+	G.E_MANAGER:add_event(Event({
+		blocking = false,
+		func = function()
+			resetting_round = false
+			G.HUD:recalculate()
+			return true
+		end,
+	}))
+	return ret
+end
+
+local raw_G_FUNCS_cash_out = G.FUNCS.cash_out
+function G.FUNCS.cash_out(...)
+	resetting_round = true
+	local ret = raw_G_FUNCS_cash_out(...)
+	G.E_MANAGER:add_event(Event({
+		blocking = false,
+		func = function()
+			resetting_round = false
+			G.HUD:recalculate()
+			return true
+		end,
+	}))
+	return ret
+end
+
+local raw_recursive_table_cull = recursive_table_cull
+function recursive_table_cull(data, ...)
+	local orig = (getmetatable(data) or {}).__Bakery_orig
+	if orig then
+		return raw_recursive_table_cull(orig, ...)
+	end
+	return raw_recursive_table_cull(data, ...)
+end
+
+local raw_G_FUNCS_draw_from_deck_to_hand = G.FUNCS.draw_from_deck_to_hand
+function G.FUNCS.draw_from_deck_to_hand(...)
+	local ret = { raw_G_FUNCS_draw_from_deck_to_hand(...) }
+	if G.GAME.current_round.hands_left < 1 then
+		G.E_MANAGER:add_event(Event({
+			blocking = false,
+			func = function()
+				G.STATE = G.STATES.NEW_ROUND
+				G.STATE_COMPLETE = false
+				return true
+			end,
+		}))
+		return true
+	end
+	return unpack(ret)
+end
+
+local raw_UIBox_calculate_xywh = UIBox.calculate_xywh
+function UIBox:calculate_xywh(node, ...)
+	local ret = { raw_UIBox_calculate_xywh(self, node, ...) }
+	local function is(id)
+		local el = G.HUD:get_UIE_by_ID(id).parent
+		if id == "Bakery_bubble_fruit" and not el.states.Bakery_hidden then
+			el.states.Bakery_hidden = true
+			if G.GAME.Bakery_charm ~= "BakeryCharm_Bakery_BubbleFruit" then
+				el.states.visible = false
+			end
+		end
+		return node == el and not el.states.visible
+	end
+	local x, y = pcall(function()
+		return is("Bakery_bubble_fruit") or is("hud_hands")
+	end)
+	if x and y then
+		return ret[1], 0
+	end
+	return unpack(ret)
+end
+
+local raw_create_UIBox_HUD = create_UIBox_HUD
+function create_UIBox_HUD(...)
+	local ret = raw_create_UIBox_HUD(...)
+	local round = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes
+	table.insert(round, 2, {
+		n = G.UIT.R,
+		config = { align = "cm" },
+		nodes = {
+			{
+				n = G.UIT.C,
+				config = {
+					id = "Bakery_bubble_fruit",
+					align = "cm",
+					padding = 0.05,
+					minw = 1.45 * 2 + 0.13,
+					colour = G.C.DYN_UI.BOSS_MAIN,
+					emboss = 0.05,
+					r = 0.1,
+				},
+				nodes = {
+					{
+						n = G.UIT.R,
+						config = { align = "cm", minh = 0.33, maxw = 1.35 * 2 + 0.13 },
+						nodes = {
+							{
+								n = G.UIT.T,
+								config = {
+									text = localize("k_Bakery_hud_hands_and_discards"),
+									scale = 0.85 * 0.4,
+									colour = G.C.UI.TEXT_LIGHT,
+									shadow = true,
+								},
+							},
+						},
+					},
+					{
+						n = G.UIT.R,
+						config = {
+							align = "cm",
+							r = 0.1,
+							minw = 1.2 * 2 + 0.13 + 0.15,
+							colour = G.C.DYN_UI.BOSS_DARK,
+						},
+						nodes = {
+							{
+								n = G.UIT.O,
+								config = {
+									object = DynaText({
+										string = {
+											{ ref_table = G.GAME.current_round, ref_value = "hands_left" },
+										},
+										font = G.LANGUAGES["en-us"].font,
+										colours = { G.C.PURPLE },
+										shadow = true,
+										rotate = true,
+										scale = 2 * 0.4,
+									}),
+									id = "Bakery_bubble_fruit_UI_count",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+	return ret
+end
+
+Bakery_API.Charm({
+	key = "BubbleFruit",
+	pos = { x = 1, y = 5 },
+	atlas = "Charms",
+	unlocked = false,
+	locked_loc_vars = function()
+		return { vars = { 15 } }
+	end,
+	check_for_unlock = function()
+		return G.GAME.current_round.hands_left >= 15
+		-- local x, y = pcall(function()
+		-- end)
+		-- return x and y
+	end,
+	equip = function()
+		local raw_current = G.GAME.current_round
+		G.GAME.current_round = setmetatable({}, {
+			__index = function(_, k)
+				if k == "discards_left" or k == "hands_left" then
+					return raw_current.discards_left + raw_current.hands_left
+				end
+				if k == "discards_used" or k == "hands_played" then
+					return raw_current.discards_used + raw_current.hands_played
+				end
+				return raw_current[k]
+			end,
+			__newindex = function(_, k, v)
+				if resetting_round then
+					raw_current[k] = v
+					return
+				end
+				if k == "discards_left" then
+					raw_current.discards_left = v - raw_current.hands_left
+					return
+				end
+				if k == "hands_left" then
+					raw_current.hands_left = v - raw_current.discards_left
+					return
+				end
+				if k == "discards_used" then
+					raw_current.discards_used = v - raw_current.hands_played
+					return
+				end
+				if k == "hands_played" then
+					raw_current.hands_played = v - raw_current.discards_used
+					return
+				end
+				raw_current[k] = v
+			end,
+			__Bakery_orig = raw_current,
+			__pairs = function()
+				return function(_, k)
+					local nk = next(raw_current, k)
+					return nk, nk and G.GAME.current_round[nk]
+				end
+			end,
+		})
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.HUD:get_UIE_by_ID("hud_hands").parent.states.visible = false
+				G.HUD:get_UIE_by_ID("Bakery_bubble_fruit").parent.states.visible = true
+				G.HUD:get_UIE_by_ID("Bakery_bubble_fruit_UI_count").config.object.config.string[1].ref_table =
+					G.GAME.current_round
+				G.HUD:recalculate()
+				return true
+			end,
+		}))
+	end,
+	unequip = function()
+		local orig = (getmetatable(G.GAME.current_round) or {}).__Bakery_orig
+		if orig then
+			G.GAME.current_round = orig
+		else
+			sendErrorMessage("Unequipping Bubble Fruit failed!", "Bakery")
+		end
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.HUD:get_UIE_by_ID("hud_hands").parent.states.visible = true
+				G.HUD:get_UIE_by_ID("Bakery_bubble_fruit").parent.states.visible = false
+				G.HUD:recalculate()
+				return true
+			end,
+		}))
+	end,
+	load = function(self)
+		self:equip()
+	end,
+})
+
 if next(SMODS.find_mod("RevosVault")) then
 	Bakery_API.Charm({
 		key = "PrintError",

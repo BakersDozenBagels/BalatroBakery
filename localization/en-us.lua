@@ -734,6 +734,11 @@ return {
 				text = { "After {C:attention}Play{} or {C:attention}Discard", "always draw {C:attention}3{} cards" },
 				unlock = { "Lose against {C:Bakery_serpent}#1#" },
 			},
+			BakeryCharm_Bakery_BubbleFruit = {
+				name = "Bubble Fruit",
+				text = { "{C:blue}Hands{} and {C:red}Discards", "are {C:attention}shared" },
+				unlock = { "Have {C:attention}#1# {C:blue}Hands", "remaining" },
+			},
 			-- KEEP_LITE
 		},
 		Other = {
@@ -773,6 +778,7 @@ return {
 			b_Bakery_shattered = "Shattered!",
 			b_Bakery_double_tags = "Double Tags",
 			ph_Bakery_Wearywolf = "Saved by Wearywolf",
+			k_Bakery_hud_hands_and_discards = "Hands + Discards",
 			-- KEEP_LITE
 			k_Bakery_charm = "Charm",
 			k_Bakery_charms = "Charms",

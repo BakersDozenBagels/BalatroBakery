@@ -1865,3 +1865,170 @@ Balatest.TestPlay({
 	end,
 })
 --#endregion
+
+--#region Bubble Fruit
+Balatest.TestPlay({
+	name = "bubble_fruit_right",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 7,
+	discards = 2,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.current_round.hands_left, 9)
+		Balatest.assert_eq(G.GAME.current_round.discards_left, 9)
+		Balatest.assert_eq(G.GAME.current_round.hands_played, 0)
+		Balatest.assert_eq(G.GAME.current_round.discards_used, 0)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_left",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.current_round.hands_left, 9)
+		Balatest.assert_eq(G.GAME.current_round.discards_left, 9)
+		Balatest.assert_eq(G.GAME.current_round.hands_played, 0)
+		Balatest.assert_eq(G.GAME.current_round.discards_used, 0)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_play",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.wait(2)
+		Balatest.play_hand({ "2S" })
+		Balatest.wait(2)
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.current_round.hands_left, 8)
+		Balatest.assert_eq(G.GAME.current_round.discards_left, 8)
+		Balatest.assert_eq(G.GAME.current_round.hands_played, 1)
+		Balatest.assert_eq(G.GAME.current_round.discards_used, 1)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_discard",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.discard({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.current_round.hands_left, 8)
+		Balatest.assert_eq(G.GAME.current_round.discards_left, 8)
+		Balatest.assert_eq(G.GAME.current_round.hands_played, 1)
+		Balatest.assert_eq(G.GAME.current_round.discards_used, 1)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_dna_yes",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	jokers = { "j_dna" },
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.play_hand({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.playing_cards, 53)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_dna_no",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	jokers = { "j_dna" },
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.discard({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.playing_cards, 52)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_trading_card_yes",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	jokers = { "j_trading" },
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.discard({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.playing_cards, 51)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_trading_card_no",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	jokers = { "j_trading" },
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.play_hand({ "2S" })
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.playing_cards, 52)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_delayed_gratification",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 2,
+	discards = 7,
+	dollars = 8,
+	jokers = { "j_delayed_grat" },
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.play_hand({ "2S" })
+		Balatest.end_round()
+		Balatest.cash_out()
+	end,
+	assert = function()
+		Balatest.assert_dollars(0)
+	end,
+})
+Balatest.TestPlay({
+	name = "bubble_fruit_reload",
+	category = { "charms", "bubble_fruit" },
+
+	hands = 5,
+	discards = 5,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_BubbleFruit")
+		Balatest.play_hand({ "2S" })
+		Balatest.reload()
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.current_round.hands_left, 9)
+		Balatest.assert_eq(G.GAME.current_round.discards_left, 9)
+		Balatest.assert_eq(G.GAME.current_round.hands_played, 1)
+		Balatest.assert_eq(G.GAME.current_round.discards_used, 1)
+	end,
+})
+--#endregion
