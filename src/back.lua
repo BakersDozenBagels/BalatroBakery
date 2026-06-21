@@ -295,7 +295,8 @@ local b_credit = SMODS.Back({
 	unlocked = false,
 	discovered = false,
 	check_for_unlock = function(self, args)
-		return get_deck_win_stake("b_yellow") > 3
+		local s, v = pcall(get_deck_win_stake, "b_yellow")
+		return s and v > 3
 	end,
 	locked_loc_vars = function(self, back)
 		if G.P_CENTERS["b_yellow"].discovered then

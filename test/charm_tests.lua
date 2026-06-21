@@ -1189,7 +1189,7 @@ Balatest.TestPlay({
 	end,
 	assert = function()
 		Balatest.assert_eq(#G.hand.cards, 1)
-		Balatest.assert_eq(G.hand.cards[1].ability.name, "m_garb_infected")
+		Balatest.assert(G.hand.cards[1].ability.name == "m_garb_infected")
 	end,
 })
 Balatest.TestPlay({
@@ -1208,7 +1208,7 @@ Balatest.TestPlay({
 	end,
 	assert = function()
 		Balatest.assert_eq(#G.hand.cards, 1)
-		Balatest.assert_eq(G.hand.cards[1].ability.name, "m_garb_infected")
+		Balatest.assert(G.hand.cards[1].ability.name == "m_garb_infected")
 	end,
 })
 Balatest.TestPlay({
@@ -1229,7 +1229,7 @@ Balatest.TestPlay({
 	end,
 	assert = function()
 		Balatest.assert_eq(#G.hand.cards, 1)
-		Balatest.assert_eq(G.hand.cards[1].ability.name, "m_garb_infected")
+		Balatest.assert(G.hand.cards[1].ability.name == "m_garb_infected")
 	end,
 })
 Balatest.TestPlay({

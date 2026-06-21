@@ -1468,7 +1468,9 @@ Bakery_API.Charm({
 	end,
 	check_for_unlock = function()
 		return (
-			G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology
+			G.PROFILES[G.SETTINGS.profile]
+				and G.PROFILES[G.SETTINGS.profile].consumeable_usage
+				and G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology
 				and G.PROFILES[G.SETTINGS.profile].consumeable_usage.c_Bakery_Astrology.count
 			or 0
 		) >= 10
