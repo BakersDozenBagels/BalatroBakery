@@ -86,7 +86,7 @@ Bakery_API.guard(function()
 
 	--- Set a default value used to replace any falsy values.
 	---@param table table @The table to modify.
-	---@param value string @The value to use.
+	---@param value any @The value to use.
 	function Bakery_API.aggressive_default_table(table, value, ...)
 		return setmetatable({}, {
 			__index = function(_, k)
