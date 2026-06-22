@@ -134,26 +134,6 @@ if card.area == G.shop_vouchers and G.shop_vouchers then
 end
 '''
 
-# Create charm area
-[[patches]]
-[patches.pattern]
-target = 'game.lua'
-pattern = 'self.consumeables = CardArea('
-position = 'before'
-match_indent = true
-times = 1
-payload = "Bakery_API.create_charm_area()\n"
-
-# Above, with Cryptid on Nostalgic deck
-[[patches]]
-[patches.pattern]
-target = 'game.lua'
-pattern = 'self.consumeables = self.jokers'
-position = 'after'
-match_indent = true
-times = 1
-payload = "Bakery_API.create_charm_area()\n"
-
 # Coin Charm
 [[patches]]
 [patches.regex]
