@@ -1297,15 +1297,16 @@ Bakery_API.Charm({
 		end
 		return true
 	end,
-})
-
-local raw_create_card = create_card
-function create_card(_type, area, l, r, s, o, forced_key, ...)
-	if G.GAME.Bakery_charm == "BakeryCharm_Bakery_MementoMori" and _type == "Tarot" and area == G.pack_cards then
-		return raw_create_card(_type, area, l, r, s, o, "c_death", ...)
+	calculate = function(self, card, context)
+		if context.create_booster_card and context.booster.config.center.kind == "Arcana" then
+			return {
+				booster_create_flags = {
+					key = "c_death"
+				}
+			}
+		end
 	end
-	return raw_create_card(_type, area, l, r, s, o, forced_key, ...)
-end
+})
 
 Bakery_API.Charm({
 	key = "FullMoon",
