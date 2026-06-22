@@ -454,13 +454,19 @@ Bakery_API.guard(function()
 		end
 	end
 
-	function Bakery_API.create_charm_area()
-		G.Bakery_charm_area = CardArea(0, 0, 0.95 * G.CARD_W, 0.95 * G.CARD_W, {
-			card_limit = 1,
-			type = "joker",
-			highlight_limit = 1,
-		})
-		G.Bakery_charm_area.ARGS.invisible_area_types = {
+	function SMODS.current_mod.custom_card_areas(game)
+		game.Bakery_charm_area = CardArea(
+			game.deck.T.x + game.deck.T.w / 2 - 0.8 * G.CARD_W / 2,
+			game.deck.T.y - 0.9 * game.deck.T.h,
+			0.95 * G.CARD_W,
+			0.95 * G.CARD_W,
+			{
+				card_limit = 1,
+				type = "joker",
+				highlight_limit = 1,
+			}
+		)
+		game.Bakery_charm_area.ARGS.invisible_area_types = {
 			joker = 1,
 		}
 	end
