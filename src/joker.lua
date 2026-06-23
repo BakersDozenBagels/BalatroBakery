@@ -74,25 +74,18 @@ Bakery_API.Joker({
 				and card.ability.extra.used_ranks[rank] == nil
 			then
 				card.ability.extra.used_ranks[rank] = true
-				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-				return {
-					message = "+" .. card.ability.extra.mult_gain,
-					colour = G.C.RED,
-					card = card,
-				}
+				SMODS.scale_card(card, {
+					ref_value = "mult",
+					scalar_value = "mult_gain",
+					message_key = "a_chips",
+					message_colour = G.C.RED,
+				})
+				return
 			end
 		end
 
 		if context.joker_main and card.ability.extra.mult > 0 then
-			return {
-				mult_mod = card.ability.extra.mult,
-				message = localize({
-					type = "variable",
-					key = "a_mult",
-					vars = { card.ability.extra.mult },
-					card = card,
-				}),
-			}
+			return { mult = card.ability.extra.mult }
 		end
 
 		if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
@@ -767,9 +760,7 @@ Bakery_API.Joker({
 	perishable_compat = true,
 	calculate = function(self, card, context)
 		if context.joker_main then
-			return {
-				mult = card.ability.extra.mult,
-			}
+			return { mult = card.ability.extra.mult }
 		end
 	end,
 	Bakery_can_use = function(self, card)
@@ -782,14 +773,11 @@ Bakery_API.Joker({
 	Bakery_use_joker = function(self, card)
 		G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
 		ease_dollars(-card.ability.extra.cost)
-		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-		card_eval_status_text(card, "extra", nil, math.random(0, 100), nil, {
-			mult_mod = true,
-			message = localize({
-				type = "variable",
-				key = "a_mult",
-				vars = { card.ability.extra.mult },
-			}),
+		SMODS.scale_card(card, {
+			ref_value = "mult",
+			scalar_value = "mult_gain",
+			message_key = "a_mult",
+			message_colour = G.C.RED,
 		})
 		G.E_MANAGER:add_event(Event({
 			func = function()
@@ -869,19 +857,12 @@ Bakery_API.Joker({
 			return { chips = card.ability.extra.chips }
 		end
 		if context.setting_blind and not context.blueprint and not card.getting_sliced then
-			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					card_eval_status_text(card, "extra", nil, nil, nil, {
-						message = localize({
-							type = "variable",
-							key = "a_chips",
-							vars = { card.ability.extra.chips },
-						}),
-					})
-					return true
-				end,
-			}))
+			SMODS.scale_card(card, {
+				ref_value = "chips",
+				scalar_value = "chips_gain",
+				message_key = "a_chips",
+				message_colour = G.C.CHIPS,
+			})
 			return nil, true
 		end
 	end,
@@ -1193,18 +1174,16 @@ Bakery_API.Joker({
 	end,
 	calculate = function(self, card, context)
 		if context.before and not context.blueprint and has_straight(context.scoring_hand, card.ability.extra.len) then
-			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.d_mult
-			return {
-				message = "+" .. card.ability.extra.d_mult,
-				colour = G.C.RED,
-				card = card,
-			}
+			SMODS.scale_card(card, {
+				ref_value = "mult",
+				scalar_value = "d_mult",
+				message_key = "a_chips",
+				message_colour = G.C.RED,
+			})
 		end
 
 		if context.joker_main and card.ability.extra.mult > 0 then
-			return {
-				mult = card.ability.extra.mult,
-			}
+			return { mult = card.ability.extra.mult }
 		end
 	end,
 })
@@ -1776,35 +1755,18 @@ Bakery_API.Joker({
 			},
 		}
 	end,
-	generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-		local key = self.key
-		if card and card.ability.extra.flipped then
-			self.key = "j_Bakery_Wearwolf_Back"
-		end
-		SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-		info_queue[#info_queue + 1] = {
-			generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
-				if not card or not card.ability.extra.flipped then
-					self.key = "j_Bakery_Wearwolf_Back"
-				end
-				SMODS.Joker.generate_ui(self, _info_queue, card, _desc_nodes, _specific_vars, _full_UI_table)
-				self.key = key
-			end,
-		}
-		self.key = key
-	end,
-	-- generate_ui = Bakery_API.werewolf_ui 'j_Bakery_Wearwolf_Back',
+	generate_ui = Bakery_API.werewolf_ui("j_Bakery_Wearwolf_Back"),
 
 	calculate = function(self, card, context)
 		if not card.ability.extra.flipped then
 			if context.before and not context.blueprint then
 				if next(context.poker_hands["Two Pair"]) then
-					-- See note about SMODS Scaling Manipulation on the wiki
-					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.d_mult
-					return {
-						message = localize("k_upgrade_ex"),
-						colour = G.C.RED,
-					}
+					SMODS.scale_card(card, {
+						ref_value = "mult",
+						scalar_value = "d_mult",
+						message_key = "a_chips",
+						message_colour = G.C.RED,
+					})
 				else
 					Bakery_API.flip_double_sided(card)
 				end
