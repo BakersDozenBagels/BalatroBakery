@@ -787,7 +787,7 @@ return {
 			b_Bakery_shattered = "Shattered!",
 			b_Bakery_double_tags = "Double Tags",
 			ph_Bakery_Wearywolf = "Saved by Wearywolf",
-			k_Bakery_hud_hands_and_discards = "Hands + Discards",
+			k_Bakery_hud_hands_and_discards = "Hands and Discards",
 			-- KEEP_LITE
 			k_Bakery_charm = "Charm",
 			k_Bakery_charms = "Charms",
