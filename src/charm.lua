@@ -1089,7 +1089,7 @@ Bakery_API.Charm({
 	atlas = "Charms",
 	config = {
 		extra = {
-			mod = 2,
+			mod = 1,
 		},
 	},
 	loc_vars = function(_, _, card)

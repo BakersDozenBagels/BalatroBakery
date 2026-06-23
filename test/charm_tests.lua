@@ -890,7 +890,7 @@ Balatest.TestPlay({
 	name = "coin_interest",
 	category = { "charms", "coin" },
 
-	dollars = 10,
+	dollars = 9,
 	execute = function()
 		G.GAME.modifiers.no_interest = nil
 		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Coin")
@@ -898,7 +898,7 @@ Balatest.TestPlay({
 		Balatest.cash_out()
 	end,
 	assert = function()
-		Balatest.assert_eq(G.GAME.dollars, 3)
+		Balatest.assert_eq(G.GAME.dollars, 2)
 	end,
 })
 Balatest.TestPlay({
@@ -921,6 +921,22 @@ Balatest.TestPlay({
 	category = { "charms", "coin" },
 
 	jokers = { "j_to_the_moon" },
+	dollars = 13,
+	execute = function()
+		G.GAME.modifiers.no_interest = nil
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Coin")
+		Balatest.end_round()
+		Balatest.cash_out()
+	end,
+	assert = function()
+		Balatest.assert_eq(G.GAME.dollars, 15)
+	end,
+})
+Balatest.TestPlay({
+	name = "coin_interest_seed_money",
+	category = { "charms", "coin" },
+
+	vouchers = { "v_seed_money" },
 	dollars = 18,
 	execute = function()
 		G.GAME.modifiers.no_interest = nil
@@ -930,22 +946,6 @@ Balatest.TestPlay({
 	end,
 	assert = function()
 		Balatest.assert_eq(G.GAME.dollars, 20)
-	end,
-})
-Balatest.TestPlay({
-	name = "coin_interest_seed_money",
-	category = { "charms", "coin" },
-
-	vouchers = { "v_seed_money" },
-	dollars = 28,
-	execute = function()
-		G.GAME.modifiers.no_interest = nil
-		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Coin")
-		Balatest.end_round()
-		Balatest.cash_out()
-	end,
-	assert = function()
-		Balatest.assert_eq(G.GAME.dollars, 30)
 	end,
 })
 --#endregion
