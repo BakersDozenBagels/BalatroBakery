@@ -739,6 +739,15 @@ return {
 				text = { "{C:blue}Hands{} and {C:red}Discards", "are {C:attention}shared" },
 				unlock = { "Have {C:attention}#1# {C:blue}Hands", "remaining" },
 			},
+			BakeryCharm_Bakery_Fractal = {
+				name = "Fractal",
+				text = {
+					"Earn {C:money}$#1#{} at end of round",
+					"Payout increases by {C:money}$#2#{}",
+					"when any {C:attention}Blind{} is defeated",
+				},
+				unlock = { "Go into {C:money}$#1#", "of {C:red}debt" },
+			},
 			-- KEEP_LITE
 		},
 		Other = {

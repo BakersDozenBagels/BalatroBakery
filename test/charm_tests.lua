@@ -2032,3 +2032,68 @@ Balatest.TestPlay({
 	end,
 })
 --#endregion
+
+--#region Fractal
+Balatest.TestPlay({
+	name = "fractal_one",
+	category = { "charms", "fractal" },
+
+	dollars = 8,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Fractal")
+		Balatest.end_round()
+		Balatest.cash_out()
+	end,
+	assert = function()
+		Balatest.assert_dollars(1)
+	end,
+})
+Balatest.TestPlay({
+	name = "fractal_two",
+	category = { "charms", "fractal" },
+
+	dollars = 8,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Fractal")
+		Balatest.next_round()
+		Balatest.end_round()
+		Balatest.cash_out()
+	end,
+	assert = function()
+		Balatest.assert_dollars(3)
+	end,
+})
+Balatest.TestPlay({
+	name = "fractal_three",
+	category = { "charms", "fractal" },
+
+	dollars = 8,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Fractal")
+		Balatest.next_round()
+		Balatest.next_round()
+		Balatest.end_round()
+		Balatest.cash_out()
+	end,
+	assert = function()
+		Balatest.assert_dollars(6)
+	end,
+})
+Balatest.TestPlay({
+	name = "fractal_four",
+	category = { "charms", "fractal" },
+
+	dollars = 8,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Fractal")
+		Balatest.next_round()
+		Balatest.next_round()
+		Balatest.next_round()
+		Balatest.end_round()
+		Balatest.cash_out()
+	end,
+	assert = function()
+		Balatest.assert_dollars(10)
+	end,
+})
+--#endregion

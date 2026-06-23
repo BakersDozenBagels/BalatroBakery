@@ -1301,11 +1301,11 @@ Bakery_API.Charm({
 		if context.create_booster_card and context.booster.config.center.kind == "Arcana" then
 			return {
 				booster_create_flags = {
-					key = "c_death"
-				}
+					key = "c_death",
+				},
 			}
 		end
-	end
+	end,
 })
 
 Bakery_API.Charm({
@@ -1837,6 +1837,35 @@ Bakery_API.Charm({
 	end,
 	load = function(self)
 		self:equip()
+	end,
+})
+
+Bakery_API.Charm({
+	key = "Fractal",
+	pos = { x = 2, y = 5 },
+	atlas = "Charms",
+	unlocked = false,
+	config = { extra = { x = 0, d = 1 } },
+	locked_loc_vars = function()
+		return { vars = { 100 } }
+	end,
+	check_for_unlock = function()
+		return ((G.GAME or {}).dollars or 0) <= -100
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.x, card.ability.extra.d } }
+	end,
+	calc_dollar_bonus = function(self, card)
+		return card.ability.extra.x
+	end,
+	calculate = function(self, card, context)
+		if context.end_of_round and not context.game_over and context.main_eval then
+			SMODS.scale_card(card, {
+				ref_value = "x",
+				scalar_value = "d",
+				message_colour = G.C.MONEY,
+			})
+		end
 	end,
 })
 
