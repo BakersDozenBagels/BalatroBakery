@@ -685,13 +685,12 @@ Bakery_API.Joker({
 		end
 		local c = card or {}
 		c.ability = c.ability or {}
-		-- The seeding is broken by visiting the collection, but whatever, it's only cosmetic
-		c.ability.Bakery_x = c.ability.Bakery_x or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
-		c.ability.Bakery_y = c.ability.Bakery_y or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
+		c.ability.Bakery_x = c.ability.Bakery_x or (pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3) .. "")
+		c.ability.Bakery_y = c.ability.Bakery_y or (pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3) .. "")
 		if card and card.children and card.children.center and card.children.center.set_sprite_pos then
 			card.children.center:set_sprite_pos({
-				x = c.ability.Bakery_x,
-				y = c.ability.Bakery_y,
+				x = tonumber(c.ability.Bakery_x),
+				y = tonumber(c.ability.Bakery_y),
 			})
 		end
 	end,
