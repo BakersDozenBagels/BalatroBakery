@@ -619,7 +619,7 @@ Bakery_API.guard(function()
 					if not card or not card.ability.extra.flipped then
 						self.key = back_key
 					end
-					SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+					SMODS.Joker.generate_ui(self, _info_queue, card, _desc_nodes, _specific_vars, _full_UI_table)
 					self.key = key
 				end,
 			}
