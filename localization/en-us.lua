@@ -748,6 +748,11 @@ return {
 				},
 				unlock = { "Go into {C:money}$#1#", "of {C:red}debt" },
 			},
+			BakeryCharm_Bakery_PieChart = {
+				name = "Pie Chart",
+				text = { "Choose between {C:attention}#1# Tags", "when skipping a {C:attention}Blind" },
+				unlock = { "Complete the", "{C:attention}#1#{} challenge" },
+			},
 			-- KEEP_LITE
 		},
 		Other = {

@@ -458,3 +458,19 @@ if ((G.GAME.blind.name == 'The Serpent' and
     G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Serpent') and
     G.STATE == G.STATES.DRAW_TO_HAND and
 '''
+
+# Pie Chart Charm
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+local _tag = e.UIBox:get_UIE_by_ID('tag_container')
+G.GAME.skips = (G.GAME.skips or 0) + 1
+'''
+position = "at"
+match_indent = true
+times = 1
+payload = '''
+local _tag = e
+G.GAME.skips = (G.GAME.skips or 0) + 1
+'''

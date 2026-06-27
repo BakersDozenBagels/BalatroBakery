@@ -1869,6 +1869,218 @@ Bakery_API.Charm({
 	end,
 })
 
+Bakery_API.Charm({
+	key = "PieChart",
+	pos = { x = 3, y = 5 },
+	atlas = "Charms",
+	unlocked = false,
+	config = { extra = 3 },
+	locked_loc_vars = function()
+		return { vars = { localize("c_Bakery_Sprint", "challenge_names") } }
+	end,
+	check_for_unlock = function()
+		return G.PROFILES[G.SETTINGS.profile].challenge_progress.completed.c_Bakery_Sprint
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra } }
+	end,
+	equip = function(self, card)
+		G.GAME.round_resets.Bakery_extra_blind_tags = {}
+		local ebt = G.GAME.round_resets.Bakery_extra_blind_tags
+		ebt.Small = {}
+		ebt.Big = {}
+		for _ = 2, card.ability.extra do
+			ebt.Small[#ebt.Small + 1] = get_next_tag_key()
+			ebt.Big[#ebt.Big + 1] = get_next_tag_key()
+		end
+	end,
+})
+
+local raw_G_FUNCS_cash_out = G.FUNCS.cash_out
+function G.FUNCS.cash_out(...)
+	if G.GAME.Bakery_charm == "BakeryCharm_Bakery_PieChart" and G.GAME.round_resets.blind_states.Boss == "Defeated" then
+		local ebt = G.GAME.round_resets.Bakery_extra_blind_tags
+		ebt.Small = {}
+		ebt.Big = {}
+		for _ = 2, G.Bakery_charm_area.cards[1].ability.extra do
+			ebt.Small[#ebt.Small + 1] = get_next_tag_key()
+			ebt.Big[#ebt.Big + 1] = get_next_tag_key()
+		end
+	end
+	return raw_G_FUNCS_cash_out(...)
+end
+
+local raw_G_FUNCS_blind_choice_handler = G.FUNCS.blind_choice_handler
+function G.FUNCS.blind_choice_handler(e, ...)
+	if
+		not e.config.ref_table.run_info
+		and G.blind_select
+		and G.blind_select.VT.y < 10
+		and e.config.id
+		and G.blind_select_opts[string.lower(e.config.id)]
+		and (
+			(e.config.ref_table.deck ~= "on" and e.config.id == G.GAME.blind_on_deck)
+			or (e.config.ref_table.deck ~= "off" and e.config.id ~= G.GAME.blind_on_deck)
+		)
+	then
+		local _tag = e.UIBox:get_UIE_by_ID("tag_" .. e.config.id)
+		local _super_container = e.UIBox:get_UIE_by_ID("Bakery_tag_super_container")
+		if _super_container then
+			_super_container.states.visible = true
+		end
+		if e.config.id == G.GAME.blind_on_deck then
+			if _super_container then
+				_super_container.children[2].config.colour = G.C.BLACK
+				for i = 1, G.Bakery_charm_area.cards[1].ability.extra - 1 do
+					-- local _tag_container = e.UIBox:get_UIE_by_ID("tag_container_Bakery_extra_" .. i)
+					_tag = e.UIBox:get_UIE_by_ID("tag_" .. e.config.id .. "_Bakery_extra_" .. i)
+					_tag.children[2].config.button = "skip_blind"
+					_tag.children[2].config.hover = true
+					_tag.children[2].config.colour = G.C.RED
+					_tag.children[2].children[1].config.colour = G.C.UI.TEXT_LIGHT
+					local _sprite = _tag.config.ref_table
+					_sprite.config.force_focus = nil
+				end
+			end
+		elseif e.config.id ~= G.GAME.blind_on_deck then
+			if _super_container then
+				_super_container.children[2].config.colour = nil
+				for i = 1, G.Bakery_charm_area.cards[1].ability.extra - 1 do
+					local _tag_container = e.UIBox:get_UIE_by_ID("tag_container_Bakery_extra_" .. i)
+					local _tag = e.UIBox:get_UIE_by_ID("tag_" .. e.config.id .. "_Bakery_extra_" .. i)
+					if
+						G.GAME.round_resets.blind_states[e.config.id] == "Skipped"
+						or G.GAME.round_resets.blind_states[e.config.id] == "Defeated"
+					then
+						_tag_container.children[1]:set_role({ xy_bond = "Weak" })
+						_tag_container.children[1]:align(0, 10)
+						_super_container.children[1]:set_role({ xy_bond = "Weak" })
+						_super_container.children[1]:align(0, 10)
+					end
+					_tag.children[2].config.button = nil
+					_tag.children[2].config.hover = false
+					_tag.children[2].children[1].config.colour = G.C.UI.TEXT_INACTIVE
+					local _sprite = _tag.config.ref_table
+					_sprite.config.force_focus = true
+				end
+			end
+		end
+	end
+	return raw_G_FUNCS_blind_choice_handler(e, ...)
+end
+
+local raw_create_UIBox_blind_tag = create_UIBox_blind_tag
+function create_UIBox_blind_tag(kind, run_info, ...)
+	local ret = raw_create_UIBox_blind_tag(kind, run_info, ...)
+	if ret and G.GAME.Bakery_charm == "BakeryCharm_Bakery_PieChart" then
+		ret.nodes[2].config.padding = nil
+		ret.nodes[1] = { n = G.UIT.R }
+		local c = ret.nodes[2].nodes[1].config
+		if c.minh then
+			c.minh = 0.8
+		end
+
+		ret = {
+			n = G.UIT.C,
+			config = { id = "Bakery_tag_super_container", align = "cm" },
+			nodes = {
+				{ n = G.UIT.R, config = { align = "cm", minh = 0.1 } },
+				{
+					n = G.UIT.R,
+					config = { align = "cm", r = 0.1, padding = 0.1 },
+					nodes = {
+						{
+							n = G.UIT.C,
+							config = { align = "cm" },
+							nodes = { ret },
+						},
+					},
+				},
+			},
+		}
+		local tags = G.GAME.round_resets.Bakery_extra_blind_tags[kind]
+		for i, tag in ipairs(tags) do
+			local _tag = Tag(tag, nil, kind)
+			local _tag_ui, _tag_sprite = _tag:generate_UI()
+			_tag_sprite.states.collide.can = not not run_info
+
+			ret.nodes[2].nodes[1].nodes[#ret.nodes[2].nodes[1].nodes + 1] = { n = G.UIT.R, config = { minh = 0.1 } }
+			ret.nodes[2].nodes[1].nodes[#ret.nodes[2].nodes[1].nodes + 1] = {
+				n = G.UIT.R,
+				config = { id = "tag_container_Bakery_extra_" .. i, ref_table = _tag, align = "cm" },
+				nodes = {
+					{
+						n = G.UIT.R,
+						config = {
+							id = "tag_" .. kind .. "_Bakery_extra_" .. i,
+							align = "cm",
+							r = 0.1,
+							minw = 1,
+							can_collide = true,
+							ref_table = _tag_sprite,
+						},
+						nodes = {
+							{
+								n = G.UIT.C,
+								config = { id = "tag_desc_Bakery_extra_" .. i, align = "cm", minh = 0.8 },
+								nodes = {
+									_tag_ui,
+								},
+							},
+							not run_info and {
+								n = G.UIT.C,
+								config = {
+									align = "cm",
+									colour = G.C.UI.BACKGROUND_INACTIVE,
+									minh = 0.6,
+									maxh = 0.6,
+									minw = 2,
+									maxw = 2,
+									padding = 0.07,
+									r = 0.1,
+									shadow = true,
+									hover = true,
+									one_press = true,
+									button = "skip_blind",
+									func = "hover_tag_proxy",
+									ref_table = _tag,
+								},
+								nodes = {
+									{
+										n = G.UIT.T,
+										config = {
+											text = localize("b_skip_blind"),
+											scale = 0.4,
+											colour = G.C.UI.TEXT_INACTIVE,
+										},
+									},
+								},
+							} or {
+								n = G.UIT.C,
+								config = {
+									align = "cm",
+									padding = 0.1,
+									emboss = 0.05,
+									colour = mix_colours(G.C.BLUE, G.C.BLACK, 0.4),
+									r = 0.1,
+									maxw = 2,
+								},
+								nodes = {
+									{
+										n = G.UIT.T,
+										config = { text = localize("b_skip_reward"), scale = 0.35, colour = G.C.WHITE },
+									},
+								},
+							},
+						},
+					},
+				},
+			}
+		end
+	end
+	return ret
+end
+
 if next(SMODS.find_mod("RevosVault")) then
 	Bakery_API.Charm({
 		key = "PrintError",

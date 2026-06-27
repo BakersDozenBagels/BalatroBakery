@@ -2097,3 +2097,31 @@ Balatest.TestPlay({
 	end,
 })
 --#endregion
+
+--#region Pie Chart
+Balatest.TestPlay {
+	name = "pie_chart_generates",
+	category = {"charms", "pie_chart"},
+
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_PieChart")
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Small, 2)
+		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Big, 2)
+	end
+}
+Balatest.TestPlay {
+	name = "pie_chart_saves",
+	category = {"charms", "pie_chart"},
+
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_PieChart")
+		Balatest.reload()
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Small, 2)
+		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Big, 2)
+	end
+}
+--#endregion
