@@ -2455,11 +2455,13 @@ Balatest.TestPlay({
 	jokers = { "j_joker", "j_Bakery_Lua", "j_Bakery_Lua" },
 	required_mods = { "Talisman" },
 	execute = function()
-		G.jokers.cards[1].ability.mult = Bakery_API.parse_hyper_e("e10#10##999999999")
+		G.jokers.cards[1].ability.mult = Bakery_API.parse_hyper_e("10#2##1e9999999999")
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(Bakery_API.parse_hyper_e("e10#10##999999999"))
+		local _, too_big = Bakery_API.parse_hyper_e("10#2##1e9999999999")
+		Balatest.assert(too_big)
+		Balatest.assert_chips(Bakery_API.parse_hyper_e("10#2##1e9999999999"))
 	end,
 })
 --#endregion
