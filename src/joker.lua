@@ -1283,7 +1283,7 @@ function Bakery_API.parse_hyper_e(num)
 					val = val - 1
 				end
 				arr[i] = val
-			elseif current_run == 2 then
+			elseif current_run == 2 and SMODS.Mods.Amulet then
 				local ret = Big:arrow(Big:new{val}, Big:new(arr))
 
 				-- Number ends up Infinite. Bail.
@@ -1292,18 +1292,31 @@ function Bakery_API.parse_hyper_e(num)
 				end
 
 				return ret
+			elseif current_run == 2 and val > 100000 and not SMODS.Mods.Amulet then
+				-- Number is too big to fit in memory. Bail.
+				return MAX_NUM, true
+			elseif current_run == 2 then
+				local last = arr[i - 1]
+				for _ = 1, val do
+					arr[i] = last
+					i = i + 1
+				end
 			else
 				-- Triple hash is unsupported. Bail.
 				return MAX_NUM, true
 			end
 			current_run = 0
 			i = i + 1
+			if i > 100010 and not SMODS.Mods.Amulet then
+				-- Number is too big to fit in memory. Bail.
+				return MAX_NUM, true
+			end
 		end
 	end
 	return Big:new(arr)
 end
 if Big then
-	MAX_NUM = Bakery_API.parse_hyper_e("10#2##1e308")
+	MAX_NUM = Bakery_API.parse_hyper_e(SMODS.Mods.Amulet and "10#2##1e308" or "e10#10##100000")
 end
 -- END_KEEP_LITE
 
@@ -1356,8 +1369,13 @@ Bakery_API.Joker({
 						end
 						mult = mod_mult(mult)
 					end
-					local step = 2 ^ (1 / 6)
-					percent = percent * ((previous_mult and previous_mult > mult) and 1 / step or step)
+					local step, lost = 2 ^ (1 / 6), nil
+					if Talisman then
+						lost = previous_mult and (previous_mult / mult):to_number() > 1
+					else
+						lost = previous_mult and previous_mult > mult
+					end
+					percent = percent * (lost and 1 / step or step)
 					update_hand_text({ delay = 0 }, { chips = hand_chips, mult = mult })
 					if too_big then
 						card_eval_status_text(
@@ -1372,7 +1390,7 @@ Bakery_API.Joker({
 						card_eval_status_text(card, "extra", card.ability.extra.concat_mult, percent, nil, {
 							XMult_mod = true,
 							message = '.."' .. card.ability.extra.concat_mult .. '"',
-							sound = previous_mult and previous_mult > mult and "Bakery_LuaLoss" or "Bakery_LuaGain",
+							sound = lost and "Bakery_LuaLoss" or "Bakery_LuaGain",
 						})
 					end
 				end,
