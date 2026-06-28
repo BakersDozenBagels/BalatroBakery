@@ -1284,7 +1284,7 @@ function Bakery_API.parse_hyper_e(num)
 				end
 				arr[i] = val
 			elseif current_run == 2 and SMODS.Mods.Amulet then
-				local ret = Big:arrow(Big:new{val}, Big:new(arr))
+				local ret = Big:arrow(Big:new({ val }), Big:new(arr))
 
 				-- Number ends up Infinite. Bail.
 				if ret.isFinite and not ret:isFinite() then
@@ -1316,7 +1316,7 @@ function Bakery_API.parse_hyper_e(num)
 	return Big:new(arr)
 end
 if Big then
-	MAX_NUM = Bakery_API.parse_hyper_e(SMODS.Mods.Amulet and "10#2##1e308" or "e10#10##100000")
+	MAX_NUM = Bakery_API.parse_hyper_e(SMODS.Mods.Amulet and "10#2##1e307" or "e10#10##100000")
 end
 -- END_KEEP_LITE
 
@@ -1354,8 +1354,8 @@ Bakery_API.Joker({
 					card_eval_status_text(card, "x_mult", card.ability.extra.x_mult, percent)
 					local too_big
 					if
-						({cdata = true, table = true})[type(mult)] and (mult.isFinite and not mult:isFinite()) or
-						(type(mult) == "table" and mult.is_naneinf and mult:is_naneinf())
+						({ cdata = true, table = true })[type(mult)] and (mult.isFinite and not mult:isFinite())
+						or (type(mult) == "table" and mult.is_naneinf and mult:is_naneinf())
 					then
 						too_big = true
 					else

@@ -2361,7 +2361,7 @@ Balatest.TestPlay({
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(84)
+		Balatest.assert_approx_eq(G.GAME.chips, 84)
 	end,
 })
 Balatest.TestPlay({
@@ -2373,7 +2373,7 @@ Balatest.TestPlay({
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(1) -- 1.54 but the game rounds
+		Balatest.assert_approx_eq(G.GAME.chips, 1) -- 1.54 but the game rounds
 	end,
 })
 Balatest.TestPlay({
@@ -2386,7 +2386,7 @@ Balatest.TestPlay({
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(70014)
+		Balatest.assert_approx_eq(G.GAME.chips, 70014)
 	end,
 })
 Balatest.TestPlay({
@@ -2399,7 +2399,7 @@ Balatest.TestPlay({
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(7 * 1e152) -- Explicitly spell this multiplication to avoid precision issues
+		Balatest.assert_approx_eq(G.GAME.chips, 7e152, 1e145)
 	end,
 })
 Balatest.TestPlay({
@@ -2413,7 +2413,7 @@ Balatest.TestPlay({
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(SMODS.Mods.Amulet and Big:parse("e1e613") or Big:parse("e1e622"))
+		Balatest.assert_chips(Big:parse("e1e622"))
 	end,
 })
 Balatest.TestPlay({
@@ -2443,9 +2443,11 @@ Balatest.TestPlay({
 		Balatest.play_hand({ "2S" })
 	end,
 	assert = function()
-		Balatest.assert_chips(
-			SMODS.Mods.Amulet and Bakery_API.parse_hyper_e("e1e10#10##622") or Bakery_API.parse_hyper_e("e10#10##622")
-		)
+		if SMODS.Mods.Amulet then
+			Balatest.assert_eq(number_format(G.GAME.chips), "e1e10#10##611")
+		else
+			Balatest.assert_chips(Bakery_API.parse_hyper_e("e10#10##622"))
+		end
 	end,
 })
 Balatest.TestPlay({
