@@ -1269,7 +1269,6 @@ local function Split(str, delim)
 end
 
 local MAX_NUM
-
 function Bakery_API.parse_hyper_e(num)
 	local split_array = num:sub(2)
 	local arr = {}
@@ -1285,28 +1284,26 @@ function Bakery_API.parse_hyper_e(num)
 				end
 				arr[i] = val
 			elseif current_run == 2 then
-				local last = arr[i - 1]
-				for _ = 1, val do
-					arr[i] = last
-					i = i + 1
+				local ret = Big:arrow(Big:new{val}, Big:new(arr))
+
+				-- Number ends up Infinite. Bail.
+				if ret.isFinite and not ret:isFinite() then
+					return MAX_NUM, true
 				end
+
+				return ret
 			else
 				-- Triple hash is unsupported. Bail.
 				return MAX_NUM, true
 			end
 			current_run = 0
 			i = i + 1
-			if i > 10010 then
-				-- Number is too big to fit in memory. Bail.
-				return MAX_NUM, true
-			end
 		end
 	end
 	return Big:new(arr)
 end
-
 if Big then
-	MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+	MAX_NUM = Bakery_API.parse_hyper_e("10#2##1e308")
 end
 -- END_KEEP_LITE
 
@@ -1344,18 +1341,18 @@ Bakery_API.Joker({
 					card_eval_status_text(card, "x_mult", card.ability.extra.x_mult, percent)
 					local too_big
 					if
-						type(mult) == "table"
-						and ((mult.isFinite and not mult:isFinite()) or (mult.is_naneinf and mult:is_naneinf()))
+						({cdata = true, table = true})[type(mult)] and (mult.isFinite and not mult:isFinite()) or
+						(type(mult) == "table" and mult.is_naneinf and mult:is_naneinf())
 					then
 						too_big = true
 					else
-						mult = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
+						local mult_str = number_format(mult):gsub(",", "") .. card.ability.extra.concat_mult
 						if not Talisman then
-							mult = tonumber(mult)
-						elseif mult:find("#") then
-							mult, too_big = Bakery_API.parse_hyper_e(mult)
+							mult = tonumber(mult_str)
+						elseif mult_str:find("#") then
+							mult, too_big = Bakery_API.parse_hyper_e(mult_str)
 						else
-							mult = Big:parse(mult)
+							mult = Big:parse(mult_str)
 						end
 						mult = mod_mult(mult)
 					end
