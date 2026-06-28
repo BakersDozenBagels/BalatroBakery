@@ -96,7 +96,6 @@ local function Split(str, delim)
 end
 
 local MAX_NUM
-
 function Bakery_API.parse_hyper_e(num)
 	local split_array = num:sub(2)
 	local arr = {}
@@ -111,6 +110,18 @@ function Bakery_API.parse_hyper_e(num)
 					val = val - 1
 				end
 				arr[i] = val
+			elseif current_run == 2 and SMODS.Mods.Amulet then
+				local ret = Big:arrow(Big:new({ val }), Big:new(arr))
+
+				-- Number ends up Infinite. Bail.
+				if ret.isFinite and not ret:isFinite() then
+					return MAX_NUM, true
+				end
+
+				return ret
+			elseif current_run == 2 and val > 100000 and not SMODS.Mods.Amulet then
+				-- Number is too big to fit in memory. Bail.
+				return MAX_NUM, true
 			elseif current_run == 2 then
 				local last = arr[i - 1]
 				for _ = 1, val do
@@ -123,7 +134,7 @@ function Bakery_API.parse_hyper_e(num)
 			end
 			current_run = 0
 			i = i + 1
-			if i > 10010 then
+			if i > 100010 and not SMODS.Mods.Amulet then
 				-- Number is too big to fit in memory. Bail.
 				return MAX_NUM, true
 			end
@@ -131,7 +142,6 @@ function Bakery_API.parse_hyper_e(num)
 	end
 	return Big:new(arr)
 end
-
 if Big then
-	MAX_NUM = Bakery_API.parse_hyper_e("e10#10##10000")
+	MAX_NUM = Bakery_API.parse_hyper_e(SMODS.Mods.Amulet and "10#2##1e307" or "e10#10##100000")
 end
