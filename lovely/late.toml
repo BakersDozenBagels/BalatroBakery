@@ -1,0 +1,17 @@
+[manifest]
+version = "1.0.0"
+priority = 214748365 # 1 more than they have :evil:
+
+# Pie Chart Charm w/ All in Jest
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+if G.GAME.all_in_jest.blind_tags.has_multiple and G.GAME.all_in_jest.blind_tags.amt > 1 then
+'''
+position = "at"
+match_indent = true
+times = 3
+payload = '''
+if G.GAME.all_in_jest.blind_tags.has_multiple and G.GAME.all_in_jest.blind_tags.amt > 1 and not (e.parent.config.id or ""):find("Bakery") then
+'''

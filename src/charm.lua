@@ -1924,7 +1924,6 @@ function G.FUNCS.blind_choice_handler(e, ...)
 			or (e.config.ref_table.deck ~= "off" and e.config.id ~= G.GAME.blind_on_deck)
 		)
 	then
-		local _tag = e.UIBox:get_UIE_by_ID("tag_" .. e.config.id)
 		local _super_container = e.UIBox:get_UIE_by_ID("Bakery_tag_super_container")
 		if _super_container then
 			_super_container.states.visible = true
@@ -1933,8 +1932,7 @@ function G.FUNCS.blind_choice_handler(e, ...)
 			if _super_container then
 				_super_container.children[2].config.colour = G.C.BLACK
 				for i = 1, G.Bakery_charm_area.cards[1].ability.extra - 1 do
-					-- local _tag_container = e.UIBox:get_UIE_by_ID("tag_container_Bakery_extra_" .. i)
-					_tag = e.UIBox:get_UIE_by_ID("tag_" .. e.config.id .. "_Bakery_extra_" .. i)
+					local _tag = e.UIBox:get_UIE_by_ID("tag_" .. e.config.id .. "_Bakery_extra_" .. i)
 					_tag.children[2].config.button = "skip_blind"
 					_tag.children[2].config.hover = true
 					_tag.children[2].config.colour = G.C.RED
