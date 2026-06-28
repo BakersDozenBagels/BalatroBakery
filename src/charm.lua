@@ -1879,7 +1879,8 @@ Bakery_API.Charm({
 		return { vars = { localize("c_Bakery_Sprint", "challenge_names") } }
 	end,
 	check_for_unlock = function()
-		return G.PROFILES[G.SETTINGS.profile].challenge_progress.completed.c_Bakery_Sprint
+		local x, y = pcall(function() return G.PROFILES[G.SETTINGS.profile].challenge_progress.completed.c_Bakery_Sprint end)
+		return x and y
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra } }
