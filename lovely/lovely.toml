@@ -474,3 +474,13 @@ payload = '''
 local _tag = e
 G.GAME.skips = (G.GAME.skips or 0) + 1
 '''
+
+# Balatest compat
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Balatest "src/events.lua"]'
+pattern = "G.FUNCS.skip_blind { UIBox = { get_UIE_by_ID = function() return { config = { ref_table = Tag(for_tag) } } end } }"
+position = "at"
+match_indent = true
+times = 1
+payload = "G.FUNCS.skip_blind { config = { ref_table = Tag(for_tag) } }"
