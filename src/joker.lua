@@ -97,7 +97,7 @@ end
 
 local MAX_NUM
 function Bakery_API.parse_hyper_e(num)
-	local split_array = num:sub(2)
+	local split_array = num:sub(1, 1) == "e" and num:sub(2) or num
 	local arr = {}
 	local current_run = 0
 	local i = 1
@@ -143,5 +143,7 @@ function Bakery_API.parse_hyper_e(num)
 	return Big:new(arr)
 end
 if Big then
-	MAX_NUM = Bakery_API.parse_hyper_e(SMODS.Mods.Amulet and "10#2##1e307" or "e10#10##100000")
+	MAX_NUM = SMODS.Mods.Amulet and
+		Big:new { 1.7976931348623157e308, 1, [1.7975e308] = 1 } or
+		Bakery_API.parse_hyper_e("e10#10##100000")
 end
