@@ -753,6 +753,10 @@ return {
 				text = { "Choose between {C:attention}#1# Tags", "when skipping a {C:attention}Blind" },
 				unlock = { "Complete the", "{C:attention}#1#{} challenge" },
 			},
+			BakeryCharm_Bakery_Revolve = {
+				name = "Revolve",
+				text = { "{C:attention}Skipping{} a {C:attention}Booster", "{C:money}refunds{} it" },
+			},
 			-- KEEP_LITE
 		},
 		Other = {

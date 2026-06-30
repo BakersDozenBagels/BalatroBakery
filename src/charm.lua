@@ -1385,7 +1385,7 @@ Bakery_API.Charm({
 	pos = { x = 1, y = 4 },
 	atlas = "Charms",
 	unlocked = false,
-	config = { extra = 10 },
+	config = { extra = 15 },
 	locked_loc_vars = function(self)
 		return {
 			vars = {
@@ -1879,7 +1879,9 @@ Bakery_API.Charm({
 		return { vars = { localize("c_Bakery_Sprint", "challenge_names") } }
 	end,
 	check_for_unlock = function()
-		local x, y = pcall(function() return G.PROFILES[G.SETTINGS.profile].challenge_progress.completed.c_Bakery_Sprint end)
+		local x, y = pcall(function()
+			return G.PROFILES[G.SETTINGS.profile].challenge_progress.completed.c_Bakery_Sprint
+		end)
 		return x and y
 	end,
 	loc_vars = function(self, info_queue, card)
@@ -2079,6 +2081,18 @@ function create_UIBox_blind_tag(kind, run_info, ...)
 	end
 	return ret
 end
+
+Bakery_API.Charm({
+	key = "Revolve",
+	pos = { x = 4, y = 5 },
+	atlas = "Charms",
+	unlocked = true,
+	calculate = function(self, card, context)
+		if context.skipping_booster then
+			return { dollars = context.booster.cost }
+		end
+	end
+})
 
 if next(SMODS.find_mod("RevosVault")) then
 	Bakery_API.Charm({

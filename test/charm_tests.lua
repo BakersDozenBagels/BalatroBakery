@@ -2099,9 +2099,9 @@ Balatest.TestPlay({
 --#endregion
 
 --#region Pie Chart
-Balatest.TestPlay {
+Balatest.TestPlay({
 	name = "pie_chart_generates",
-	category = {"charms", "pie_chart"},
+	category = { "charms", "pie_chart" },
 
 	execute = function()
 		Bakery_API.Balatest_equip("BakeryCharm_Bakery_PieChart")
@@ -2109,11 +2109,11 @@ Balatest.TestPlay {
 	assert = function()
 		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Small, 2)
 		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Big, 2)
-	end
-}
-Balatest.TestPlay {
+	end,
+})
+Balatest.TestPlay({
 	name = "pie_chart_saves",
-	category = {"charms", "pie_chart"},
+	category = { "charms", "pie_chart" },
 
 	execute = function()
 		Bakery_API.Balatest_equip("BakeryCharm_Bakery_PieChart")
@@ -2122,6 +2122,78 @@ Balatest.TestPlay {
 	assert = function()
 		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Small, 2)
 		Balatest.assert_eq(#G.GAME.round_resets.Bakery_extra_blind_tags.Big, 2)
-	end
-}
+	end,
+})
+--#endregion
+
+--#region Revolve
+-- We're relying on the game always generating a buffoon pack as the first booster of a run
+Balatest.TestPlay({
+	name = "revolve_buffoon",
+	category = { "charms", "revolve" },
+
+	dollars = 12,
+	execute = function()
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Revolve")
+		Balatest.end_round()
+		Balatest.cash_out()
+		Balatest.open(function()
+			return G.shop_booster.cards[1]
+		end)
+		Balatest.skip_booster()
+	end,
+	assert = function()
+		Balatest.assert_dollars(4)
+	end,
+})
+Balatest.TestPlay({
+	name = "revolve_buffoon_taken",
+	category = { "charms", "revolve" },
+
+	dollars = 12,
+	execute = function()
+		Balatest.hook(_G, "create_card", function(orig, set, a, l, r, k, s, f, ...)
+			return set == "Joker" and orig(set, a, l, r, k, s, "j_joker", ...) or orig(set, a, l, r, k, s, f, ...)
+		end)
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Revolve")
+		Balatest.end_round()
+		Balatest.cash_out()
+		Balatest.open(function()
+			return G.shop_booster.cards[1]
+		end)
+		Balatest.use(function()
+			return G.pack_cards.cards[1]
+		end)
+	end,
+	assert = function()
+		Balatest.assert_dollars(0)
+	end,
+})
+Balatest.TestPlay({
+	name = "revolve_mega_buffoon",
+	category = { "charms", "revolve" },
+
+	dollars = 16,
+	execute = function()
+		Balatest.hook(_G, "get_pack", function()
+			return { key = "p_buffoon_mega_1" }
+		end)
+		Balatest.hook(_G, "create_card", function(orig, set, a, l, r, k, s, f, ...)
+			return set == "Joker" and orig(set, a, l, r, k, s, "j_joker", ...) or orig(set, a, l, r, k, s, f, ...)
+		end)
+		Bakery_API.Balatest_equip("BakeryCharm_Bakery_Revolve")
+		Balatest.end_round()
+		Balatest.cash_out()
+		Balatest.open(function()
+			return G.shop_booster.cards[1]
+		end)
+		Balatest.use(function()
+			return G.pack_cards.cards[1]
+		end)
+		Balatest.skip_booster()
+	end,
+	assert = function()
+		Balatest.assert_dollars(8)
+	end,
+})
 --#endregion
