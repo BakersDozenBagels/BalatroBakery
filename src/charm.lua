@@ -110,7 +110,7 @@ Bakery_API.guard(function()
 	end
 
 	local raw_smods_create_UIBox_Other_GameObjects = create_UIBox_Other_GameObjects
-	function create_UIBox_Other_GameObjects()
+	function create_UIBox_Other_GameObjects(...)
 		local mod_has_charms = false
 		local raw_mod_custom_collection_tabs
 		if G.ACTIVE_MOD_UI then
@@ -119,7 +119,7 @@ Bakery_API.guard(function()
 			mod_has_charms = tally.of > 0
 			if mod_has_charms then
 				raw_mod_custom_collection_tabs = G.ACTIVE_MOD_UI.custom_collection_tabs
-				G.ACTIVE_MOD_UI.custom_collection_tabs = function()
+				G.ACTIVE_MOD_UI.custom_collection_tabs = function(...)
 					local res = raw_mod_custom_collection_tabs and raw_mod_custom_collection_tabs() or {}
 					if mod_id == "Bakery" then
 						res[1] = create_charm_button(tally)
@@ -131,7 +131,7 @@ Bakery_API.guard(function()
 			end
 		end
 
-		local res = raw_smods_create_UIBox_Other_GameObjects()
+		local res = raw_smods_create_UIBox_Other_GameObjects(...)
 
 		if mod_has_charms then
 			G.ACTIVE_MOD_UI.custom_collection_tabs = raw_mod_custom_collection_tabs
@@ -175,8 +175,8 @@ Bakery_API.guard(function()
 	}
 
 	local raw_Card_set_sprites = Card.set_sprites
-	function Card:set_sprites(center, front)
-		raw_Card_set_sprites(self, center, front)
+	function Card:set_sprites(center, front, ...)
+		raw_Card_set_sprites(self, center, front, ...)
 		if center and center.set == "BakeryCharm" and not center.unlocked then
 			self.children.center.atlas = G.ASSET_ATLAS.Bakery_CharmsUtil
 			self.children.center.scale = {
@@ -473,8 +473,8 @@ Bakery_API.guard(function()
 	end
 
 	local raw_set_screen_positions = set_screen_positions
-	function set_screen_positions()
-		raw_set_screen_positions()
+	function set_screen_positions(...)
+		raw_set_screen_positions(...)
 		if G.STAGE == G.STAGES.RUN and G.Bakery_charm_area then
 			G.Bakery_charm_area.T.x = G.TILE_W - G.Bakery_charm_area.T.w - 0.5
 			G.Bakery_charm_area.T.y = G.TILE_H - G.deck.T.h - 1.2 * G.Bakery_charm_area.T.h
@@ -482,8 +482,8 @@ Bakery_API.guard(function()
 	end
 
 	local raw_CardArea_can_highlight = CardArea.can_highlight
-	function CardArea:can_highlight(card)
-		return self ~= G.Bakery_charm_area and raw_CardArea_can_highlight(self, card)
+	function CardArea:can_highlight(card, ...)
+		return self ~= G.Bakery_charm_area and raw_CardArea_can_highlight(self, card, ...)
 	end
 
 	sendInfoMessage("set_screen_positions() and CardArea:can_highlight() patched. Reason: Charm rendering", "Bakery")
@@ -521,7 +521,7 @@ SMODS.Atlas({
 })
 
 local raw_get_flush = get_flush
-function get_flush(hand)
+function get_flush(hand, ...)
 	if G.GAME.Bakery_charm == "BakeryCharm_Bakery_Palette" then
 		local suits = SMODS.Suit.obj_buffer
 		local suit = {}
@@ -538,7 +538,7 @@ function get_flush(hand)
 			return { hand }
 		end
 	end
-	return raw_get_flush(hand)
+	return raw_get_flush(hand, ...)
 end
 
 Bakery_API.Charm({
@@ -576,9 +576,9 @@ Bakery_API.Charm({
 Bakery_API.no_update_joker_display = false
 
 local raw_evaluate_poker_hand = evaluate_poker_hand
-function evaluate_poker_hand(hand)
+function evaluate_poker_hand(hand, ...)
 	if G.GAME.Bakery_charm ~= "BakeryCharm_Bakery_AnaglyphLens" or #hand == 0 then
-		return raw_evaluate_poker_hand(hand)
+		return raw_evaluate_poker_hand(hand, ...)
 	end
 	local dup = hand[1]
 	local x = hand[1].T.x
@@ -592,7 +592,7 @@ function evaluate_poker_hand(hand)
 		playing_card = dup.playing_card,
 	})
 	table.insert(hand, 1, clone)
-	local ret = raw_evaluate_poker_hand(hand)
+	local ret = raw_evaluate_poker_hand(hand, ...)
 	assert(table.remove(hand, 1) == clone)
 	local ret2 = {}
 	for k, v in pairs(ret) do
@@ -617,7 +617,7 @@ end
 
 local raw_five_of_a_kind_modify_display_text = SMODS.PokerHands["Five of a Kind"].modify_display_text
 SMODS.PokerHand:take_ownership("Five of a Kind", {
-	modify_display_text = function(_, scoring_hand)
+	modify_display_text = function(_, scoring_hand, ...)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens" and next(get_X_same(5, scoring_hand, true)) then
 			return "Bakery_SixOfAKind"
 		end
@@ -629,14 +629,14 @@ SMODS.PokerHand:take_ownership("Five of a Kind", {
 			return "Bakery_FullFive"
 		end
 		if raw_five_of_a_kind_modify_display_text then
-			return raw_five_of_a_kind_modify_display_text()
+			return raw_five_of_a_kind_modify_display_text(_, scoring_hand, ...)
 		end
 	end,
 }, true)
 
 local raw_flush_five_modify_display_text = SMODS.PokerHands["Flush Five"].modify_display_text
 SMODS.PokerHand:take_ownership("Flush Five", {
-	modify_display_text = function(_, scoring_hand)
+	modify_display_text = function(_, scoring_hand, ...)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens" and next(get_X_same(5, scoring_hand, true)) then
 			return "Bakery_FlushSix"
 		end
@@ -648,14 +648,14 @@ SMODS.PokerHand:take_ownership("Flush Five", {
 			return "Bakery_FullFlushFive"
 		end
 		if raw_flush_five_modify_display_text then
-			return raw_flush_five_modify_display_text()
+			return raw_flush_five_modify_display_text(_, scoring_hand, ...)
 		end
 	end,
 }, true)
 
 local raw_two_pair_modify_display_text = SMODS.PokerHands["Two Pair"].modify_display_text
 SMODS.PokerHand:take_ownership("Two Pair", {
-	modify_display_text = function(_, scoring_hand)
+	modify_display_text = function(_, scoring_hand, ...)
 		if
 			G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens"
 			and #scoring_hand == 5
@@ -665,7 +665,7 @@ SMODS.PokerHand:take_ownership("Two Pair", {
 			return "Bakery_ThreePair"
 		end
 		if raw_two_pair_modify_display_text then
-			return raw_two_pair_modify_display_text()
+			return raw_two_pair_modify_display_text(_, scoring_hand, ...)
 		end
 	end,
 }, true)
@@ -677,11 +677,11 @@ end
 local raw_Flush_House_evaluate = SMODS.PokerHands["Flush House"].evaluate
 local raw_flush_house_modify_display_text = SMODS.PokerHands["Flush House"].modify_display_text
 SMODS.PokerHand:take_ownership("Flush House", {
-	evaluate = function(parts)
-		local val = raw_Flush_House_evaluate(parts)
+	evaluate = function(parts, ...)
+		local val = raw_Flush_House_evaluate(parts, ...)
 		return Bakery_API.maximus_full_house_compat(parts, val, true)
 	end,
-	modify_display_text = function(_, scoring_hand)
+	modify_display_text = function(_, scoring_hand, ...)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens" and #scoring_hand == 5 then
 			local dup = scoring_hand[1]
 			local x = scoring_hand[1].T.x
@@ -727,14 +727,14 @@ SMODS.PokerHand:take_ownership("Flush House", {
 			return "Bakery_StuffedFlush"
 		end
 		if raw_flush_house_modify_display_text then
-			return raw_flush_house_modify_display_text()
+			return raw_flush_house_modify_display_text(_, scoring_hand, ...)
 		end
 	end,
 }, true)
 
 local raw_flush_modify_display_text = SMODS.PokerHands["Flush"].modify_display_text
 SMODS.PokerHand:take_ownership("Flush", {
-	modify_display_text = function(_, scoring_hand)
+	modify_display_text = function(_, scoring_hand, ...)
 		if
 			G.GAME.Bakery_charm == "BakeryCharm_Bakery_AnaglyphLens"
 			and #scoring_hand == 5
@@ -745,7 +745,7 @@ SMODS.PokerHand:take_ownership("Flush", {
 			return "Bakery_FlushThreePair"
 		end
 		if raw_flush_modify_display_text then
-			return raw_flush_modify_display_text()
+			return raw_flush_modify_display_text(_, scoring_hand, ...)
 		end
 	end,
 }, true)
@@ -855,12 +855,12 @@ local function can_discard_zero()
 end
 
 local raw_G_FUNCS_can_discard = G.FUNCS.can_discard
-function G.FUNCS.can_discard(e)
+function G.FUNCS.can_discard(e, ...)
 	if can_discard_zero() then
 		e.config.colour = G.C.RED
 		e.config.button = "Bakery_discard_zero"
 	else
-		raw_G_FUNCS_can_discard(e)
+		return raw_G_FUNCS_can_discard(e, ...)
 	end
 end
 
@@ -995,7 +995,7 @@ Bakery_API.credit(Bakery_API.Charm({
 
 local juicing = false
 local raw_Game_update_draw_to_hand = Game.update_draw_to_hand
-function Game:update_draw_to_hand(dt)
+function Game:update_draw_to_hand(dt, ...)
 	local function condition()
 		juicing = (
 			G.GAME.Bakery_charm == "BakeryCharm_Bakery_Obsession"
@@ -1009,7 +1009,7 @@ function Game:update_draw_to_hand(dt)
 	if not juicing and condition() then
 		juice_card_until(G.Bakery_charm_area.cards[1], condition, true)
 	end
-	raw_Game_update_draw_to_hand(self, dt)
+	return raw_Game_update_draw_to_hand(self, dt, ...)
 end
 
 sendInfoMessage("Game:update_draw_to_hand() patched. Reason: Discard zero Charms juice", "Bakery")
@@ -1101,8 +1101,8 @@ Bakery_API.Charm({
 
 local raw_e_negative_get_weight = G.P_CENTERS.e_negative.get_weight
 SMODS.Edition:take_ownership("negative", {
-	get_weight = function(self)
-		local w = raw_e_negative_get_weight(self)
+	get_weight = function(self, ...)
+		local w = raw_e_negative_get_weight(self, ...)
 		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_Void" then
 			w = w * G.Bakery_charm_area.cards[1].ability.extra.mod
 		end
@@ -1485,7 +1485,7 @@ Bakery_API.Charm({
 })
 
 local raw_level_up_hand = level_up_hand
-function level_up_hand(card, hand, instant, amount)
+function level_up_hand(card, hand, instant, amount, ...)
 	if
 		G.GAME.Bakery_charm == "BakeryCharm_Bakery_MilkyWay"
 		and card
@@ -1494,7 +1494,7 @@ function level_up_hand(card, hand, instant, amount)
 	then
 		amount = (amount or 1) * G.Bakery_charm_area.cards[1].ability.extra
 	end
-	return raw_level_up_hand(card, hand, instant, amount)
+	return raw_level_up_hand(card, hand, instant, amount, ...)
 end
 
 -- KEEP_LITE
@@ -2091,7 +2091,7 @@ Bakery_API.Charm({
 		if context.skipping_booster then
 			return { dollars = context.booster.cost }
 		end
-	end
+	end,
 })
 
 if next(SMODS.find_mod("RevosVault")) then
@@ -2219,7 +2219,7 @@ if next(SMODS.find_mod("MoreFluff")) then
 	end
 
 	local raw_CardArea_draw = CardArea.draw
-	function CardArea:draw()
+	function CardArea:draw(...)
 		if self.children.area_uibox and G.GAME and G.GAME.Bakery_charm == "BakeryCharm_Bakery_Posterization" then
 			local el = self.children.area_uibox:get_UIE_by_ID("Bakery_card_limit_text")
 			if el then
@@ -2234,7 +2234,7 @@ if next(SMODS.find_mod("MoreFluff")) then
 			self.config.card_count = #self.cards - x
 			self.config.Bakery_visual_card_limit = self.config.card_limit - x
 		end
-		return raw_CardArea_draw(self)
+		return raw_CardArea_draw(self, ...)
 	end
 end
 

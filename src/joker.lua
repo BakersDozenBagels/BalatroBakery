@@ -1136,11 +1136,11 @@ Bakery_API.Joker({
 })
 
 local raw_Card_start_dissolve = Card.start_dissolve
-function Card:start_dissolve()
+function Card:start_dissolve(...)
 	if self.config.center.key == "j_Bakery_GlassCannon" then
 		self:shatter()
 	else
-		raw_Card_start_dissolve(self)
+		raw_Card_start_dissolve(self, ...)
 	end
 end
 
@@ -1316,9 +1316,8 @@ function Bakery_API.parse_hyper_e(num)
 	return Big:new(arr)
 end
 if Big then
-	MAX_NUM = SMODS.Mods.Amulet and
-		Big:new { 1.7976931348623157e308, 1, [1.7975e308] = 1 } or
-		Bakery_API.parse_hyper_e("e10#10##100000")
+	MAX_NUM = SMODS.Mods.Amulet and Big:new({ 1.7976931348623157e308, 1, [1.7975e308] = 1 })
+		or Bakery_API.parse_hyper_e("e10#10##100000")
 end
 -- END_KEEP_LITE
 
