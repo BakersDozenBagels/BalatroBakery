@@ -109,7 +109,7 @@ Bakery_API.guard(function()
 	end
 
 	local raw_smods_create_UIBox_Other_GameObjects = create_UIBox_Other_GameObjects
-	function create_UIBox_Other_GameObjects()
+	function create_UIBox_Other_GameObjects(...)
 		local mod_has_charms = false
 		local raw_mod_custom_collection_tabs
 		if G.ACTIVE_MOD_UI then
@@ -118,7 +118,7 @@ Bakery_API.guard(function()
 			mod_has_charms = tally.of > 0
 			if mod_has_charms then
 				raw_mod_custom_collection_tabs = G.ACTIVE_MOD_UI.custom_collection_tabs
-				G.ACTIVE_MOD_UI.custom_collection_tabs = function()
+				G.ACTIVE_MOD_UI.custom_collection_tabs = function(...)
 					local res = raw_mod_custom_collection_tabs and raw_mod_custom_collection_tabs() or {}
 					if mod_id == "Bakery" then
 						res[1] = create_charm_button(tally)
@@ -130,7 +130,7 @@ Bakery_API.guard(function()
 			end
 		end
 
-		local res = raw_smods_create_UIBox_Other_GameObjects()
+		local res = raw_smods_create_UIBox_Other_GameObjects(...)
 
 		if mod_has_charms then
 			G.ACTIVE_MOD_UI.custom_collection_tabs = raw_mod_custom_collection_tabs
@@ -174,8 +174,8 @@ Bakery_API.guard(function()
 	}
 
 	local raw_Card_set_sprites = Card.set_sprites
-	function Card:set_sprites(center, front)
-		raw_Card_set_sprites(self, center, front)
+	function Card:set_sprites(center, front, ...)
+		raw_Card_set_sprites(self, center, front, ...)
 		if center and center.set == "BakeryCharm" and not center.unlocked then
 			self.children.center.atlas = G.ASSET_ATLAS.Bakery_CharmsUtil
 			self.children.center.scale = {
@@ -472,8 +472,8 @@ Bakery_API.guard(function()
 	end
 
 	local raw_set_screen_positions = set_screen_positions
-	function set_screen_positions()
-		raw_set_screen_positions()
+	function set_screen_positions(...)
+		raw_set_screen_positions(...)
 		if G.STAGE == G.STAGES.RUN and G.Bakery_charm_area then
 			G.Bakery_charm_area.T.x = G.TILE_W - G.Bakery_charm_area.T.w - 0.5
 			G.Bakery_charm_area.T.y = G.TILE_H - G.deck.T.h - 1.2 * G.Bakery_charm_area.T.h
@@ -481,8 +481,8 @@ Bakery_API.guard(function()
 	end
 
 	local raw_CardArea_can_highlight = CardArea.can_highlight
-	function CardArea:can_highlight(card)
-		return self ~= G.Bakery_charm_area and raw_CardArea_can_highlight(self, card)
+	function CardArea:can_highlight(card, ...)
+		return self ~= G.Bakery_charm_area and raw_CardArea_can_highlight(self, card, ...)
 	end
 
 	sendInfoMessage("set_screen_positions() and CardArea:can_highlight() patched. Reason: Charm rendering", "Bakery")

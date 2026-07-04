@@ -143,7 +143,6 @@ function Bakery_API.parse_hyper_e(num)
 	return Big:new(arr)
 end
 if Big then
-	MAX_NUM = SMODS.Mods.Amulet and
-		Big:new { 1.7976931348623157e308, 1, [1.7975e308] = 1 } or
-		Bakery_API.parse_hyper_e("e10#10##100000")
+	MAX_NUM = SMODS.Mods.Amulet and Big:new({ 1.7976931348623157e308, 1, [1.7975e308] = 1 })
+		or Bakery_API.parse_hyper_e("e10#10##100000")
 end
