@@ -141,10 +141,11 @@ Bakery_API.Joker({
 				and not G.jokers.cards[my_pos + 1].getting_sliced
 			then
 				local sliced_card = G.jokers.cards[my_pos + 1]
-				sliced_card.getting_sliced = true
 
 				sliced_card.sell_cost = sliced_card.sell_cost * card.ability.extra.scale
-				sliced_card:sell_card()
+				G.FUNCS.sell_card({ config = { ref_table = sliced_card } })
+
+				sliced_card.getting_sliced = true
 			end
 		end
 	end,

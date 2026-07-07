@@ -104,6 +104,17 @@ Balatest.TestPlay({
 	end,
 })
 Balatest.TestPlay({
+	name = "auctioneer_cola",
+	category = { "jokers", "auctioneer" },
+
+	jokers = { "j_Bakery_Auctioneer", "j_diet_cola" },
+	dollars = 0,
+	assert = function()
+		Balatest.assert_eq(G.GAME.dollars, 9)
+		Balatest.assert_eq(#G.GAME.tags, 1)
+	end,
+})
+Balatest.TestPlay({
 	name = "auctioneer_twice_half",
 	category = { "jokers", "auctioneer" },
 
