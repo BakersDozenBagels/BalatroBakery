@@ -29,5 +29,8 @@ Bakery_API.guard(function()
 		"tag_Bakery_BottomTag",
 		"BakeryCharm_Bakery_Coin",
 		"BakeryCharm_Bakery_Obsession",
+		"BakeryCharm_Bakery_Revolve",
+		"BakeryCharm_Bakery_Epitaph",
+		"BakeryCharm_Bakery_Fractal",
 	}
 end)
