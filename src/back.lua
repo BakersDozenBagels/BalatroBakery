@@ -997,9 +997,10 @@ if CardSleeves then
 		calculate = b_dominion.calculate,
 	}))
 
-	CardSleeves.Sleeve({
+	Bakery_API.credit(CardSleeves.Sleeve({
 		key = "United",
 		atlas = "BakerySleeves",
+		idea = "RedsToad",
 		pos = {
 			x = 5,
 			y = 0,
@@ -1033,5 +1034,5 @@ if CardSleeves then
 				b_lone_star.calculate(self, ...)
 			end
 		end,
-	})
+	}))
 end
