@@ -1,4 +1,6 @@
 #!/bin/sh
+cd "$(dirname "$0")"
+
 for file in 2x/*.png; do
     filename=$(basename "$file")
     if [ ! -f "1x/${filename}" ]; then
