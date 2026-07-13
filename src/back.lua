@@ -467,7 +467,7 @@ local b_dominion = Bakery_API.credit(SMODS.Back({
 	end,
 }))
 
-function find_texas(x)
+local function find_texas(x)
 	local res = {}
 	for _, card in pairs(G.I.CARD) do
 		card.ability = card.ability or {}
