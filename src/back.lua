@@ -467,6 +467,289 @@ local b_dominion = Bakery_API.credit(SMODS.Back({
 	end,
 }))
 
+function find_texas(x)
+	local res = {}
+	for _, card in pairs(G.I.CARD) do
+		card.ability = card.ability or {}
+		if card.ability.Bakery_texas and card.ability.Bakery_texas == x then
+			res[#res + 1] = card
+		end
+	end
+	return res
+end
+
+local b_lone_star = Bakery_API.credit(SMODS.Back({
+	key = "LoneStar",
+	name = "LoneStar",
+	atlas = "BakeryBack",
+	idea = "RedsToad",
+	pos = { x = 5, y = 0 },
+	unlocked = false,
+	discovered = false,
+	check_for_unlock = function(self, args)
+		local a, b = pcall(function()
+			return get_deck_win_stake("b_Bakery_House") > 0
+		end)
+		return a and b
+	end,
+	locked_loc_vars = function(self, back)
+		if G.P_CENTERS["b_Bakery_House"].discovered then
+			return {
+				vars = {
+					localize({
+						type = "name_text",
+						key = "b_Bakery_House",
+						set = "Back",
+					}),
+				},
+			}
+		end
+		return {
+			vars = { localize("k_unknown") },
+		}
+	end,
+	apply = function()
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.hand:change_size(-1)
+				G.hand.config.highlighted_limit = 1 / 0 -- Infinity
+				G.GAME.modifiers.Bakery_texas_hold_em = true
+				G.GAME.Bakery_texas_hold_em_phase = 0
+				return true
+			end,
+		}))
+	end,
+	calculate = function(self, card, context)
+		if context.pre_discard then
+			G.GAME.Bakery_texas_hold_em_phase = G.GAME.Bakery_texas_hold_em_phase + 1
+			for _, card in pairs(find_texas(G.GAME.Bakery_texas_hold_em_phase)) do
+				if card.facing == "back" then
+					card:flip()
+				end
+			end
+			G.hand:parse_highlighted() -- After discarding 0 cards
+		end
+
+		if context.after then
+			G.GAME.Bakery_texas_hold_em_phase = 0
+			if G.GAME.round_resets.discards - G.GAME.current_round.discards_left > 0 then
+				ease_discard(G.GAME.round_resets.discards - G.GAME.current_round.discards_left)
+			end
+		end
+
+		if context.hand_drawn then
+			G.hand:parse_highlighted()
+		end
+	end,
+}))
+
+-- Queue this to put it after Anaglyph Lens (and any modded hooks)
+G.E_MANAGER:add_event(Event({
+	blocking = false,
+	blockable = false,
+	func = function()
+		local raw_evaluate_poker_hand = evaluate_poker_hand
+		function evaluate_poker_hand(cards, ...)
+			if not G.GAME.modifiers.Bakery_texas_hold_em or #cards <= 5 then
+				return raw_evaluate_poker_hand(cards, ...)
+			end
+
+			local results = {}
+			for i = 1, #cards - 4 do
+				for j = i + 1, #cards - 3 do
+					for k = j + 1, #cards - 2 do
+						for l = k + 1, #cards - 1 do
+							for m = l + 1, #cards do
+								local res =
+									raw_evaluate_poker_hand({ cards[i], cards[j], cards[k], cards[l], cards[m] })
+								for k, v in pairs(res) do
+									results[k] = results[k] or {}
+									for _, v in ipairs(res[k]) do
+										results[k][#results[k] + 1] = v
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+
+			for _, v in ipairs(G.handlist) do
+				if not results.top and results[v] then
+					results.top = results[v]
+					break
+				end
+			end
+
+			return results
+		end
+		return true
+	end,
+}))
+
+local raw_Blind_stay_flipped = Blind.stay_flipped
+function Blind:stay_flipped(to, card, from, ...)
+	local ret = raw_Blind_stay_flipped(self, to, card, from, ...)
+
+	if not G.GAME.modifiers.Bakery_texas_hold_em or not G.GAME.facing_blind then
+		return ret
+	end
+
+	card.ability = card.ability or {}
+
+	if to ~= G.hand then
+		card.ability.Bakery_texas = nil
+	else
+		if #find_texas(1) < 3 then
+			card.ability.Bakery_texas = 1
+			card.ability.Bakery_texas_extra = #find_texas(1)
+			return true
+		elseif #find_texas(2) < 1 then
+			card.ability.Bakery_texas = 2
+			card.ability.Bakery_texas_extra = 4
+			return true
+		elseif #find_texas(3) < 1 then
+			card.ability.Bakery_texas = 3
+			card.ability.Bakery_texas_extra = 5
+			return true
+		end
+	end
+
+	return ret
+end
+
+local raw_G_FUNCS_can_discard = G.FUNCS.can_discard
+function G.FUNCS.can_discard(e, ...)
+	if G.GAME.modifiers.Bakery_texas_hold_em then
+		for _, card in pairs(G.hand.highlighted) do
+			card.ability = card.ability or {}
+			if card.ability.Bakery_texas then
+				e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+				e.config.button = nil
+				return
+			end
+		end
+	end
+
+	return raw_G_FUNCS_can_discard(e, ...)
+end
+
+local raw_G_FUNCS_can_play = G.FUNCS.can_play
+function G.FUNCS.can_play(e, ...)
+	if G.GAME.modifiers.Bakery_texas_hold_em then
+		e.config.colour = G.C.BLUE
+		e.config.button = "Bakery_play_texas_hold_em"
+		return
+	end
+
+	return raw_G_FUNCS_can_play(e, ...)
+end
+
+function G.FUNCS.Bakery_play_texas_hold_em(e, ...)
+	for _, card in pairs(G.hand.cards) do
+		if not card.highlighted then
+			G.hand:add_to_highlighted(card, true)
+		end
+	end
+	return G.FUNCS.play_cards_from_highlighted(e, ...)
+end
+
+local raw_CardArea_parse_highlighted = CardArea.parse_highlighted
+function CardArea:parse_highlighted(...)
+	if not G.GAME.modifiers.Bakery_texas_hold_em then
+		return raw_CardArea_parse_highlighted(self, ...)
+	end
+
+	local visible = {}
+	local any_backwards = false
+	local all_backwards = true
+	for _, card in ipairs(self.cards) do
+		if card.facing ~= "back" then
+			visible[#visible + 1] = card
+			all_backwards = false
+		else
+			any_backwards = true
+		end
+	end
+
+	G.boss_throw_hand = nil
+	local text, disp_text, poker_hands = G.FUNCS.get_poker_hand_info(visible)
+	if text == "NULL" then
+		update_hand_text(
+			{ immediate = true, nopulse = true, delay = 0 },
+			{ mult = 0, chips = 0, level = "", handname = "" }
+		)
+		for name, parameter in pairs(SMODS.Scoring_Parameters) do
+			update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { [name] = parameter.default_value })
+		end
+		return
+	end
+
+	if G.GAME.blind and G.GAME.blind:debuff_hand(self.highlighted, poker_hands, text, true) then
+		G.boss_throw_hand = true
+	end
+
+	if all_backwards then
+		update_hand_text(
+			{ immediate = true, nopulse = nil, delay = 0 },
+			{ handname = "????", level = "?", mult = "?", chips = "?" }
+		)
+		for name in pairs(SMODS.Scoring_Parameters) do
+			update_hand_text({ immediate = true, nopulse = nil, delay = 0 }, { [name] = "?" })
+		end
+		return
+	end
+
+	local function fix(x)
+		return any_backwards and localize({ type = "variable", key = "v_Bakery_value?", vars = { x } }) or x
+	end
+
+	for name, parameter in pairs(SMODS.Scoring_Parameters) do
+		parameter.current = G.GAME.hands[text][name] or parameter.default_value
+		update_hand_text({ immediate = true, nopulse = nil, delay = 0 }, { [name] = fix(parameter.current) })
+	end
+	update_hand_text({ immediate = true, nopulse = nil, delay = 0 }, {
+		handname = fix(disp_text),
+		level = fix(G.GAME.hands[text].level),
+		mult = fix(G.GAME.hands[text].mult),
+		chips = fix(G.GAME.hands[text].chips),
+	})
+end
+
+local texas_atlas = SMODS.Atlas({
+	key = "BakeryTexas",
+	path = "BakeryTexas.png",
+	px = 71,
+	py = 95,
+})
+G.E_MANAGER:add_event(Event({
+	func = function()
+		Bakery_API.texas_hold_em_stickers = {
+			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 0, y = 0 }),
+			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 1, y = 0 }),
+			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 2, y = 0 }),
+			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 3, y = 0 }),
+			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 4, y = 0 }),
+		}
+	end,
+}))
+
+SMODS.DrawStep({
+	key = "texas_hold_em",
+	order = 47,
+	func = function(card, layer)
+		card.ability = card.ability or {}
+		if not card.ability.Bakery_texas then
+			return
+		end
+
+		---@type Sprite
+		local sticker = Bakery_API.texas_hold_em_stickers[card.ability.Bakery_texas_extra]
+		sticker.role.draw_major = card
+		sticker:draw_shader("dissolve", nil, nil, nil, card.children.center)
+	end,
+})
+
 if CardSleeves then
 	SMODS.Atlas({
 		key = "BakerySleeves",
@@ -713,4 +996,42 @@ if CardSleeves then
 		end,
 		calculate = b_dominion.calculate,
 	}))
+
+	CardSleeves.Sleeve({
+		key = "United",
+		atlas = "BakerySleeves",
+		pos = {
+			x = 5,
+			y = 0,
+		},
+		unlocked = false,
+		unlock_condition = {
+			deck = "b_Bakery_LoneStar",
+			stake = "stake_white",
+		},
+		loc_vars = function(self)
+			local key = self.key
+			if self.get_current_deck_key() == "b_Bakery_LoneStar" then
+				key = key .. "_alt"
+			end
+			return { key = key, vars = { 2 } }
+		end,
+		apply = function(self)
+			if self.get_current_deck_key() == "b_Bakery_LoneStar" then
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						G.hand:change_size(2)
+						return true
+					end,
+				}))
+			else
+				b_lone_star.apply()
+			end
+		end,
+		calculate = function(self, ...)
+			if self.get_current_deck_key() ~= "b_Bakery_LoneStar" then
+				b_lone_star.calculate(self, ...)
+			end
+		end,
+	})
 end

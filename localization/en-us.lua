@@ -430,6 +430,18 @@ return {
 					"of any one {C:attention}Joker",
 				},
 			},
+			b_Bakery_LoneStar = {
+				name = "Lone Star Deck",
+				text = {
+					"{C:attention}-1{} hand size,",
+					"Discards refresh each hand,",
+					"{C:attention}5{} cards drawn face-down",
+					"and cannot be discarded,",
+					"Play entire hand,",
+					"Best {C:attention}5{} cards score",
+				},
+				unlock = { "Win a run with", "{C:attention}#1#{}", "on any difficulty" },
+			},
 		},
 		Sleeve = {
 			sleeve_Bakery_Violet = {
@@ -487,6 +499,23 @@ return {
 				text = {
 					"Start with {C:red}#4#{} playing cards,",
 					"{C:attention}#5#{}, and {C:attention}#6#",
+				},
+			},
+			sleeve_Bakery_United = {
+				name = "United Sleeve",
+				text = {
+					"{C:attention}-1{} hand size,",
+					"Discards refresh each hand,",
+					"{C:attention}5{} cards drawn face-down",
+					"and cannot be discarded,",
+					"Play entire hand,",
+					"Best {C:attention}5{} cards score",
+				},
+			},
+			sleeve_Bakery_United_alt = {
+				name = "Texas Sleeve",
+				text = {
+					"{C:attention}+#1#{} hand size",
 				},
 			},
 		},
@@ -812,6 +841,7 @@ return {
 			-- END_KEEP_LITE
 			b_Bakery_deposit = "DEPOSIT $#1#",
 			b_Bakery_ante_times = "(Ante*#1#)",
+			["v_Bakery_value?"] = "#1#?",
 			-- KEEP_LITE
 			v_Bakery_artist = "Art: #1#",
 			v_Bakery_coder = "Code: #1#",

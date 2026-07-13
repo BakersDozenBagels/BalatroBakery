@@ -990,7 +990,7 @@ Bakery_API.guard(function()
 						end
 						local tag = "{"
 						if contrib.fg then
-							G.ARGS.LOC_COLOURS["Bakery_credit_fg_" .. obj.artist] = contrib.fg
+							G.ARGS.LOC_COLOURS["Bakery_credit_fg_" .. key] = contrib.fg
 							tag = tag .. "C:Bakery_credit_fg_" .. key
 						end
 						if contrib.bg then

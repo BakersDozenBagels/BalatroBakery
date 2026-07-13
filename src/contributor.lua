@@ -32,6 +32,11 @@ Bakery_API.guard(function()
 			bg = HEX("FF2862"),
 			fg = HEX("ffffff"),
 		},
+		RedsToad = {
+			name = "RedsToad",
+			fg = HEX("ffffffff"),
+			bg = HEX("da4044ff"),
+		},
 	}
 end)
 -- END_KEEP_LITE
