@@ -547,6 +547,7 @@ local b_lone_star = Bakery_API.credit(SMODS.Back({
 G.E_MANAGER:add_event(Event({
 	blocking = false,
 	blockable = false,
+	no_delete = true,
 	func = function()
 		local raw_evaluate_poker_hand = evaluate_poker_hand
 		function evaluate_poker_hand(cards, ...)
@@ -723,6 +724,9 @@ local texas_atlas = SMODS.Atlas({
 	py = 95,
 })
 G.E_MANAGER:add_event(Event({
+	blocking = false,
+	blockable = false,
+	no_delete = true,
 	func = function()
 		Bakery_API.texas_hold_em_stickers = {
 			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 0, y = 0 }),
