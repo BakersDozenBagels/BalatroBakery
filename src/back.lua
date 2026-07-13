@@ -735,6 +735,7 @@ G.E_MANAGER:add_event(Event({
 			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 3, y = 0 }),
 			Sprite(0, 0, G.CARD_W, G.CARD_H, texas_atlas, { x = 4, y = 0 }),
 		}
+		return true
 	end,
 }))
 
