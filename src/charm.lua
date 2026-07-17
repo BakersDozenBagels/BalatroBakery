@@ -22,12 +22,12 @@ local function all_suits(n, hand)
 end
 
 Bakery_API.guard(function()
-	SMODS.ObjectType({
-		key = "BakeryCharm",
-	})
+	SMODS.ObjectType {
+		key = 'BakeryCharm',
+	}
 
-	Bakery_API.Charm = SMODS.Center:extend({
-		required_params = { "key" },
+	Bakery_API.Charm = SMODS.Center:extend {
+		required_params = { 'key' },
 		unlocked = true,
 		discovered = false,
 		pos = {
@@ -37,11 +37,11 @@ Bakery_API.guard(function()
 		cost = 8,
 		config = {},
 		consumeable = true,
-		set = "BakeryCharm",
-		class_prefix = "BakeryCharm",
-		pools = { "BakeryCharm" },
+		set = 'BakeryCharm',
+		class_prefix = 'BakeryCharm',
+		pools = { 'BakeryCharm' },
 		set_card_type_badge = function(self, card, badges)
-			badges[#badges + 1] = create_badge(localize("k_Bakery_charm"), G.C.DARK_EDITION, G.C.WHITE, 1.2)
+			badges[#badges + 1] = create_badge(localize 'k_Bakery_charm', G.C.DARK_EDITION, G.C.WHITE, 1.2)
 		end,
 		load = function(self, card, cardTable, other_card)
 			card.T.h = G.CARD_W
@@ -51,8 +51,8 @@ Bakery_API.guard(function()
 			local raw_obj_loc_vars = self.loc_vars
 			self.loc_vars = function(self, info_queue, card)
 				info_queue[#info_queue + 1] = {
-					set = "Other",
-					key = "Bakery_charm",
+					set = 'Other',
+					key = 'Bakery_charm',
 				}
 				if raw_obj_loc_vars then
 					return raw_obj_loc_vars(self, info_queue, card)
@@ -62,18 +62,18 @@ Bakery_API.guard(function()
 		end,
 		equip = function(self, card) end,
 		unequip = function(self, card) end,
-	})
+	}
 
-	SMODS.Atlas({
-		key = "CharmsUtil",
+	SMODS.Atlas {
+		key = 'CharmsUtil',
 		px = 68,
 		py = 68,
-		path = "BakeryCharmsUtil.png",
-	})
+		path = 'BakeryCharmsUtil.png',
+	}
 
-	SMODS.UndiscoveredSprite({
-		key = "BakeryCharm",
-		atlas = "CharmsUtil",
+	SMODS.UndiscoveredSprite {
+		key = 'BakeryCharm',
+		atlas = 'CharmsUtil',
 		pos = {
 			x = 0,
 			y = 1,
@@ -82,7 +82,7 @@ Bakery_API.guard(function()
 			x = 0,
 			y = 2,
 		},
-	})
+	}
 
 	-- Collection code adapted from Card Sleeves https://github.com/larswijn/CardSleeves/blob/main/CardSleeves.lua
 	local function get_charm_tally_of(mod_id)
@@ -99,13 +99,13 @@ Bakery_API.guard(function()
 	end
 
 	local function create_charm_button(tally)
-		return UIBox_button({
+		return UIBox_button {
 			count = { tally = tally.tally, of = tally.of },
 			minw = 5,
-			button = "your_collection_Bakery_Charms",
-			label = { localize("k_Bakery_charms") },
-			id = "your_collection_Bakery_Charms",
-		})
+			button = 'your_collection_Bakery_Charms',
+			label = { localize 'k_Bakery_charms' },
+			id = 'your_collection_Bakery_Charms',
+		}
 	end
 
 	local raw_smods_create_UIBox_Other_GameObjects = create_UIBox_Other_GameObjects
@@ -120,7 +120,7 @@ Bakery_API.guard(function()
 				raw_mod_custom_collection_tabs = G.ACTIVE_MOD_UI.custom_collection_tabs
 				G.ACTIVE_MOD_UI.custom_collection_tabs = function(...)
 					local res = raw_mod_custom_collection_tabs and raw_mod_custom_collection_tabs() or {}
-					if mod_id == "Bakery" then
+					if mod_id == 'Bakery' then
 						res[1] = create_charm_button(tally)
 					else
 						res[#res + 1] = create_charm_button(tally)
@@ -145,10 +145,10 @@ Bakery_API.guard(function()
 
 	function G.FUNCS.your_collection_Bakery_Charms()
 		G.SETTINGS.paused = true
-		G.FUNCS.overlay_menu({
+		G.FUNCS.overlay_menu {
 			definition = SMODS.card_collection_UIBox(G.P_CENTER_POOLS.BakeryCharm, { 5, 5 }, {
 				snap_back = true,
-				infotip = localize("k_BakeryCharmInfo"),
+				infotip = localize 'k_BakeryCharmInfo',
 				hide_single_page = true,
 				collapse_single_page = true,
 				h_mod = 0.65,
@@ -156,19 +156,19 @@ Bakery_API.guard(function()
 					card.T.h = card.T.w
 				end,
 			}),
-		})
+		}
 	end
 
 	G.BakeryCharm_locked = {
 		unlocked = false,
 		max = 1,
-		name = "Locked",
+		name = 'Locked',
 		pos = {
 			x = 0,
 			y = 0,
 		},
-		set = "BakeryCharm",
-		atlas = "Bakery_CharmsUtil",
+		set = 'BakeryCharm',
+		atlas = 'Bakery_CharmsUtil',
 		cost_mult = 1.0,
 		config = {},
 	}
@@ -176,7 +176,7 @@ Bakery_API.guard(function()
 	local raw_Card_set_sprites = Card.set_sprites
 	function Card:set_sprites(center, front, ...)
 		raw_Card_set_sprites(self, center, front, ...)
-		if center and center.set == "BakeryCharm" and not center.unlocked then
+		if center and center.set == 'BakeryCharm' and not center.unlocked then
 			self.children.center.atlas = G.ASSET_ATLAS.Bakery_CharmsUtil
 			self.children.center.scale = {
 				x = G.ASSET_ATLAS.Bakery_CharmsUtil.px,
@@ -186,14 +186,14 @@ Bakery_API.guard(function()
 				G.ASSET_ATLAS.Bakery_CharmsUtil.px / (self.children.center.VT.W or 1),
 				G.ASSET_ATLAS.Bakery_CharmsUtil.py / (self.children.center.VT.H or 1)
 			)
-			self.children.center:set_sprite_pos({
+			self.children.center:set_sprite_pos {
 				x = 0,
 				y = 0,
-			})
+			}
 		end
 	end
 
-	sendInfoMessage("Card:set_sprites() patched. Reason: Charm Unlocking", "Bakery")
+	sendInfoMessage('Card:set_sprites() patched. Reason: Charm Unlocking', 'Bakery')
 
 	function Bakery_API.get_charm_count()
 		return (G.GAME.starting_params.Bakery_charms_in_shop or 1) + (G.GAME.modifiers.Bakery_extra_charms or 0)
@@ -203,7 +203,7 @@ Bakery_API.guard(function()
 		ret = ret or {
 			spawn = {},
 		}
-		local _pool, _pool_key = get_current_pool("BakeryCharm")
+		local _pool, _pool_key = get_current_pool 'BakeryCharm'
 		local already = 0
 		G.GAME.current_round.Bakery_charm = G.GAME.current_round.Bakery_charm or {
 			spawn = {},
@@ -216,9 +216,9 @@ Bakery_API.guard(function()
 		for _ = 1, math.min(SMODS.size_of_pool(_pool) - already, count or Bakery_API.get_charm_count()) do
 			local center = pseudorandom_element(_pool, pseudoseed(_pool_key))
 			local it = 1
-			while center == "UNAVAILABLE" or G.GAME.current_round.Bakery_charm.spawn[center] do
+			while center == 'UNAVAILABLE' or G.GAME.current_round.Bakery_charm.spawn[center] do
 				it = it + 1
-				center = pseudorandom_element(_pool, pseudoseed(_pool_key .. "_resample" .. it))
+				center = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
 			end
 
 			ret[#ret + 1] = center
@@ -239,15 +239,15 @@ Bakery_API.guard(function()
 			Bakery_API.get_next_charms(G.GAME.current_round.Bakery_charm)
 		end
 		for _, key in ipairs(G.GAME.current_round.Bakery_charm or {}) do
-			if G.P_CENTERS[key] and G.GAME.current_round.Bakery_charm.spawn[key] and key ~= "j_joker" then
-				Bakery_API.add_charm_to_shop(key, "shop_voucher")
+			if G.P_CENTERS[key] and G.GAME.current_round.Bakery_charm.spawn[key] and key ~= 'j_joker' then
+				Bakery_API.add_charm_to_shop(key, 'shop_voucher')
 			end
 		end
 	end
 
 	function Bakery_API.add_charm_to_shop(key, source)
-		assert(key, "Expected a key")
-		assert(G.P_CENTERS[key], "Invalid charm key: " .. key)
+		assert(key, 'Expected a key')
+		assert(G.P_CENTERS[key], 'Invalid charm key: ' .. key)
 		local card = Card(
 			G.shop_vouchers.T.x + G.shop_vouchers.T.w / 2,
 			G.shop_vouchers.T.y,
@@ -261,7 +261,7 @@ Bakery_API.guard(function()
 			}
 		)
 		card[source] = true
-		create_shop_card_ui(card, "Charm", G.shop_vouchers)
+		create_shop_card_ui(card, 'Charm', G.shop_vouchers)
 		card:start_materialize()
 		G.shop_vouchers:emplace(card)
 		G.shop_vouchers.config.card_limit = #G.shop_vouchers.cards
@@ -276,21 +276,21 @@ Bakery_API.guard(function()
 				minw = 1.1,
 				maxw = 1.3,
 				padding = 0.1,
-				align = "bm",
+				align = 'bm',
 				colour = G.C.GREEN,
 				shadow = true,
 				r = 0.08,
 				minh = 0.94,
-				func = "Bakery_can_equip",
+				func = 'Bakery_can_equip',
 				one_press = true,
-				button = "Bakery_equip_from_shop",
+				button = 'Bakery_equip_from_shop',
 				hover = true,
 			},
 			nodes = {
 				{
 					n = G.UIT.T,
 					config = {
-						text = localize("b_Bakery_equip"),
+						text = localize 'b_Bakery_equip',
 						colour = G.C.WHITE,
 						scale = 0.4,
 					},
@@ -304,14 +304,14 @@ Bakery_API.guard(function()
 	end
 	G.FUNCS.Bakery_can_equip = function(e)
 		if
-			G.GAME.Bakery_charm == "BakeryCharm_Bakery_DuctTape"
+			G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape'
 			or to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at)
 		then
 			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
 			e.config.button = nil
 		else
 			e.config.colour = G.C.GREEN
-			e.config.button = "Bakery_equip_from_shop"
+			e.config.button = 'Bakery_equip_from_shop'
 		end
 	end
 	G.FUNCS.Bakery_equip_from_shop = function(e)
@@ -347,8 +347,8 @@ Bakery_API.guard(function()
 		G.GAME.round_scores.cards_purchased.amt = G.GAME.round_scores.cards_purchased.amt + 1
 		e.config.ref_table:Bakery_equip()
 
-		G.E_MANAGER:add_event(Event({
-			trigger = "after",
+		G.E_MANAGER:add_event(Event {
+			trigger = 'after',
 			delay = 0.1,
 			func = function()
 				G.STATE = prev_state
@@ -356,24 +356,24 @@ Bakery_API.guard(function()
 				G.CONTROLLER.locks.use = false
 
 				if area and area.cards[1] then
-					G.E_MANAGER:add_event(Event({
+					G.E_MANAGER:add_event(Event {
 						func = function()
 							G.CONTROLLER.interrupt.focus = nil
-							G.CONTROLLER:snap_to({
-								node = G.shop:get_UIE_by_ID("next_round_button"),
-							})
+							G.CONTROLLER:snap_to {
+								node = G.shop:get_UIE_by_ID 'next_round_button',
+							}
 							return true
 						end,
-					}))
+					})
 				end
 				return true
 			end,
-		}))
+		})
 	end
 
 	local raw_G_FUNCS_redeem_from_shop = G.FUNCS.redeem_from_shop
 	function G.FUNCS.redeem_from_shop(e, ...)
-		if e.config.ref_table.config.center.set == "BakeryCharm" then
+		if e.config.ref_table.config.center.set == 'BakeryCharm' then
 			return G.FUNCS.Bakery_equip_from_shop(e)
 		end
 		return raw_G_FUNCS_redeem_from_shop(e, ...)
@@ -381,7 +381,7 @@ Bakery_API.guard(function()
 
 	local raw_G_FUNCS_can_redeem = G.FUNCS.can_redeem
 	function G.FUNCS.can_redeem(e, ...)
-		if e.config.ref_table.config.center.set == "BakeryCharm" then
+		if e.config.ref_table.config.center.set == 'BakeryCharm' then
 			return G.FUNCS.Bakery_can_equip(e)
 		end
 		return raw_G_FUNCS_can_redeem(e, ...)
@@ -389,7 +389,7 @@ Bakery_API.guard(function()
 
 	local raw_CardArea_emplace = CardArea.emplace
 	function CardArea:emplace(card, ...)
-		if self == G.consumeables and card.ability.set == "BakeryCharm" then
+		if self == G.consumeables and card.ability.set == 'BakeryCharm' then
 			card:remove_from_area()
 			card:Bakery_equip(true)
 			return
@@ -399,7 +399,7 @@ Bakery_API.guard(function()
 	end
 
 	function Card:Bakery_equip(not_bought)
-		if self.config.center.set ~= "BakeryCharm" then
+		if self.config.center.set ~= 'BakeryCharm' then
 			return
 		end
 		stop_use()
@@ -414,7 +414,7 @@ Bakery_API.guard(function()
 			G.P_CENTERS[G.GAME.Bakery_charm]:unequip(G.Bakery_charm_area.cards[1])
 			G.GAME.used_jokers[G.GAME.Bakery_charm] = nil
 			if not G.Bakery_charm_area.cards[1] then
-				sendWarnMessage("No charm was found in G.Bakery_charm_area to destroy.", "Bakery")
+				sendWarnMessage('No charm was found in G.Bakery_charm_area to destroy.', 'Bakery')
 			else
 				G.Bakery_charm_area.cards[1]:start_dissolve()
 			end
@@ -424,7 +424,7 @@ Bakery_API.guard(function()
 		G.Bakery_charm_area:emplace(self)
 		if self.cost ~= 0 and not not_bought then
 			ease_dollars(-self.cost)
-			inc_career_stat("c_shop_dollars_spent", self.cost)
+			inc_career_stat('c_shop_dollars_spent', self.cost)
 		end
 		-- TODO: stat tracking
 		-- inc_career_stat('c_vouchers_bought', 1)
@@ -433,15 +433,15 @@ Bakery_API.guard(function()
 		self.config.center:equip(self)
 		delay(0.6)
 		if not not_bought then
-			SMODS.calculate_context({
+			SMODS.calculate_context {
 				buying_card = true,
 				card = self,
-			})
+			}
 		end
 
 		if G.GAME.modifiers.inflation and not not_bought then
 			G.GAME.inflation = G.GAME.inflation + 1
-			G.E_MANAGER:add_event(Event({
+			G.E_MANAGER:add_event(Event {
 				func = function()
 					for _, v in pairs(G.I.CARD) do
 						if v.set_cost then
@@ -450,7 +450,7 @@ Bakery_API.guard(function()
 					end
 					return true
 				end,
-			}))
+			})
 		end
 	end
 
@@ -462,7 +462,7 @@ Bakery_API.guard(function()
 			0.95 * G.CARD_W,
 			{
 				card_limit = 1,
-				type = "joker",
+				type = 'joker',
 				highlight_limit = 1,
 			}
 		)
@@ -485,22 +485,22 @@ Bakery_API.guard(function()
 		return self ~= G.Bakery_charm_area and raw_CardArea_can_highlight(self, card, ...)
 	end
 
-	sendInfoMessage("set_screen_positions() and CardArea:can_highlight() patched. Reason: Charm rendering", "Bakery")
+	sendInfoMessage('set_screen_positions() and CardArea:can_highlight() patched. Reason: Charm rendering', 'Bakery')
 
-	SMODS.PokerHandPart({
-		key = "s_2",
+	SMODS.PokerHandPart {
+		key = 's_2',
 		func = function(hand)
 			return all_suits(2, hand)
 		end,
-	})
-	SMODS.PokerHandPart({
-		key = "s_3",
+	}
+	SMODS.PokerHandPart {
+		key = 's_3',
 		func = function(hand)
 			return all_suits(3, hand)
 		end,
-	})
-	SMODS.PokerHandPart({
-		key = "s_all_pairs",
+	}
+	SMODS.PokerHandPart {
+		key = 's_all_pairs',
 		func = function(hand)
 			local _2 = all_suits(2, hand)
 			if not next(_2) then
@@ -508,7 +508,7 @@ Bakery_API.guard(function()
 			end
 			return { SMODS.merge_lists(_2) }
 		end,
-	})
+	}
 end)
 Bakery_API.guard(function()
 	function Bakery_API.maximus_full_house_compat(_, val)

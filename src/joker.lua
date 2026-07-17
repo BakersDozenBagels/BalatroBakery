@@ -3,7 +3,7 @@ Bakery_API.guard(function()
 
 	function Bakery_API.Joker(o)
 		o.name = o.name or o.key
-		o.atlas = o.atlas or "Bakery"
+		o.atlas = o.atlas or 'Bakery'
 		o.pos = o.pos or {
 			x = 0.5,
 			y = 0.5,
@@ -20,10 +20,10 @@ Bakery_API.guard(function()
 		end
 	end
 end)
-Bakery_API.load("sleeve")
+Bakery_API.load 'sleeve'
 Bakery_API.guard(function()
-	Bakery_API.black_suits = { "Spades", "Clubs" }
-	Bakery_API.red_suits = { "Hearts", "Diamonds" }
+	Bakery_API.black_suits = { 'Spades', 'Clubs' }
+	Bakery_API.red_suits = { 'Hearts', 'Diamonds' }
 	function Bakery_API.is_any_suit(card, suits)
 		for _, s in pairs(suits) do
 			if card:is_suit(s) then
@@ -83,7 +83,7 @@ local function Split(str, delim)
 		return { str }
 	end
 	local result = {}
-	local pat = "(.-)" .. delim .. "()"
+	local pat = '(.-)' .. delim .. '()'
 	local nb = 0
 	local lastPos
 	for part, pos in string.gfind(str, pat) do
@@ -97,11 +97,11 @@ end
 
 local MAX_NUM
 function Bakery_API.parse_hyper_e(num)
-	local split_array = num:sub(1, 1) == "e" and num:sub(2) or num
+	local split_array = num:sub(1, 1) == 'e' and num:sub(2) or num
 	local arr = {}
 	local current_run = 0
 	local i = 1
-	for _, str in ipairs(Split(split_array, "#")) do
+	for _, str in ipairs(Split(split_array, '#')) do
 		current_run = current_run + 1
 		if #str ~= 0 then
 			local val = tonumber(str)
@@ -111,7 +111,7 @@ function Bakery_API.parse_hyper_e(num)
 				end
 				arr[i] = val
 			elseif current_run == 2 and SMODS.Mods.Amulet then
-				local ret = Big:arrow(Big:new({ val }), Big:new(arr))
+				local ret = Big:arrow(Big:new { val }, Big:new(arr))
 
 				-- Number ends up Infinite. Bail.
 				if ret.isFinite and not ret:isFinite() then
@@ -143,6 +143,6 @@ function Bakery_API.parse_hyper_e(num)
 	return Big:new(arr)
 end
 if Big then
-	MAX_NUM = SMODS.Mods.Amulet and Big:new({ 1.7976931348623157e308, 1, [1.7975e308] = 1 })
-		or Bakery_API.parse_hyper_e("e10#10##100000")
+	MAX_NUM = SMODS.Mods.Amulet and Big:new { 1.7976931348623157e308, 1, [1.7975e308] = 1 }
+		or Bakery_API.parse_hyper_e 'e10#10##100000'
 end

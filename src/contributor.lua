@@ -2,39 +2,39 @@ Bakery_API.guard(function()
 	---@type table<string, {name: string, fg: table, bg: table}>
 	Bakery_API.contributors = {
 		GhostSalt = {
-			name = "GhostSalt",
-			fg = HEX("FFFFFF"),
-			bg = HEX("4D1575"),
+			name = 'GhostSalt',
+			fg = HEX 'FFFFFF',
+			bg = HEX '4D1575',
 		},
 		SadCube = {
-			name = "SadCube",
+			name = 'SadCube',
 			fg = G.C.UI.TEXT_DARK,
-			bg = HEX("1ddebe"),
+			bg = HEX '1ddebe',
 		},
 		ClausStephan = {
-			name = "Claus Stephan",
-			bg = HEX("AF8BBB"),
-			fg = HEX("000000"),
+			name = 'Claus Stephan',
+			bg = HEX 'AF8BBB',
+			fg = HEX '000000',
 		},
 		AmyWeber = {
-			name = "Amy Weber",
-			bg = HEX("60ADC4"),
+			name = 'Amy Weber',
+			bg = HEX '60ADC4',
 			fg = G.C.UI.TEXT_DARK,
 		},
 		Jack5 = {
-			name = "Jack5",
-			bg = HEX("ff4d00"),
-			fg = HEX("ffffff"),
+			name = 'Jack5',
+			bg = HEX 'ff4d00',
+			fg = HEX 'ffffff',
 		},
 		Craw = {
-			name = "https://craw.run",
-			bg = HEX("FF2862"),
-			fg = HEX("ffffff"),
+			name = 'https://craw.run',
+			bg = HEX 'FF2862',
+			fg = HEX 'ffffff',
 		},
 		RedsToad = {
-			name = "RedsToad",
-			fg = HEX("ffffffff"),
-			bg = HEX("da4044ff"),
+			name = 'RedsToad',
+			fg = HEX 'ffffffff',
+			bg = HEX 'da4044ff',
 		},
 	}
 end)
