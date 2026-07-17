@@ -1,19 +1,19 @@
-SMODS.Atlas({
-	key = "BakeryBack",
-	path = "BakeryBack.png",
+SMODS.Atlas {
+	key = 'BakeryBack',
+	path = 'BakeryBack.png',
 	px = 71,
 	py = 95,
-})
+}
 
-local b_violet = SMODS.Back({
-	key = "Violet",
-	name = "Violet",
+local b_violet = SMODS.Back {
+	key = 'Violet',
+	name = 'Violet',
 	config = {
 		extra = {
 			x_mult = 2,
 		},
 	},
-	atlas = "BakeryBack",
+	atlas = 'BakeryBack',
 	pos = {
 		x = 0,
 		y = 0,
@@ -21,22 +21,22 @@ local b_violet = SMODS.Back({
 	unlocked = false,
 	discovered = false,
 	check_for_unlock = function(self, args)
-		return Bakery_API.defeated_blinds["bl_final_vessel"] > 0
+		return Bakery_API.defeated_blinds['bl_final_vessel'] > 0
 	end,
 	locked_loc_vars = function(self, args)
-		if G.P_BLINDS["bl_final_vessel"].discovered then
+		if G.P_BLINDS['bl_final_vessel'].discovered then
 			return {
 				vars = {
-					localize({
-						type = "name_text",
-						key = "bl_final_vessel",
-						set = "Blind",
-					}),
+					localize {
+						type = 'name_text',
+						key = 'bl_final_vessel',
+						set = 'Blind',
+					},
 				},
 			}
 		end
 		return {
-			vars = { localize("k_unknown") },
+			vars = { localize 'k_unknown' },
 		}
 	end,
 	loc_vars = function(self, info_queue, back)
@@ -45,7 +45,7 @@ local b_violet = SMODS.Back({
 		}
 	end,
 	calculate = function(self, back, args)
-		if args.context == "final_scoring_step" then
+		if args.context == 'final_scoring_step' then
 			args.mult = args.mult * self.config.extra.x_mult
 
 			local skip = Talisman and Talisman.config_file and Talisman.config_file.disable_anims
@@ -56,16 +56,16 @@ local b_violet = SMODS.Back({
 				mult = args.mult,
 			})
 			if not skip then
-				G.E_MANAGER:add_event(Event({
-					trigger = "before",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'before',
 					delay = 0.8125,
 					func = function()
-						attention_text({
-							text = localize({
-								type = "variable",
-								key = "a_xmult",
+						attention_text {
+							text = localize {
+								type = 'variable',
+								key = 'a_xmult',
 								vars = { self.config.extra.x_mult },
-							}),
+							},
 							scale = 1.4,
 							hold = 2,
 							offset = {
@@ -73,33 +73,33 @@ local b_violet = SMODS.Back({
 								y = -2.7,
 							},
 							major = G.play,
-						})
-						play_sound("multhit2", 0.845 + 0.04 * math.random(), 0.7)
+						}
+						play_sound('multhit2', 0.845 + 0.04 * math.random(), 0.7)
 						G.ROOM.jiggle = G.ROOM.jiggle + 0.7
 						return true
 					end,
-				}))
+				})
 			end
 
 			return args.chips, args.mult
 		end
 	end,
-})
+}
 
 local function is_double_house()
-	return G.GAME.selected_sleeve == "sleeve_Bakery_House"
+	return G.GAME.selected_sleeve == 'sleeve_Bakery_House'
 		and ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key)
-			== "b_Bakery_House"
+			== 'b_Bakery_House'
 end
-local b_house = SMODS.Back({
-	key = "House",
-	name = "House",
+local b_house = SMODS.Back {
+	key = 'House',
+	name = 'House',
 	config = {
 		extra = {
 			odds_bottom = 4,
 		},
 	},
-	atlas = "BakeryBack",
+	atlas = 'BakeryBack',
 	pos = {
 		x = 1,
 		y = 0,
@@ -108,24 +108,24 @@ local b_house = SMODS.Back({
 	discovered = false,
 	check_for_unlock = function(self, args)
 		local a, b = pcall(function()
-			return get_deck_win_stake("b_erratic") > 0
+			return get_deck_win_stake 'b_erratic' > 0
 		end)
 		return a and b
 	end,
 	locked_loc_vars = function(self, back)
-		if G.P_CENTERS["b_erratic"].discovered then
+		if G.P_CENTERS['b_erratic'].discovered then
 			return {
 				vars = {
-					localize({
-						type = "name_text",
-						key = "b_erratic",
-						set = "Back",
-					}),
+					localize {
+						type = 'name_text',
+						key = 'b_erratic',
+						set = 'Back',
+					},
 				},
 			}
 		end
 		return {
-			vars = { localize("k_unknown") },
+			vars = { localize 'k_unknown' },
 		}
 	end,
 	loc_vars = function(self, info_queue, card)
@@ -135,13 +135,13 @@ local b_house = SMODS.Back({
 					self,
 					is_double_house() and 2 or 1,
 					self.config.extra.odds_bottom,
-					"b_Bakery_House"
+					'b_Bakery_House'
 				),
 			},
 		}
 	end,
 	calculate = function(self, back, args)
-		if args.context == "final_scoring_step" then
+		if args.context == 'final_scoring_step' then
 			local anim = {}
 
 			local double = is_double_house()
@@ -150,7 +150,7 @@ local b_house = SMODS.Back({
 				if
 					SMODS.pseudorandom_probability(
 						self,
-						"b_Bakery_House",
+						'b_Bakery_House',
 						double and 2 or 1,
 						self.config.extra.odds_bottom
 					)
@@ -163,58 +163,58 @@ local b_house = SMODS.Back({
 				return
 			end
 
-			G.E_MANAGER:add_event(Event({
-				trigger = "after",
+			G.E_MANAGER:add_event(Event {
+				trigger = 'after',
 				delay = 0.4,
 				func = function()
-					play_sound("tarot1")
+					play_sound 'tarot1'
 					return true
 				end,
-			}))
+			})
 			for i = 1, #anim do
 				local percent = 1.15 - (i - 0.999) / (#anim - 0.998) * 0.3
-				G.E_MANAGER:add_event(Event({
-					trigger = "after",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'after',
 					delay = 0.15,
 					func = function()
 						anim[i]:flip()
-						play_sound("card1", percent)
+						play_sound('card1', percent)
 						anim[i]:juice_up(0.3, 0.3)
 						return true
 					end,
-				}))
+				})
 			end
 
 			delay(0.2)
 
 			for i = 1, #anim do
-				G.E_MANAGER:add_event(Event({
-					trigger = "after",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'after',
 					delay = 0.1,
 					func = function()
 						local card = anim[i]
-						local rank = pseudorandom_element(SMODS.Ranks, pseudoseed("HouseDeck")).card_key
-						local suit = pseudorandom_element(SMODS.Suits, pseudoseed("HouseDeck")).card_key
-						card:set_base(G.P_CARDS[suit .. "_" .. rank])
+						local rank = pseudorandom_element(SMODS.Ranks, pseudoseed 'HouseDeck').card_key
+						local suit = pseudorandom_element(SMODS.Suits, pseudoseed 'HouseDeck').card_key
+						card:set_base(G.P_CARDS[suit .. '_' .. rank])
 						if double then
 							if not card.edition then
-								local ed = SMODS.poll_edition({ key = "HouseDeck", no_negative = true })
+								local ed = SMODS.poll_edition { key = 'HouseDeck', no_negative = true }
 								if ed then
 									card:set_edition(ed)
 								end
 							end
 							if card.ability.name == G.P_CENTERS.c_base.name then
-								local en = SMODS.poll_enhancement({
-									type_key = "HouseDeck",
-								})
+								local en = SMODS.poll_enhancement {
+									type_key = 'HouseDeck',
+								}
 								if en then
 									card:set_ability(G.P_CENTERS[en])
 								end
 							end
 							if not card:get_seal(true) then
-								local se = SMODS.poll_seal({
-									type_key = "HouseDeck",
-								})
+								local se = SMODS.poll_seal {
+									type_key = 'HouseDeck',
+								}
 								if se then
 									card:set_seal(se)
 								end
@@ -222,24 +222,24 @@ local b_house = SMODS.Back({
 						end
 						return true
 					end,
-				}))
+				})
 				local percent = 0.85 + (i - 0.999) / (#anim - 0.998) * 0.3
-				G.E_MANAGER:add_event(Event({
-					trigger = "after",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'after',
 					delay = 0.15,
 					func = function()
 						anim[i]:flip()
-						play_sound("tarot2", percent, 0.6)
+						play_sound('tarot2', percent, 0.6)
 						anim[i]:juice_up(0.3, 0.3)
 						return true
 					end,
-				}))
+				})
 			end
 
 			delay(0.7)
 		end
 	end,
-})
+}
 
 -- KEEP_LITE
 Bakery_API.guard(function()
@@ -247,47 +247,47 @@ Bakery_API.guard(function()
 	-- For example, Egg is not on this list, since sell value can still matter for Swashbuckler or Ceremonial Dagger.
 	-- Neither is Midas Mask, since it can feed Vampire or Driver's License.
 	Bakery_API.econ_only_items = {
-		"j_delayed_grat",
-		"j_business",
-		"j_faceless",
-		"j_cloud_9",
-		"j_rocket",
-		"j_reserved_parking",
-		"j_mail",
-		"j_to_the_moon",
-		"j_golden",
-		"j_ticket",
-		"j_rough_gem",
-		"j_satellite",
-		"j_todo_list",
-		"j_Bakery_Auctioneer",
-		"v_seed_money",
-		"v_money_tree",
-		"c_hermit",
-		"c_temperance",
-		"tag_skip",
-		"tag_economy",
-		"tag_garbage",
-		"tag_handy",
-		"tag_Bakery_TopTag",
-		"tag_Bakery_BottomTag",
-		"BakeryCharm_Bakery_Coin",
-		"BakeryCharm_Bakery_Obsession",
-		"BakeryCharm_Bakery_Revolve",
-		"BakeryCharm_Bakery_Epitaph",
-		"BakeryCharm_Bakery_Fractal",
+		'j_delayed_grat',
+		'j_business',
+		'j_faceless',
+		'j_cloud_9',
+		'j_rocket',
+		'j_reserved_parking',
+		'j_mail',
+		'j_to_the_moon',
+		'j_golden',
+		'j_ticket',
+		'j_rough_gem',
+		'j_satellite',
+		'j_todo_list',
+		'j_Bakery_Auctioneer',
+		'v_seed_money',
+		'v_money_tree',
+		'c_hermit',
+		'c_temperance',
+		'tag_skip',
+		'tag_economy',
+		'tag_garbage',
+		'tag_handy',
+		'tag_Bakery_TopTag',
+		'tag_Bakery_BottomTag',
+		'BakeryCharm_Bakery_Coin',
+		'BakeryCharm_Bakery_Obsession',
+		'BakeryCharm_Bakery_Revolve',
+		'BakeryCharm_Bakery_Epitaph',
+		'BakeryCharm_Bakery_Fractal',
 	}
 end)
 -- END_KEEP_LITE
 
-local b_credit = SMODS.Back({
-	key = "Credit",
-	name = "Credit",
+local b_credit = SMODS.Back {
+	key = 'Credit',
+	name = 'Credit',
 	config = {
 		dollars = 200,
 		no_interest = true,
 	},
-	atlas = "Joker",
+	atlas = 'Joker',
 	prefix_config = {
 		atlas = false,
 	},
@@ -298,35 +298,35 @@ local b_credit = SMODS.Back({
 	unlocked = false,
 	discovered = false,
 	check_for_unlock = function(self, args)
-		local s, v = pcall(get_deck_win_stake, "b_yellow")
+		local s, v = pcall(get_deck_win_stake, 'b_yellow')
 		return s and v > 3
 	end,
 	locked_loc_vars = function(self, back)
-		if G.P_CENTERS["b_yellow"].discovered then
+		if G.P_CENTERS['b_yellow'].discovered then
 			return {
 				vars = {
-					localize({
-						type = "name_text",
-						key = "b_yellow",
-						set = "Back",
-					}),
-					localize({
-						type = "name_text",
-						set = "Stake",
-						key = "stake_black",
-					}),
+					localize {
+						type = 'name_text',
+						key = 'b_yellow',
+						set = 'Back',
+					},
+					localize {
+						type = 'name_text',
+						set = 'Stake',
+						key = 'stake_black',
+					},
 					colours = { G.C.BLACK },
 				},
 			}
 		end
 		return {
 			vars = {
-				localize("k_unknown"),
-				localize({
-					type = "name_text",
-					set = "Stake",
-					key = "stake_black",
-				}),
+				localize 'k_unknown',
+				localize {
+					type = 'name_text',
+					set = 'Stake',
+					key = 'stake_black',
+				},
 				colours = { G.C.BLACK },
 			},
 		}
@@ -347,12 +347,12 @@ local b_credit = SMODS.Back({
 			G.GAME.banned_keys[k] = true
 		end
 	end,
-})
+}
 
-local b_dn = SMODS.Back({
-	key = "DN",
-	name = "DN",
-	atlas = "BakeryBack",
+local b_dn = SMODS.Back {
+	key = 'DN',
+	name = 'DN',
+	atlas = 'BakeryBack',
 	pos = {
 		x = 3,
 		y = 0,
@@ -360,7 +360,7 @@ local b_dn = SMODS.Back({
 	apply = function(self, back)
 		G.GAME.modifiers.Bakery_advantage = (G.GAME.modifiers.Bakery_advantage or 0) + 1
 	end,
-})
+}
 
 local raw_SMODS_pseudorandom_probability = SMODS.pseudorandom_probability
 function SMODS.pseudorandom_probability(...)
@@ -375,18 +375,18 @@ function SMODS.pseudorandom_probability(...)
 end
 
 local function is_double_dominion()
-	return G.GAME.selected_sleeve == "sleeve_Bakery_Dominion"
+	return G.GAME.selected_sleeve == 'sleeve_Bakery_Dominion'
 		and ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key)
-			== "b_Bakery_Dominion"
+			== 'b_Bakery_Dominion'
 end
-local b_dominion = Bakery_API.credit(SMODS.Back({
-	key = "Dominion",
-	name = "Dominion",
+local b_dominion = Bakery_API.credit(SMODS.Back {
+	key = 'Dominion',
+	name = 'Dominion',
 	config = {
 		-- Global config
 		hand_size_penalty = 3,
 		joker_count = 3,
-		joker = "j_Bakery_Estate",
+		joker = 'j_Bakery_Estate',
 		-- Normal-only config
 		hand_size_per_period = 1,
 		ante_period = 2,
@@ -394,14 +394,14 @@ local b_dominion = Bakery_API.credit(SMODS.Back({
 			highest_ante_yet = 1,
 		},
 	},
-	atlas = "BakeryBack",
+	atlas = 'BakeryBack',
 	pos = {
 		x = 4,
 		y = 0,
 	},
-	artist = "Jack5",
-	coder = "Jack5",
-	idea = "Jack5",
+	artist = 'Jack5',
+	coder = 'Jack5',
+	idea = 'Jack5',
 	unlocked = false,
 	---Have at least 3 of any one Joker
 	check_for_unlock = function(self, args)
@@ -425,11 +425,11 @@ local b_dominion = Bakery_API.credit(SMODS.Back({
 			vars = {
 				self.config.hand_size_penalty,
 				self.config.joker_count,
-				localize({
-					type = "name_text",
+				localize {
+					type = 'name_text',
 					key = self.config.joker,
-					set = "Joker",
-				}),
+					set = 'Joker',
+				},
 				self.config.hand_size_per_period,
 				self.config.ante_period,
 			},
@@ -438,16 +438,16 @@ local b_dominion = Bakery_API.credit(SMODS.Back({
 	---Applies the initial effects of the Dominion Deck and Sleeve, those being:
 	---Start with -3 hand size and 3 Estate Jokers
 	apply = function(self, back)
-		G.E_MANAGER:add_event(Event({
+		G.E_MANAGER:add_event(Event {
 			func = function()
 				G.hand:change_size(-self.config.hand_size_penalty)
 				for _ = 1, self.config.joker_count do
-					local joker = create_card("Joker", nil, nil, nil, nil, nil, self.config.joker)
+					local joker = create_card('Joker', nil, nil, nil, nil, nil, self.config.joker)
 					G.jokers:emplace(joker)
 				end
 				return true
 			end,
-		}))
+		})
 	end,
 	---+1 hand size every 2 Antes
 	calculate = function(self, back, context)
@@ -465,7 +465,7 @@ local b_dominion = Bakery_API.credit(SMODS.Back({
 			self.config.extra.highest_ante_yet = G.GAME.round_resets.ante
 		end
 	end,
-}))
+})
 
 local function find_texas(x)
 	local res = {}
@@ -478,38 +478,38 @@ local function find_texas(x)
 	return res
 end
 
-local b_lone_star = Bakery_API.credit(SMODS.Back({
-	key = "LoneStar",
-	name = "LoneStar",
-	atlas = "BakeryBack",
-	idea = "RedsToad",
+local b_lone_star = Bakery_API.credit(SMODS.Back {
+	key = 'LoneStar',
+	name = 'LoneStar',
+	atlas = 'BakeryBack',
+	idea = 'RedsToad',
 	pos = { x = 5, y = 0 },
 	unlocked = false,
 	discovered = false,
 	check_for_unlock = function(self, args)
 		local a, b = pcall(function()
-			return get_deck_win_stake("b_Bakery_House") > 0
+			return get_deck_win_stake 'b_Bakery_House' > 0
 		end)
 		return a and b
 	end,
 	locked_loc_vars = function(self, back)
-		if G.P_CENTERS["b_Bakery_House"].discovered then
+		if G.P_CENTERS['b_Bakery_House'].discovered then
 			return {
 				vars = {
-					localize({
-						type = "name_text",
-						key = "b_Bakery_House",
-						set = "Back",
-					}),
+					localize {
+						type = 'name_text',
+						key = 'b_Bakery_House',
+						set = 'Back',
+					},
 				},
 			}
 		end
 		return {
-			vars = { localize("k_unknown") },
+			vars = { localize 'k_unknown' },
 		}
 	end,
 	apply = function()
-		G.E_MANAGER:add_event(Event({
+		G.E_MANAGER:add_event(Event {
 			func = function()
 				G.hand:change_size(-1)
 				G.hand.config.highlighted_limit = 1 / 0 -- Infinity
@@ -517,13 +517,13 @@ local b_lone_star = Bakery_API.credit(SMODS.Back({
 				G.GAME.Bakery_texas_hold_em_phase = 0
 				return true
 			end,
-		}))
+		})
 	end,
 	calculate = function(self, card, context)
 		if context.pre_discard then
 			G.GAME.Bakery_texas_hold_em_phase = G.GAME.Bakery_texas_hold_em_phase + 1
 			for _, card in pairs(find_texas(G.GAME.Bakery_texas_hold_em_phase)) do
-				if card.facing == "back" then
+				if card.facing == 'back' then
 					card:flip()
 				end
 			end
@@ -541,10 +541,10 @@ local b_lone_star = Bakery_API.credit(SMODS.Back({
 			G.hand:parse_highlighted()
 		end
 	end,
-}))
+})
 
 -- Queue this to put it after Anaglyph Lens (and any modded hooks)
-G.E_MANAGER:add_event(Event({
+G.E_MANAGER:add_event(Event {
 	blocking = false,
 	blockable = false,
 	no_delete = true,
@@ -561,8 +561,7 @@ G.E_MANAGER:add_event(Event({
 					for k = j + 1, #cards - 2 do
 						for l = k + 1, #cards - 1 do
 							for m = l + 1, #cards do
-								local res =
-									raw_evaluate_poker_hand({ cards[i], cards[j], cards[k], cards[l], cards[m] })
+								local res = raw_evaluate_poker_hand { cards[i], cards[j], cards[k], cards[l], cards[m] }
 								for k, v in pairs(res) do
 									results[k] = results[k] or {}
 									for _, v in ipairs(res[k]) do
@@ -586,7 +585,7 @@ G.E_MANAGER:add_event(Event({
 		end
 		return true
 	end,
-}))
+})
 
 local raw_Blind_stay_flipped = Blind.stay_flipped
 function Blind:stay_flipped(to, card, from, ...)
@@ -639,7 +638,7 @@ local raw_G_FUNCS_can_play = G.FUNCS.can_play
 function G.FUNCS.can_play(e, ...)
 	if G.GAME.modifiers.Bakery_texas_hold_em then
 		e.config.colour = G.C.BLUE
-		e.config.button = "Bakery_play_texas_hold_em"
+		e.config.button = 'Bakery_play_texas_hold_em'
 		return
 	end
 
@@ -665,7 +664,7 @@ function CardArea:parse_highlighted(...)
 	local any_backwards = false
 	local all_backwards = true
 	for _, card in ipairs(self.cards) do
-		if card.facing ~= "back" then
+		if card.facing ~= 'back' then
 			visible[#visible + 1] = card
 			all_backwards = false
 		else
@@ -675,10 +674,10 @@ function CardArea:parse_highlighted(...)
 
 	G.boss_throw_hand = nil
 	local text, disp_text, poker_hands = G.FUNCS.get_poker_hand_info(visible)
-	if text == "NULL" then
+	if text == 'NULL' then
 		update_hand_text(
 			{ immediate = true, nopulse = true, delay = 0 },
-			{ mult = 0, chips = 0, level = "", handname = "" }
+			{ mult = 0, chips = 0, level = '', handname = '' }
 		)
 		for name, parameter in pairs(SMODS.Scoring_Parameters) do
 			update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { [name] = parameter.default_value })
@@ -693,16 +692,16 @@ function CardArea:parse_highlighted(...)
 	if all_backwards then
 		update_hand_text(
 			{ immediate = true, nopulse = nil, delay = 0 },
-			{ handname = "????", level = "?", mult = "?", chips = "?" }
+			{ handname = '????', level = '?', mult = '?', chips = '?' }
 		)
 		for name in pairs(SMODS.Scoring_Parameters) do
-			update_hand_text({ immediate = true, nopulse = nil, delay = 0 }, { [name] = "?" })
+			update_hand_text({ immediate = true, nopulse = nil, delay = 0 }, { [name] = '?' })
 		end
 		return
 	end
 
 	local function fix(x)
-		return any_backwards and localize({ type = "variable", key = "v_Bakery_value?", vars = { x } }) or x
+		return any_backwards and localize { type = 'variable', key = 'v_Bakery_value?', vars = { x } } or x
 	end
 
 	for name, parameter in pairs(SMODS.Scoring_Parameters) do
@@ -717,13 +716,13 @@ function CardArea:parse_highlighted(...)
 	})
 end
 
-local texas_atlas = SMODS.Atlas({
-	key = "BakeryTexas",
-	path = "BakeryTexas.png",
+local texas_atlas = SMODS.Atlas {
+	key = 'BakeryTexas',
+	path = 'BakeryTexas.png',
 	px = 71,
 	py = 95,
-})
-G.E_MANAGER:add_event(Event({
+}
+G.E_MANAGER:add_event(Event {
 	blocking = false,
 	blockable = false,
 	no_delete = true,
@@ -737,10 +736,10 @@ G.E_MANAGER:add_event(Event({
 		}
 		return true
 	end,
-}))
+})
 
-SMODS.DrawStep({
-	key = "texas_hold_em",
+SMODS.DrawStep {
+	key = 'texas_hold_em',
 	order = 47,
 	func = function(card, layer)
 		card.ability = card.ability or {}
@@ -751,74 +750,74 @@ SMODS.DrawStep({
 		---@type Sprite
 		local sticker = Bakery_API.texas_hold_em_stickers[card.ability.Bakery_texas_extra]
 		sticker.role.draw_major = card
-		sticker:draw_shader("dissolve", nil, nil, nil, card.children.center)
+		sticker:draw_shader('dissolve', nil, nil, nil, card.children.center)
 	end,
-})
+}
 
 if CardSleeves then
-	SMODS.Atlas({
-		key = "BakerySleeves",
-		path = "BakerySleeves.png",
+	SMODS.Atlas {
+		key = 'BakerySleeves',
+		path = 'BakerySleeves.png',
 		px = 73,
 		py = 95,
-	})
+	}
 
-	CardSleeves.Sleeve({
-		key = "Violet",
-		atlas = "BakerySleeves",
+	CardSleeves.Sleeve {
+		key = 'Violet',
+		atlas = 'BakerySleeves',
 		pos = {
 			x = 0,
 			y = 0,
 		},
 		unlocked = false,
 		unlock_condition = {
-			deck = "b_Bakery_Violet",
-			stake = "stake_black",
+			deck = 'b_Bakery_Violet',
+			stake = 'stake_black',
 		},
 		calculate = b_violet.calculate,
 		config = b_violet.config,
 		loc_vars = b_violet.loc_vars,
-	})
+	}
 
-	CardSleeves.Sleeve({
-		key = "House",
-		atlas = "BakerySleeves",
+	CardSleeves.Sleeve {
+		key = 'House',
+		atlas = 'BakerySleeves',
 		pos = {
 			x = 1,
 			y = 0,
 		},
 		unlocked = false,
 		unlock_condition = {
-			deck = "b_Bakery_House",
-			stake = "stake_red",
+			deck = 'b_Bakery_House',
+			stake = 'stake_red',
 		},
 		config = b_house.config,
 		calculate = function(self, sleeve, context)
-			if self.get_current_deck_key() ~= "b_Bakery_House" then
+			if self.get_current_deck_key() ~= 'b_Bakery_House' then
 				return b_house.calculate(self, sleeve, context)
 			end
 		end,
 		loc_vars = function(self)
-			if self.get_current_deck_key() ~= "b_Bakery_House" then
+			if self.get_current_deck_key() ~= 'b_Bakery_House' then
 				return b_house.loc_vars(self)
 			end
 			return {
-				key = self.key .. "_alt",
+				key = self.key .. '_alt',
 			}
 		end,
-	})
+	}
 
-	CardSleeves.Sleeve({
-		key = "Credit",
-		atlas = "BakerySleeves",
+	CardSleeves.Sleeve {
+		key = 'Credit',
+		atlas = 'BakerySleeves',
 		pos = {
 			x = 2,
 			y = 0,
 		},
 		unlocked = false,
 		unlock_condition = {
-			deck = "b_Bakery_Credit",
-			stake = "stake_black",
+			deck = 'b_Bakery_Credit',
+			stake = 'stake_black',
 		},
 		config = {
 			dollars = 200,
@@ -828,8 +827,8 @@ if CardSleeves then
 		loc_vars = function(self, info_queue, back)
 			local key = self.key
 			local dollars = self.config.dollars
-			if self.get_current_deck_key() == "b_Bakery_Credit" then
-				key = key .. "_alt"
+			if self.get_current_deck_key() == 'b_Bakery_Credit' then
+				key = key .. '_alt'
 				dollars = dollars + self.config.alt_dollars
 			end
 			return {
@@ -841,71 +840,71 @@ if CardSleeves then
 			G.GAME.modifiers.no_interest = true
 			b_credit.apply()
 			G.GAME.starting_params.dollars = G.GAME.starting_params.dollars + self.config.dollars
-			if self.get_current_deck_key() == "b_Bakery_Credit" then
+			if self.get_current_deck_key() == 'b_Bakery_Credit' then
 				G.GAME.starting_params.dollars = G.GAME.starting_params.dollars + self.config.alt_dollars
 			end
 		end,
 		calculate = function(self, sleeve, context)
-			if self.get_current_deck_key() == "b_Bakery_Credit" and context.context == "Bakery_after_press_play" then
-				G.E_MANAGER:add_event(Event({
-					trigger = "after",
+			if self.get_current_deck_key() == 'b_Bakery_Credit' and context.context == 'Bakery_after_press_play' then
+				G.E_MANAGER:add_event(Event {
+					trigger = 'after',
 					delay = 0.2,
 					func = function()
 						for i = 1, #G.play.cards do
-							G.E_MANAGER:add_event(Event({
+							G.E_MANAGER:add_event(Event {
 								func = function()
 									G.play.cards[i]:juice_up()
 									return true
 								end,
-							}))
+							})
 							ease_dollars(-1)
 							delay(0.23)
 						end
 						return true
 					end,
-				}))
+				})
 			end
 		end,
-	})
+	}
 
-	CardSleeves.Sleeve({
-		key = "DN",
-		atlas = "BakerySleeves",
+	CardSleeves.Sleeve {
+		key = 'DN',
+		atlas = 'BakerySleeves',
 		pos = {
 			x = 3,
 			y = 0,
 		},
 		unlocked = false,
 		unlock_condition = {
-			deck = "b_Bakery_DN",
-			stake = "stake_white",
+			deck = 'b_Bakery_DN',
+			stake = 'stake_white',
 		},
 		apply = b_dn.apply,
 		loc_vars = function(self)
-			if self.get_current_deck_key() == "b_Bakery_DN" then
+			if self.get_current_deck_key() == 'b_Bakery_DN' then
 				return {
-					key = self.key .. "_alt",
+					key = self.key .. '_alt',
 				}
 			end
 		end,
-	})
+	}
 
-	Bakery_API.credit(CardSleeves.Sleeve({
-		key = "Dominion",
-		atlas = "BakerySleeves",
+	Bakery_API.credit(CardSleeves.Sleeve {
+		key = 'Dominion',
+		atlas = 'BakerySleeves',
 		pos = {
 			x = 4,
 			y = 0,
 		},
-		artist = "Jack5",
-		coder = "Jack5",
-		idea = "Jack5",
+		artist = 'Jack5',
+		coder = 'Jack5',
+		idea = 'Jack5',
 		unlocked = false,
 		config = {
 			-- Global config
 			hand_size_penalty = 3,
 			joker_count = 3,
-			joker = "j_Bakery_Estate",
+			joker = 'j_Bakery_Estate',
 			-- Normal-only config
 			hand_size_per_period = 1,
 			ante_period = 2,
@@ -914,48 +913,48 @@ if CardSleeves then
 			},
 			-- Combo config
 			vouchers = {
-				"v_magic_trick",
-				"v_illusion",
+				'v_magic_trick',
+				'v_illusion',
 			},
 			combo_cards_count = 7,
 		},
 		unlock_condition = {
-			deck = "b_Bakery_Dominion",
-			stake = "stake_white",
+			deck = 'b_Bakery_Dominion',
+			stake = 'stake_white',
 		},
 		loc_vars = function(self, info_queue, back)
 			local key = self.key
 			local vars = {
 				self.config.hand_size_penalty,
 				self.config.joker_count,
-				localize({
-					type = "name_text",
+				localize {
+					type = 'name_text',
 					key = self.config.joker,
-					set = "Joker",
-				}),
+					set = 'Joker',
+				},
 			}
 			-- Normal-only localisation
-			if self.get_current_deck_key() ~= "b_Bakery_Dominion" then
+			if self.get_current_deck_key() ~= 'b_Bakery_Dominion' then
 				table.insert(vars, self.config.hand_size_per_period)
 				table.insert(vars, self.config.ante_period)
 			else -- Combo localisation
-				key = key .. "_alt"
+				key = key .. '_alt'
 				table.insert(vars, self.config.combo_cards_count)
 				table.insert(
 					vars,
-					localize({
-						type = "name_text",
+					localize {
+						type = 'name_text',
 						key = self.config.vouchers[1],
-						set = "Voucher",
-					})
+						set = 'Voucher',
+					}
 				)
 				table.insert(
 					vars,
-					localize({
-						type = "name_text",
+					localize {
+						type = 'name_text',
 						key = self.config.vouchers[2],
-						set = "Voucher",
-					})
+						set = 'Voucher',
+					}
 				)
 			end
 			return {
@@ -968,13 +967,13 @@ if CardSleeves then
 				return b_dominion.apply(self, back)
 			end
 			-- Combo effects: Start with -3 hand size, 3 Estate Jokers, 7 total cards and Illusion Voucher
-			G.E_MANAGER:add_event(Event({
+			G.E_MANAGER:add_event(Event {
 				func = function()
 					-- Remove all but 7 cards
 					local keep_cards = {}
 					local kept = 0
 					while kept < self.config.combo_cards_count do
-						local keep_card = pseudorandom_element(G.playing_cards, pseudoseed("Nothin'ButCoppers"))
+						local keep_card = pseudorandom_element(G.playing_cards, pseudoseed "Nothin'ButCoppers")
 						if not keep_cards[keep_card] then
 							keep_cards[keep_card] = true
 							kept = kept + 1
@@ -987,57 +986,57 @@ if CardSleeves then
 					end
 					return true
 				end,
-			}))
+			})
 			for k, v in pairs(self.config.vouchers) do
 				G.GAME.used_vouchers[v] = true
 				G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 1
-				G.E_MANAGER:add_event(Event({
+				G.E_MANAGER:add_event(Event {
 					func = function()
 						Card.apply_to_run(nil, G.P_CENTERS[v])
 						return true
 					end,
-				}))
+				})
 			end
 		end,
 		calculate = b_dominion.calculate,
-	}))
+	})
 
-	Bakery_API.credit(CardSleeves.Sleeve({
-		key = "United",
-		atlas = "BakerySleeves",
-		idea = "RedsToad",
+	Bakery_API.credit(CardSleeves.Sleeve {
+		key = 'United',
+		atlas = 'BakerySleeves',
+		idea = 'RedsToad',
 		pos = {
 			x = 5,
 			y = 0,
 		},
 		unlocked = false,
 		unlock_condition = {
-			deck = "b_Bakery_LoneStar",
-			stake = "stake_white",
+			deck = 'b_Bakery_LoneStar',
+			stake = 'stake_white',
 		},
 		loc_vars = function(self)
 			local key = self.key
-			if self.get_current_deck_key() == "b_Bakery_LoneStar" then
-				key = key .. "_alt"
+			if self.get_current_deck_key() == 'b_Bakery_LoneStar' then
+				key = key .. '_alt'
 			end
 			return { key = key, vars = { 2 } }
 		end,
 		apply = function(self)
-			if self.get_current_deck_key() == "b_Bakery_LoneStar" then
-				G.E_MANAGER:add_event(Event({
+			if self.get_current_deck_key() == 'b_Bakery_LoneStar' then
+				G.E_MANAGER:add_event(Event {
 					func = function()
 						G.hand:change_size(2)
 						return true
 					end,
-				}))
+				})
 			else
 				b_lone_star.apply()
 			end
 		end,
 		calculate = function(self, ...)
-			if self.get_current_deck_key() ~= "b_Bakery_LoneStar" then
+			if self.get_current_deck_key() ~= 'b_Bakery_LoneStar' then
 				b_lone_star.calculate(self, ...)
 			end
 		end,
-	}))
+	})
 end

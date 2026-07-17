@@ -1,20 +1,20 @@
-SMODS.Atlas({
-	key = "BakeryBlinds",
-	path = "BakeryBlinds.png",
+SMODS.Atlas {
+	key = 'BakeryBlinds',
+	path = 'BakeryBlinds.png',
 	px = 34,
 	py = 34,
-	atlas_table = "ANIMATION_ATLAS",
+	atlas_table = 'ANIMATION_ATLAS',
 	frames = 21,
-})
+}
 
-SMODS.Blind({
-	key = "Aleph", -- The Leader
-	atlas = "BakeryBlinds",
+SMODS.Blind {
+	key = 'Aleph', -- The Leader
+	atlas = 'BakeryBlinds',
 	boss = {
 		min = 3,
 		max = 0,
 	},
-	boss_colour = HEX("a9e74b"),
+	boss_colour = HEX 'a9e74b',
 	-- -1 Hand, -1 Discard
 	set_blind = function(self, blind)
 		ease_discard(-1)
@@ -24,11 +24,11 @@ SMODS.Blind({
 		ease_discard(1)
 		ease_hands_played(1)
 	end,
-})
+}
 
-SMODS.Blind({
-	key = "Tsadi", -- The Attrition
-	atlas = "BakeryBlinds",
+SMODS.Blind {
+	key = 'Tsadi', -- The Attrition
+	atlas = 'BakeryBlinds',
 	pos = {
 		y = 1,
 	},
@@ -36,7 +36,7 @@ SMODS.Blind({
 		min = 3,
 		max = 0,
 	},
-	boss_colour = HEX("ff004b"),
+	boss_colour = HEX 'ff004b',
 	-- -(Ante*5) Mult before scoring
 	config = {
 		extra = {
@@ -46,11 +46,11 @@ SMODS.Blind({
 	collection_loc_vars = function(self)
 		return {
 			vars = {
-				localize({
-					type = "variable",
-					key = "b_Bakery_ante_times",
+				localize {
+					type = 'variable',
+					key = 'b_Bakery_ante_times',
 					vars = { self.config.extra.scale },
-				}),
+				},
 			},
 		}
 	end,
@@ -67,11 +67,11 @@ SMODS.Blind({
 			blind.triggered = true
 		end
 	end,
-})
+}
 
-SMODS.Blind({
-	key = "He", -- The Solo
-	atlas = "BakeryBlinds",
+SMODS.Blind {
+	key = 'He', -- The Solo
+	atlas = 'BakeryBlinds',
 	pos = {
 		y = 2,
 	},
@@ -79,7 +79,7 @@ SMODS.Blind({
 		min = 3,
 		max = 0,
 	},
-	boss_colour = HEX("ffd78e"),
+	boss_colour = HEX 'ffd78e',
 	-- Only one card scores
 	calculate = function(self, blind, context)
 		if context.modify_scoring_hand and not blind.disabled then
@@ -97,11 +97,11 @@ SMODS.Blind({
 			end
 		end
 	end,
-})
+}
 
-SMODS.Blind({
-	key = "Qof", -- The Witch
-	atlas = "BakeryBlinds",
+SMODS.Blind {
+	key = 'Qof', -- The Witch
+	atlas = 'BakeryBlinds',
 	pos = {
 		y = 3,
 	},
@@ -109,10 +109,10 @@ SMODS.Blind({
 		min = 2,
 		max = 0,
 	},
-	boss_colour = HEX("e9b4ff"),
+	boss_colour = HEX 'e9b4ff',
 	-- Adds (Ante) curses to your deck
 	collection_loc_vars = function(self)
-		return { vars = { localize("b_Bakery_ante") } }
+		return { vars = { localize 'b_Bakery_ante' } }
 	end,
 	loc_vars = function(self)
 		return { vars = { G.GAME.round_resets.ante } }
@@ -120,7 +120,7 @@ SMODS.Blind({
 	set_blind = function(self)
 		local cards = {}
 		for _ = 1, G.GAME.round_resets.ante do
-			local front = pseudorandom_element(G.P_CARDS, pseudoseed("bl_Bakery_Qof"))
+			local front = pseudorandom_element(G.P_CARDS, pseudoseed 'bl_Bakery_Qof')
 			G.playing_card = (G.playing_card and G.playing_card + 1) or 1
 			local card = Card(
 				G.discard.T.x + G.discard.T.w / 2,
@@ -131,41 +131,41 @@ SMODS.Blind({
 				G.P_CENTERS.m_Bakery_Curse,
 				{ playing_card = G.playing_card }
 			)
-			G.E_MANAGER:add_event(Event({
+			G.E_MANAGER:add_event(Event {
 				func = function()
-					card:start_materialize({ G.C.SECONDARY_SET.Enhanced })
+					card:start_materialize { G.C.SECONDARY_SET.Enhanced }
 					G.play:emplace(card)
 					table.insert(G.playing_cards, card)
 					return true
 				end,
-			}))
-			G.E_MANAGER:add_event(Event({
+			})
+			G.E_MANAGER:add_event(Event {
 				func = function()
 					G.deck.config.card_limit = G.deck.config.card_limit + 1
 					return true
 				end,
-			}))
+			})
 			cards[#cards + 1] = card
 		end
 
 		for i = 1, G.GAME.round_resets.ante do
-			draw_card(G.play, G.deck, 90 + i, "up", nil)
+			draw_card(G.play, G.deck, 90 + i, 'up', nil)
 		end
 		playing_card_joker_effects(cards)
 	end,
 	disable = function(self)
-		G.E_MANAGER:add_event(Event({
+		G.E_MANAGER:add_event(Event {
 			func = function()
 				local done = {}
 				for _, card in pairs(G.playing_cards) do
-					if card.config.center.key == "m_Bakery_Curse" and not card.getting_sliced then
+					if card.config.center.key == 'm_Bakery_Curse' and not card.getting_sliced then
 						card.getting_sliced = true
-						G.E_MANAGER:add_event(Event({
+						G.E_MANAGER:add_event(Event {
 							func = function()
 								card.area:remove_card(card):start_dissolve()
 								return true
 							end,
-						}))
+						})
 						done[#done + 1] = card
 						if #done >= G.GAME.round_resets.ante then
 							break
@@ -173,17 +173,17 @@ SMODS.Blind({
 					end
 				end
 				if #done > 0 then
-					SMODS.calculate_context({ remove_playing_cards = true, removed = done })
+					SMODS.calculate_context { remove_playing_cards = true, removed = done }
 				end
 				return true
 			end,
-		}))
+		})
 	end,
-})
+}
 
-SMODS.Blind({
-	key = "Kaf", -- The Build
-	atlas = "BakeryBlinds",
+SMODS.Blind {
+	key = 'Kaf', -- The Build
+	atlas = 'BakeryBlinds',
 	pos = {
 		y = 4,
 	},
@@ -191,7 +191,7 @@ SMODS.Blind({
 		min = 2,
 		max = 0,
 	},
-	boss_colour = HEX("93a9ff"),
+	boss_colour = HEX '93a9ff',
 	-- No base chips
 	modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
 		return mult, 0, hand_chips ~= 0
@@ -201,11 +201,11 @@ SMODS.Blind({
 			blind.triggered = true
 		end
 	end,
-})
+}
 
-Bakery_API.credit(SMODS.Blind({
-	key = "Samekh", -- The Ruler
-	atlas = "BakeryBlinds",
+Bakery_API.credit(SMODS.Blind {
+	key = 'Samekh', -- The Ruler
+	atlas = 'BakeryBlinds',
 	pos = {
 		y = 5,
 	},
@@ -213,10 +213,10 @@ Bakery_API.credit(SMODS.Blind({
 		min = 3,
 		max = 0,
 	},
-	boss_colour = HEX("eaba23"),
-	artist = "Jack5",
-	coder = "Jack5",
-	idea = "Jack5",
+	boss_colour = HEX 'eaba23',
+	artist = 'Jack5',
+	coder = 'Jack5',
+	idea = 'Jack5',
 	-- Cards with no rank or suit are debuffed
 	recalc_debuff = function(self, card, from_blind)
 		local debuff = not G.GAME.blind.disabled
@@ -244,4 +244,4 @@ Bakery_API.credit(SMODS.Blind({
 		end
 		return false
 	end,
-}))
+})

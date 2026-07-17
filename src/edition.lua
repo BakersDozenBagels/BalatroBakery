@@ -1,11 +1,11 @@
-SMODS.Shader({
-	key = "Bakery_Carbon",
-	path = "Bakery_Carbon.fs",
-})
+SMODS.Shader {
+	key = 'Bakery_Carbon',
+	path = 'Bakery_Carbon.fs',
+}
 
-SMODS.Edition({
-	key = "Carbon",
-	shader = "Bakery_Carbon",
+SMODS.Edition {
+	key = 'Carbon',
+	shader = 'Bakery_Carbon',
 	weight = 0,
 	calculate = function(self, card, context)
 		if
@@ -16,7 +16,7 @@ SMODS.Edition({
 			and (not card.area or card.area ~= G.hand)
 			and not card.ability.eternal
 		then
-			G.E_MANAGER:add_event(Event({
+			G.E_MANAGER:add_event(Event {
 				func = function()
 					if SMODS.shatters(card) then
 						card:shatter()
@@ -25,7 +25,7 @@ SMODS.Edition({
 					end
 					return true
 				end,
-			}))
+			})
 		end
 		if
 			not card.debuff
@@ -41,4 +41,4 @@ SMODS.Edition({
 	in_pool = function()
 		return false
 	end,
-})
+}

@@ -19,13 +19,13 @@ Bakery_API.guard(function()
 		return raw_ipairs(t)
 	end
 
-	sendInfoMessage("pairs() and ipairs() patched. Reason: Convenience", "Bakery")
+	sendInfoMessage('pairs() and ipairs() patched. Reason: Convenience', 'Bakery')
 
 	--- Adds a `Length` key to the table which reports the number of other keys contained within.
 	---@param table table @The table to modify.
 	---@param key string @The key to use. Defaults to `Length`
 	function Bakery_API.sized_table(table, key, ...)
-		key = key or "Length"
+		key = key or 'Length'
 		local count = 0
 		for _ in pairs(table) do
 			count = count + 1
@@ -111,7 +111,7 @@ Bakery_API.guard(function()
 	---@param table table @The table to modify.
 	---@return table, function, ...
 	function Bakery_API.reset_table(table, ...)
-		key = key or "Reset"
+		key = key or 'Reset'
 		local function reset()
 			table = {}
 		end
@@ -167,9 +167,9 @@ Bakery_API.guard(function()
 
 		for i = 1, #G.GAME.tags do
 			apply(
-				G.GAME.tags[i]:apply_to_run({
-					type = "Bakery_play_hand_early",
-				}),
+				G.GAME.tags[i]:apply_to_run {
+					type = 'Bakery_play_hand_early',
+				},
 				G.GAME.tags[i]
 			)
 		end
@@ -188,26 +188,26 @@ Bakery_API.guard(function()
 				chips = anim.chips,
 			})
 			if not skip then
-				G.E_MANAGER:add_event(Event({
-					trigger = "before",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'before',
 					delay = 0.75,
 					func = function()
-						attention_text({
-							text = localize({
-								type = "variable",
-								key = "a_chips",
+						attention_text {
+							text = localize {
+								type = 'variable',
+								key = 'a_chips',
 								vars = { anim.d_chips },
-							}),
+							},
 							hold = 0.55,
 							backdrop_colour = G.C.CHIPS,
 							major = anim.card.HUD_tag,
-						})
-						play_sound("chips1", 0.845 + 0.04 * math.random(), 1)
+						}
+						play_sound('chips1', 0.845 + 0.04 * math.random(), 1)
 						anim.card:juice_up(0.6, 0.1)
 						G.ROOM.jiggle = G.ROOM.jiggle + 0.7
 						return true
 					end,
-				}))
+				})
 			end
 		end
 		if anim.d_mult and anim.d_mult ~= 0 then
@@ -220,27 +220,27 @@ Bakery_API.guard(function()
 				mult = (anim.x_mult and anim.mult / anim.x_mult) or anim.mult,
 			})
 			if not skip then
-				G.E_MANAGER:add_event(Event({
-					trigger = "before",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'before',
 					delay = 0.8125,
 					func = function()
-						attention_text({
-							text = localize({
-								type = "variable",
-								key = "a_mult",
+						attention_text {
+							text = localize {
+								type = 'variable',
+								key = 'a_mult',
 								vars = { anim.d_mult },
-							}),
+							},
 							scale = 0.7,
 							hold = 0.6125,
 							backdrop_colour = G.C.MULT,
 							major = anim.card.HUD_tag,
-						})
-						play_sound("multhit1", 0.845 + 0.04 * math.random(), 1)
+						}
+						play_sound('multhit1', 0.845 + 0.04 * math.random(), 1)
 						anim.card:juice_up(0.6, 0.1)
 						G.ROOM.jiggle = G.ROOM.jiggle + 0.7
 						return true
 					end,
-				}))
+				})
 			end
 		end
 		if anim.x_mult and anim.x_mult ~= 0 then
@@ -253,27 +253,27 @@ Bakery_API.guard(function()
 				mult = anim.mult,
 			})
 			if not skip then
-				G.E_MANAGER:add_event(Event({
-					trigger = "before",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'before',
 					delay = 0.8125,
 					func = function()
-						attention_text({
-							text = localize({
-								type = "variable",
-								key = "a_xmult",
+						attention_text {
+							text = localize {
+								type = 'variable',
+								key = 'a_xmult',
 								vars = { anim.x_mult },
-							}),
+							},
 							scale = 0.7,
 							hold = 0.6125,
 							backdrop_colour = G.C.XMULT,
 							major = anim.card.HUD_tag,
-						})
-						play_sound("multhit2", 0.845 + 0.04 * math.random(), 0.7)
+						}
+						play_sound('multhit2', 0.845 + 0.04 * math.random(), 0.7)
 						anim.card:juice_up(0.6, 0.1)
 						G.ROOM.jiggle = G.ROOM.jiggle + 0.7
 						return true
 					end,
-				}))
+				})
 			end
 		end
 		if anim.dollars and anim.dollars ~= 0 then
@@ -282,25 +282,25 @@ Bakery_API.guard(function()
 			end
 			ease_dollars(anim.dollars)
 			if not skip then
-				G.E_MANAGER:add_event(Event({
-					trigger = "before",
+				G.E_MANAGER:add_event(Event {
+					trigger = 'before',
 					delay = 0.8125,
 					func = function()
-						attention_text({
-							text = (anim.dollars < -0.01 and "-" or "") .. localize("$") .. tostring(
+						attention_text {
+							text = (anim.dollars < -0.01 and '-' or '') .. localize '$' .. tostring(
 								math.abs(anim.dollars)
 							),
 							scale = 1,
 							hold = 0.6125,
 							backdrop_colour = anim.dollars < -0.01 and G.C.RED or G.C.MONEY,
 							major = anim.card.HUD_tag,
-						})
-						play_sound("coin3", 0.845 + 0.04 * math.random(), 0.7)
+						}
+						play_sound('coin3', 0.845 + 0.04 * math.random(), 0.7)
 						anim.card:juice_up(0.6, 0.1)
 						G.ROOM.jiggle = G.ROOM.jiggle + 0.7
 						return true
 					end,
-				}))
+				})
 			end
 		end
 		if anim.after then
@@ -325,13 +325,13 @@ Bakery_API.guard(function()
 	end
 
 	function Back:trigger_effect(args)
-		if args.context == "final_scoring_step" then
+		if args.context == 'final_scoring_step' then
 			local function handle(ret, tag)
 				if ret ~= nil then
 					args.chips = mod_chips(args.chips + (ret.chips or 0))
 					args.mult = mod_mult(args.mult + (ret.mult or 0))
 					args.mult = mod_mult(args.mult * (ret.x_mult or 1))
-					run_animation({
+					run_animation {
 						d_mult = ret.mult,
 						x_mult = ret.x_mult,
 						mult = args.mult,
@@ -339,7 +339,7 @@ Bakery_API.guard(function()
 						chips = args.chips,
 						card = ret.tag or tag,
 						after = ret.after,
-					})
+					}
 				end
 			end
 
@@ -348,19 +348,19 @@ Bakery_API.guard(function()
 					for j = 1, #G.jokers.cards do
 						if not G.jokers.cards[j].debufffed then
 							handle(
-								G.jokers.cards[j]:calculate_joker({
+								G.jokers.cards[j]:calculate_joker {
 									Bakery_calculate_tags_late = true,
 									tag = G.GAME.tags[i],
-								}),
+								},
 								G.GAME.tags[i]
 							)
 						end
 					end
 				end
 				handle(
-					G.GAME.tags[i]:apply_to_run({
-						type = "Bakery_play_hand_late",
-					}),
+					G.GAME.tags[i]:apply_to_run {
+						type = 'Bakery_play_hand_late',
+					},
 					G.GAME.tags[i]
 				)
 			end
@@ -371,8 +371,8 @@ Bakery_API.guard(function()
 	end
 
 	sendInfoMessage(
-		"Blind:modify_hand(), update_hand_text(), and Back:trigger_effect() patched. Reason: Scoring tags",
-		"Bakery"
+		'Blind:modify_hand(), update_hand_text(), and Back:trigger_effect() patched. Reason: Scoring tags',
+		'Bakery'
 	)
 
 	-- END_KEEP_LITE
@@ -433,7 +433,7 @@ Bakery_API.guard(function()
 	local raw_Tag_load = Tag.load
 	function Tag:load(tbl)
 		raw_Tag_load(self, tbl)
-		if tbl.key == "tag_Bakery_PolyTag" or tbl.key == "tag_BakeryAntiTag" then
+		if tbl.key == 'tag_Bakery_PolyTag' or tbl.key == 'tag_BakeryAntiTag' then
 			setmetatable(self, PolyTag)
 		end
 	end
@@ -442,25 +442,25 @@ Bakery_API.guard(function()
 	function Object:__call(...)
 		local arg = { ... }
 		if self == Tag then
-			if arg[1] == "tag_Bakery_PolyTag" and (G.P_TAGS.tag_Bakery_PolyTag.discovered or not arg[2]) then
+			if arg[1] == 'tag_Bakery_PolyTag' and (G.P_TAGS.tag_Bakery_PolyTag.discovered or not arg[2]) then
 				local ret = raw_Object_call(PolyTag, ...)
-				ret.ability.shader = "polychrome"
+				ret.ability.shader = 'polychrome'
 				return ret
 			end
-			if arg[1] == "tag_Bakery_AntiTag" and (G.P_TAGS.tag_Bakery_AntiTag.discovered or not arg[2]) then
+			if arg[1] == 'tag_Bakery_AntiTag' and (G.P_TAGS.tag_Bakery_AntiTag.discovered or not arg[2]) then
 				local ret = raw_Object_call(PolyTag, ...)
-				ret.ability.shader = "negative"
+				ret.ability.shader = 'negative'
 				return ret
 			end
 		end
 		return raw_Object_call(self, ...)
 	end
 
-	sendInfoMessage("Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag", "Bakery")
+	sendInfoMessage('Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag', 'Bakery')
 	-- KEEP_LITE
 
 	-- Maps the keys of Blinds to how many times they've been defeated this session.
-	local defeated_blinds, defeated_blinds_reset = Bakery_API.reset_table({})
+	local defeated_blinds, defeated_blinds_reset = Bakery_API.reset_table {}
 	Bakery_API.defeated_blinds = Bakery_API.aggressive_default_table(defeated_blinds, 0)
 
 	local raw_Blind_defeat = Blind.defeat
@@ -471,11 +471,11 @@ Bakery_API.guard(function()
 		end
 
 		for _, v in ipairs(G.jokers.cards) do
-			if v.config.center.key == "j_Bakery_CardSleeve" and v.ability.extra.occupied then
+			if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.occupied then
 				local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
 				if area then
 					for _, c in ipairs(area.cards) do
-						if c.facing == "back" then
+						if c.facing == 'back' then
 							c:flip()
 						end
 					end
@@ -490,7 +490,7 @@ Bakery_API.guard(function()
 		raw_G_FUNCS_load_profile(...)
 	end
 
-	sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
+	sendInfoMessage('Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions', 'Bakery')
 
 	-- Any deck or card sleeve whose key is true in this table will receive no money from any source.
 	Bakery_API.no_money_decks = {
@@ -500,17 +500,17 @@ Bakery_API.guard(function()
 
 	function Bakery_API.to_number(num) -- This shouldn't be necessary, but Talisman's __lt and __gt aren't working against numbers for whatever reason
 		sendWarnMessage(
-			"Bakery_API.to_number() is deprecated and will be removed in a future release of Bakery.",
-			"Bakery"
+			'Bakery_API.to_number() is deprecated and will be removed in a future release of Bakery.',
+			'Bakery'
 		)
-		if type(num) == "table" then
+		if type(num) == 'table' then
 			return num:to_number()
 		end
 		return num
 	end
 
 	function Bakery_API.big(x)
-		return to_big and type(to_big) == "function" and to_big(x) or x
+		return to_big and type(to_big) == 'function' and to_big(x) or x
 	end
 
 	local raw_ease_dollars = ease_dollars
@@ -531,76 +531,76 @@ Bakery_API.guard(function()
 		end
 
 		local function _mod()
-			local dollar_UI = G.HUD:get_UIE_by_ID("dollar_text_UI")
-			attention_text({
-				text = localize("k_nope_ex"),
+			local dollar_UI = G.HUD:get_UIE_by_ID 'dollar_text_UI'
+			attention_text {
+				text = localize 'k_nope_ex',
 				scale = 0.8,
 				hold = 0.7,
 				cover = dollar_UI.parent,
 				cover_colour = G.C.RED,
-				align = "cm",
+				align = 'cm',
 				silent = true,
-			})
-			G.E_MANAGER:add_event(Event({
-				trigger = "after",
+			}
+			G.E_MANAGER:add_event(Event {
+				trigger = 'after',
 				delay = 0.06 * G.SETTINGS.GAMESPEED,
 				blockable = false,
 				blocking = false,
 				func = function()
-					play_sound("tarot2", 0.76, 0.4)
+					play_sound('tarot2', 0.76, 0.4)
 					return true
 				end,
-			}))
-			play_sound("tarot2", 1, 0.4)
+			})
+			play_sound('tarot2', 1, 0.4)
 		end
 		if instant then
 			_mod()
 		else
-			G.E_MANAGER:add_event(Event({
-				trigger = "immediate",
+			G.E_MANAGER:add_event(Event {
+				trigger = 'immediate',
 				func = function()
 					_mod()
 					return true
 				end,
-			}))
+			})
 		end
 	end
 
-	sendInfoMessage("ease_dollars() patched. Reason: Credit Deck, Vagabond Challenge", "Bakery")
+	sendInfoMessage('ease_dollars() patched. Reason: Credit Deck, Vagabond Challenge', 'Bakery')
 
 	local raw_Blind_press_play = Blind.press_play
 	function Blind:press_play()
 		raw_Blind_press_play(self)
 
-		local sleeve = CardSleeves and CardSleeves.Sleeve:get_obj(G.GAME.selected_sleeve or "sleeve_casl_none")
-		if sleeve and type(sleeve.calculate) == "function" then
+		local sleeve = CardSleeves and CardSleeves.Sleeve:get_obj(G.GAME.selected_sleeve or 'sleeve_casl_none')
+		if sleeve and type(sleeve.calculate) == 'function' then
 			sleeve:calculate(sleeve, {
-				context = "Bakery_after_press_play",
+				context = 'Bakery_after_press_play',
 			})
 		end
 	end
 
-	sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve", "Bakery")
+	sendInfoMessage('Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve', 'Bakery')
 
 	Bakery_API.double_sided_jokers = setmetatable({}, {
 		__index = function(_, k)
 			sendWarnMessage(
 				"Accessing Bakery_API.double_sided_jokers is deprecated. Use Card:has_attribute('bakery_double_sided') instead.",
-				"Bakery"
+				'Bakery'
 			)
 			return (G.P_CENTERS[k].attributes or {}).bakery_double_sided
 		end,
 		__newindex = function(_, k, v)
 			sendWarnMessage(
 				"Accessing Bakery_API.double_sided_jokers is deprecated. Add the 'bakery_double_sided' attribute instead.",
-				"Bakery"
+				'Bakery'
 			)
 			if v == true then
 				G.P_CENTERS[k].attributes = G.P_CENTERS[k].attributes or {}
-				G.P_CENTERS[k].attributes[#G.P_CENTERS[k].attributes + 1] = "bakery_double_sided"
+				G.P_CENTERS[k].attributes[#G.P_CENTERS[k].attributes + 1] = 'bakery_double_sided'
 				G.P_CENTERS[k].attributes.bakery_double_sided = true
 				SMODS.Attributes.bakery_double_sided.keys =
-					SMODS.merge_lists({ SMODS.Attributes.bakery_double_sided.keys or {}, { k } })
+					SMODS.merge_lists { SMODS.Attributes.bakery_double_sided.keys or {}, { k } }
 			end
 		end,
 	})
@@ -609,37 +609,37 @@ Bakery_API.guard(function()
 		__index = function(_, k)
 			sendWarnMessage(
 				"Accessing Bakery_API.werewolves is deprecated. Use Card:has_attribute('bakery_werewolf') instead.",
-				"Bakery"
+				'Bakery'
 			)
 			return (G.P_CENTERS[k].attributes or {}).bakery_werewolf
 		end,
 		__newindex = function(_, k, v)
 			sendWarnMessage(
 				"Accessing Bakery_API.werewolves is deprecated. Add the 'bakery_werewolf' attribute instead.",
-				"Bakery"
+				'Bakery'
 			)
 			if v == true then
 				G.P_CENTERS[k].attributes = G.P_CENTERS[k].attributes or {}
-				G.P_CENTERS[k].attributes[#G.P_CENTERS[k].attributes + 1] = "bakery_werewolf"
+				G.P_CENTERS[k].attributes[#G.P_CENTERS[k].attributes + 1] = 'bakery_werewolf'
 				G.P_CENTERS[k].attributes.bakery_werewolf = true
 				SMODS.Attributes.bakery_werewolf.keys =
-					SMODS.merge_lists({ SMODS.Attributes.bakery_werewolf.keys or {}, { k } })
+					SMODS.merge_lists { SMODS.Attributes.bakery_werewolf.keys or {}, { k } }
 			end
 		end,
 	})
 
 	-- Flips a double-sided card.
 	function Bakery_API.flip_double_sided(card)
-		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_FullMoon" and not G.Bakery_charm_area.cards[1].ability.extra then
-			G.E_MANAGER:add_event(Event({
-				trigger = "before",
+		if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon' and not G.Bakery_charm_area.cards[1].ability.extra then
+			G.E_MANAGER:add_event(Event {
+				trigger = 'before',
 				delay = 0.2,
 				func = function()
 					card:juice_up(0.3, 0.3)
 					G.Bakery_charm_area.cards[1]:juice_up(0.3, 0.3)
 					return true
 				end,
-			}))
+			})
 			return
 		end
 
@@ -648,19 +648,19 @@ Bakery_API.guard(function()
 		end
 
 		card.ability.extra.flipping = true
-		G.E_MANAGER:add_event(Event({
-			trigger = "before",
+		G.E_MANAGER:add_event(Event {
+			trigger = 'before',
 			delay = 0.2,
 			func = function()
-				play_sound("tarot1")
-				play_sound("card1")
+				play_sound 'tarot1'
+				play_sound 'card1'
 				card.pinch.x = true
 				card.flipping = nil
 				return true
 			end,
-		}))
-		G.E_MANAGER:add_event(Event({
-			trigger = "immediate",
+		})
+		G.E_MANAGER:add_event(Event {
+			trigger = 'immediate',
 			func = function()
 				if card.REMOVED then
 					return true
@@ -673,22 +673,22 @@ Bakery_API.guard(function()
 				end
 				return false
 			end,
-		}))
-		G.E_MANAGER:add_event(Event({
-			trigger = "immediate",
+		})
+		G.E_MANAGER:add_event(Event {
+			trigger = 'immediate',
 			blocking = false,
 			func = function()
 				if card.REMOVED then
 					return true
 				end
 				if card.VT.w >= card.T.w then
-					play_sound("tarot2")
+					play_sound 'tarot2'
 					card:juice_up(0.3, 0.3)
 					return true
 				end
 				return false
 			end,
-		}))
+		})
 	end
 
 	function Bakery_API.werewolf_ui(back_key)
@@ -716,13 +716,13 @@ Bakery_API.guard(function()
 		if
 			self.config.center
 			and (self.config.center.discovered or self.params.bypass_discovery_center)
-			and self:has_attribute("bakery_double_sided")
+			and self:has_attribute 'bakery_double_sided'
 		then
 			local sprite_facing = self.sprite_facing
-			self.sprite_facing = "front"
+			self.sprite_facing = 'front'
 			self.children.center:set_sprite_pos(
 				self.ability.extra.flipped == nil and self.ability.extra.front_pos
-					or (self.ability.extra.flipped ~= (sprite_facing == "front") and self.ability.extra.front_pos or self.ability.extra.back_pos)
+					or (self.ability.extra.flipped ~= (sprite_facing == 'front') and self.ability.extra.front_pos or self.ability.extra.back_pos)
 					or {
 						x = 0.5,
 						y = 0,
@@ -735,20 +735,20 @@ Bakery_API.guard(function()
 		raw_Card_draw(self, layer)
 	end
 
-	sendInfoMessage("Card:draw() patched. Reason: Werewolf rendering", "Bakery")
+	sendInfoMessage('Card:draw() patched. Reason: Werewolf rendering', 'Bakery')
 
 	local raw_G_FUNCS_evaluate_round = G.FUNCS.evaluate_round
 	function G.FUNCS.evaluate_round(...)
 		raw_G_FUNCS_evaluate_round(...)
 
 		for i = 1, #G.jokers.cards do
-			G.jokers.cards[i]:calculate_joker({
+			G.jokers.cards[i]:calculate_joker {
 				Bakery_after_eval = true,
-			})
+			}
 		end
 	end
 
-	sendInfoMessage("G.FUNCS.evaluate_round() patched. Reason: Spinner Animation", "Bakery")
+	sendInfoMessage('G.FUNCS.evaluate_round() patched. Reason: Spinner Animation', 'Bakery')
 
 	local last_chips = 0
 	local raw_mod_mult = mod_mult
@@ -773,8 +773,8 @@ Bakery_API.guard(function()
 	end
 
 	sendInfoMessage(
-		"mod_mult(), mod_chips(), and G.FUNCS.evaluate_play() patched. Reason: Balanced Challenge",
-		"Bakery"
+		'mod_mult(), mod_chips(), and G.FUNCS.evaluate_play() patched. Reason: Balanced Challenge',
+		'Bakery'
 	)
 
 	local raw_G_FUNCS_buy_from_shop = G.FUNCS.buy_from_shop
@@ -783,7 +783,7 @@ Bakery_API.guard(function()
 		local ret = raw_G_FUNCS_buy_from_shop(e)
 
 		local card = e.config.ref_table
-		if card.ability.set == "Joker" then
+		if card.ability.set == 'Joker' then
 			local latest = Bakery_API.get_proxied_joker()
 			card.ability.Bakery_purchase_index = latest and (latest.ability.Bakery_purchase_index + 1) or 1
 		end
@@ -800,16 +800,16 @@ Bakery_API.guard(function()
 		return ret
 	end
 
-	sendInfoMessage("G.FUNCS.buy_from_shop() and copy_card() patched. Reason: Proxy", "Bakery")
+	sendInfoMessage('G.FUNCS.buy_from_shop() and copy_card() patched. Reason: Proxy', 'Bakery')
 
 	function Bakery_API.crash(message)
-		G.E_MANAGER:add_event(Event({
-			trigger = "immediate",
+		G.E_MANAGER:add_event(Event {
+			trigger = 'immediate',
 			func = function()
-				error(message or "Forced crash via Bakery_API.crash()")
+				error(message or 'Forced crash via Bakery_API.crash()')
 				return true
 			end,
-		}))
+		})
 	end
 
 	Bakery_API.tag_effect_names = {}
@@ -821,32 +821,32 @@ Bakery_API.guard(function()
 
 		if context.cardarea == G.play and context.main_scoring then
 			for i = 1, #G.GAME.tags do
-				local suffix = ""
-				while ret["tag" .. i .. suffix] do
-					suffix = suffix .. "x"
+				local suffix = ''
+				while ret['tag' .. i .. suffix] do
+					suffix = suffix .. 'x'
 				end
-				if not Bakery_API.tag_effect_names_t["tag" .. i .. suffix] then
-					Bakery_API.tag_effect_names_t["tag" .. i .. suffix] = true
-					Bakery_API.tag_effect_names[#Bakery_API.tag_effect_names + 1] = "tag" .. i .. suffix
+				if not Bakery_API.tag_effect_names_t['tag' .. i .. suffix] then
+					Bakery_API.tag_effect_names_t['tag' .. i .. suffix] = true
+					Bakery_API.tag_effect_names[#Bakery_API.tag_effect_names + 1] = 'tag' .. i .. suffix
 				end
-				ret["tag" .. i .. suffix] = G.GAME.tags[i]:apply_to_run({
-					type = "Bakery_score_card",
+				ret['tag' .. i .. suffix] = G.GAME.tags[i]:apply_to_run {
+					type = 'Bakery_score_card',
 					card = card,
-				})
+				}
 			end
 		end
 		return ret, trig
 	end
 
-	sendInfoMessage("eval_card() patched. Reason: Penny Tag", "Bakery")
+	sendInfoMessage('eval_card() patched. Reason: Penny Tag', 'Bakery')
 
 	local raw_SMODS_calculate_repetitions = SMODS.calculate_repetitions
 	SMODS.calculate_repetitions = function(card, context, reps, ...)
 		for i = 1, #G.GAME.tags do
-			local eval = G.GAME.tags[i]:apply_to_run({
-				type = "Bakery_add_repetitions_to_card",
+			local eval = G.GAME.tags[i]:apply_to_run {
+				type = 'Bakery_add_repetitions_to_card',
 				context = context,
-			})
+			}
 			if eval then
 				reps[#reps + 1] = { key = eval }
 			end
@@ -854,53 +854,53 @@ Bakery_API.guard(function()
 		return raw_SMODS_calculate_repetitions(card, context, reps, ...)
 	end
 
-	sendInfoMessage("SMODS.calculate_repetitions() patched. Reason: Up Tag", "Bakery")
+	sendInfoMessage('SMODS.calculate_repetitions() patched. Reason: Up Tag', 'Bakery')
 
 	local raw_Blind_set_text = Blind.set_text
 	function Blind:set_text(...)
 		raw_Blind_set_text(self, ...)
 		local blind = self.config.blind
 		if blind and (blind.artist or blind.coder or blind.idea) then
-			self.loc_debuff_lines[#self.loc_debuff_lines + 1] = ""
+			self.loc_debuff_lines[#self.loc_debuff_lines + 1] = ''
 			if blind.artist == blind.coder and blind.coder == blind.idea then
 				if Bakery_API.contributors[blind.artist] then
 					local creator = Bakery_API.contributors[blind.artist]
-					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize({
-						type = "variable",
-						key = "v_Bakery_by",
+					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+						type = 'variable',
+						key = 'v_Bakery_by',
 						vars = { creator.name },
-					})
+					}
 					return
 				end
 			end
 			if blind.artist then
 				if Bakery_API.contributors[blind.artist] then
 					local artist = Bakery_API.contributors[blind.artist]
-					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize({
-						type = "variable",
-						key = "v_Bakery_artist",
+					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+						type = 'variable',
+						key = 'v_Bakery_artist',
 						vars = { artist.name },
-					})
+					}
 				end
 			end
 			if blind.coder then
 				if Bakery_API.contributors[blind.coder] then
 					local coder = Bakery_API.contributors[blind.coder]
-					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize({
-						type = "variable",
-						key = "v_Bakery_coder",
+					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+						type = 'variable',
+						key = 'v_Bakery_coder',
 						vars = { coder.name },
-					})
+					}
 				end
 			end
 			if blind.idea then
 				if Bakery_API.contributors[blind.idea] then
 					local idea = Bakery_API.contributors[blind.idea]
-					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize({
-						type = "variable",
-						key = "v_Bakery_idea",
+					self.loc_debuff_lines[#self.loc_debuff_lines + 1] = localize {
+						type = 'variable',
+						key = 'v_Bakery_idea',
 						vars = { idea.name },
-					})
+					}
 				end
 			end
 		end
@@ -914,13 +914,13 @@ Bakery_API.guard(function()
 			local function make(kind, contrib)
 				txt.nodes[#txt.nodes + 1] = {
 					n = G.UIT.R,
-					config = { align = "cm" },
+					config = { align = 'cm' },
 					colour = contrib.bg,
 					nodes = {
 						{
 							n = G.UIT.T,
 							config = {
-								text = localize({ type = "variable", key = kind, vars = { contrib.name } }),
+								text = localize { type = 'variable', key = kind, vars = { contrib.name } },
 								scale = 0.2,
 								shadow = true,
 								colour = contrib.fg,
@@ -930,16 +930,16 @@ Bakery_API.guard(function()
 				}
 			end
 			if blind.artist == blind.coder and blind.coder == blind.idea and Bakery_API.contributors[blind.artist] then
-				make("v_Bakery_by", Bakery_API.contributors[blind.artist])
+				make('v_Bakery_by', Bakery_API.contributors[blind.artist])
 			else
 				if blind.artist and Bakery_API.contributors[blind.artist] then
-					make("v_Bakery_artist", Bakery_API.contributors[blind.artist])
+					make('v_Bakery_artist', Bakery_API.contributors[blind.artist])
 				end
 				if blind.coder and Bakery_API.contributors[blind.coder] then
-					make("v_Bakery_coder", Bakery_API.contributors[blind.coder])
+					make('v_Bakery_coder', Bakery_API.contributors[blind.coder])
 				end
 				if blind.idea and Bakery_API.contributors[blind.idea] then
-					make("v_Bakery_idea", Bakery_API.contributors[blind.idea])
+					make('v_Bakery_idea', Bakery_API.contributors[blind.idea])
 				end
 			end
 		end
@@ -947,38 +947,38 @@ Bakery_API.guard(function()
 	end
 
 	function Bakery_API.credit(obj)
-		if obj.set == "Back" or obj.set == "Sleeve" then
+		if obj.set == 'Back' or obj.set == 'Sleeve' then
 			if not obj.artist and not obj.coder and not obj.idea then
 				return obj
 			end
-			G.E_MANAGER:add_event(Event({
+			G.E_MANAGER:add_event(Event {
 				blocking = false,
 				blockable = false,
 				func = function()
 					local loc = G.localization.descriptions[obj.set][obj.key].text
 
-					if type(loc[1]) ~= "string" then
+					if type(loc[1]) ~= 'string' then
 						sendWarnMessage(
-							"Crediting a " .. obj.set .. " with multiboxes is not supported. (" .. obj.key .. ")",
-							"Bakery"
+							'Crediting a ' .. obj.set .. ' with multiboxes is not supported. (' .. obj.key .. ')',
+							'Bakery'
 						)
 						return true
 					end
 					for _, s in ipairs(loc) do
-						if s:find("B:") or s:find("V:") then
+						if s:find 'B:' or s:find 'V:' then
 							sendWarnMessage(
-								"Crediting a "
+								'Crediting a '
 									.. obj.set
-									.. " with dynamic colors is not supported. ("
+									.. ' with dynamic colors is not supported. ('
 									.. obj.key
-									.. ")",
-								"Bakery"
+									.. ')',
+								'Bakery'
 							)
 							return true
 						end
 					end
 
-					loc[#loc + 1] = "{C:white}-"
+					loc[#loc + 1] = '{C:white}-'
 					local colours = {}
 					local lookup = {}
 					local index = 1
@@ -986,12 +986,12 @@ Bakery_API.guard(function()
 					local function loc_tag(key)
 						local contrib = Bakery_API.contributors[key]
 						if not contrib.fg and not contrib.bg then
-							return ""
+							return ''
 						end
-						local tag = "{"
+						local tag = '{'
 						if contrib.fg then
-							G.ARGS.LOC_COLOURS["Bakery_credit_fg_" .. key] = contrib.fg
-							tag = tag .. "C:Bakery_credit_fg_" .. key
+							G.ARGS.LOC_COLOURS['Bakery_credit_fg_' .. key] = contrib.fg
+							tag = tag .. 'C:Bakery_credit_fg_' .. key
 						end
 						if contrib.bg then
 							local i = lookup[key]
@@ -1002,48 +1002,48 @@ Bakery_API.guard(function()
 								colours[i] = contrib.bg
 							end
 							if contrib.fg then
-								tag = tag .. ","
+								tag = tag .. ','
 							end
-							tag = tag .. "B:" .. i
+							tag = tag .. 'B:' .. i
 						end
-						return tag .. "}"
+						return tag .. '}'
 					end
 
 					if obj.artist == obj.coder and obj.coder == obj.idea then
 						local creator = Bakery_API.contributors[obj.artist]
 						loc[#loc + 1] = loc_tag(obj.artist)
-							.. localize({
-								type = "variable",
-								key = "v_Bakery_by",
+							.. localize {
+								type = 'variable',
+								key = 'v_Bakery_by',
 								vars = { creator.name },
-							})
+							}
 					else
 						if obj.artist then
 							local artist = Bakery_API.contributors[obj.artist]
 							loc[#loc + 1] = loc_tag(obj.artist)
-								.. localize({
-									type = "variable",
-									key = "v_Bakery_artist",
+								.. localize {
+									type = 'variable',
+									key = 'v_Bakery_artist',
 									vars = { artist.name },
-								})
+								}
 						end
 						if obj.coder then
 							local coder = Bakery_API.contributors[obj.coder]
 							loc[#loc + 1] = loc_tag(obj.coder)
-								.. localize({
-									type = "variable",
-									key = "v_Bakery_coder",
+								.. localize {
+									type = 'variable',
+									key = 'v_Bakery_coder',
 									vars = { coder.name },
-								})
+								}
 						end
 						if obj.idea then
 							local idea = Bakery_API.contributors[obj.idea]
 							loc[#loc + 1] = loc_tag(obj.idea)
-								.. localize({
-									type = "variable",
-									key = "v_Bakery_idea",
+								.. localize {
+									type = 'variable',
+									key = 'v_Bakery_idea',
 									vars = { idea.name },
-								})
+								}
 						end
 					end
 
@@ -1057,20 +1057,20 @@ Bakery_API.guard(function()
 
 					return true
 				end,
-			}))
+			})
 			return obj
 		end
 		local raw_obj_set_badges = obj.set_badges
 		obj.set_badges = function(self, card, badges, ...)
-			if self.set == "Enhanced" or self.discovered or card.bypass_discovery_center then
+			if self.set == 'Enhanced' or self.discovered or card.bypass_discovery_center then
 				if self.artist and self.artist == self.coder and self.coder == self.idea then
 					local creator = Bakery_API.contributors[self.artist]
 					badges[#badges + 1] = create_badge(
-						localize({
-							type = "variable",
-							key = "v_Bakery_by",
+						localize {
+							type = 'variable',
+							key = 'v_Bakery_by',
 							vars = { creator.name },
-						}),
+						},
 						creator.bg or G.C.RED,
 						creator.fg or G.C.BLACK,
 						0.7
@@ -1079,11 +1079,11 @@ Bakery_API.guard(function()
 					if self.artist then
 						local artist = Bakery_API.contributors[self.artist]
 						badges[#badges + 1] = create_badge(
-							localize({
-								type = "variable",
-								key = "v_Bakery_artist",
+							localize {
+								type = 'variable',
+								key = 'v_Bakery_artist',
 								vars = { artist.name },
-							}),
+							},
 							artist.bg or G.C.RED,
 							artist.fg or G.C.BLACK,
 							0.7
@@ -1092,11 +1092,11 @@ Bakery_API.guard(function()
 					if self.coder then
 						local coder = Bakery_API.contributors[self.coder]
 						badges[#badges + 1] = create_badge(
-							localize({
-								type = "variable",
-								key = "v_Bakery_coder",
+							localize {
+								type = 'variable',
+								key = 'v_Bakery_coder',
 								vars = { coder.name },
-							}),
+							},
 							coder.bg or G.C.RED,
 							coder.fg or G.C.BLACK,
 							0.7
@@ -1105,11 +1105,11 @@ Bakery_API.guard(function()
 					if self.idea then
 						local idea = Bakery_API.contributors[self.idea]
 						badges[#badges + 1] = create_badge(
-							localize({
-								type = "variable",
-								key = "v_Bakery_idea",
+							localize {
+								type = 'variable',
+								key = 'v_Bakery_idea',
 								vars = { idea.name },
-							}),
+							},
 							idea.bg or G.C.RED,
 							idea.fg or G.C.BLACK,
 							0.7
@@ -1126,7 +1126,7 @@ Bakery_API.guard(function()
 
 	function Bakery_API.interest_scale(no_big)
 		local scale = 5
-		if G.GAME.Bakery_charm == "BakeryCharm_Bakery_Coin" then
+		if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Coin' then
 			scale = G.Bakery_charm_area.cards[1].ability.extra.mod
 		end
 		return not no_big and to_big and to_big(scale) or scale
@@ -1134,16 +1134,16 @@ Bakery_API.guard(function()
 
 	function Bakery_API.on_set_blind(blind)
 		for i = 1, #G.GAME.tags do
-			G.GAME.tags[i]:apply_to_run({
-				type = "Bakery_set_blind",
+			G.GAME.tags[i]:apply_to_run {
+				type = 'Bakery_set_blind',
 				blind = blind,
-			})
+			}
 		end
 	end
 
 	function Bakery_API.Balatest_equip(key)
 		Balatest.q(function()
-			G.FUNCS.Bakery_equip_from_shop({
+			G.FUNCS.Bakery_equip_from_shop {
 				config = {
 					ref_table = Card(
 						G.Bakery_charm_area.T.x + G.Bakery_charm_area.T.w / 2,
@@ -1158,24 +1158,24 @@ Bakery_API.guard(function()
 						}
 					),
 				},
-			})
+			}
 		end)
 	end
 
 	function Bakery_API.Balatest_use_joker(joker)
 		Balatest.q(function()
-			if type(joker) == "function" then
+			if type(joker) == 'function' then
 				joker = joker()
 			end
-			G.FUNCS.Bakery_use_joker({ config = { ref_table = joker } })
+			G.FUNCS.Bakery_use_joker { config = { ref_table = joker } }
 		end)
 	end
 
 	if AltTextures_Utils then
 		AltTextures_Utils.dimensions.BakeryCharm = { px = 68, py = 68 }
-		AltTextures_Utils.default_atlas.BakeryCharm = "Bakery_Charms"
-		AltTextures_Utils.texture_types[#AltTextures_Utils.texture_types + 1] = "BakeryCharm"
-		AltTextures_Utils.loc_keys.BakeryCharm = "k_Bakery_charms"
+		AltTextures_Utils.default_atlas.BakeryCharm = 'Bakery_Charms'
+		AltTextures_Utils.texture_types[#AltTextures_Utils.texture_types + 1] = 'BakeryCharm'
+		AltTextures_Utils.loc_keys.BakeryCharm = 'k_Bakery_charms'
 	end
 end)
 -- END_KEEP_LITE

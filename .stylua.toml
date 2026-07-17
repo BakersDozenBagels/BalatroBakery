@@ -1,0 +1,13 @@
+syntax = "Lua51"
+column_width = 120
+line_endings = "Windows"
+indent_type = "Tabs"
+indent_width = 4
+quote_style = "AutoPreferSingle"
+call_parentheses = "None"
+collapse_simple_statement = "Never"
+space_after_function_names = "Never"
+block_newline_gaps = "Never"
+
+[sort_requires]
+enabled = false
