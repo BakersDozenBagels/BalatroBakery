@@ -69,7 +69,7 @@ Bakery_API.guard(function()
 		local rarities = {}
 		for _, v in ipairs(G.jokers.cards) do
 			local rarity = Bakery_API.rarities[v.config.center.rarity] or v.config.center.rarity
-			if not rarities[rarity] then
+			if rarity and not rarities[rarity] then
 				rarities[rarity] = true
 				count = count + 1
 			end

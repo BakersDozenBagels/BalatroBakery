@@ -483,14 +483,14 @@ pattern = """
 		G.FUNCS.skip_blind({
 			UIBox = {
 				get_UIE_by_ID = function()
-					return { config = { ref_table = Tag(for_tag) } }
+					return { config = { ref_table = Tag(for_tag()) } }
 				end,
 			},
 		})"""
 position = "at"
 match_indent = true
 times = 1
-payload = "G.FUNCS.skip_blind { config = { ref_table = Tag(for_tag) } }"
+payload = "G.FUNCS.skip_blind { config = { ref_table = Tag(for_tag()) } }"
 
 # Crash Prevention with Pie Chart
 [[patches]]
