@@ -202,7 +202,7 @@ Balatest.TestPlay {
 		end
 	end,
 }
-Balatest.TestPlay { -- This test passes at 8x speed but fails at 16x or higher??? Manually, this works fine even at higher speeds.
+Balatest.TestPlay {
 	name = 'down_tag_witch',
 	category = { 'tags', 'blinds', 'down_tag', 'witch' },
 
@@ -223,9 +223,6 @@ Balatest.TestPlay { -- This test passes at 8x speed but fails at 16x or higher??
 				'Card ' .. k .. ' should have no enhancement, found ' .. v.config.center.key
 			)
 		end
-	end,
-	skip = function()
-		return 'The test is flaky at high speeds'
 	end,
 }
 Balatest.TestPlay {

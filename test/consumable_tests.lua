@@ -142,10 +142,9 @@ Balatest.TestPlay {
 	name = 'scribe_can_use_joker_edition',
 	category = { 'consumables', 'scribe' },
 
-	jokers = { 'j_joker' },
+	jokers = { { id = 'j_joker', edition = 'foil' } },
 	consumeables = { 'c_Bakery_Scribe' },
 	execute = function()
-		G.jokers.cards[1]:set_edition('e_foil', true)
 		G.jokers:add_to_highlighted(G.jokers.cards[1], true)
 	end,
 	assert = function()

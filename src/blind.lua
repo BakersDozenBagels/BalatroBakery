@@ -156,25 +156,30 @@ SMODS.Blind {
 	disable = function(self)
 		G.E_MANAGER:add_event(Event {
 			func = function()
-				local done = {}
-				for _, card in pairs(G.playing_cards) do
-					if card.config.center.key == 'm_Bakery_Curse' and not card.getting_sliced then
-						card.getting_sliced = true
-						G.E_MANAGER:add_event(Event {
-							func = function()
-								card.area:remove_card(card):start_dissolve()
-								return true
-							end,
-						})
-						done[#done + 1] = card
-						if #done >= G.GAME.round_resets.ante then
-							break
+				G.E_MANAGER:add_event(Event {
+					func = function()
+						local done = {}
+						for _, card in pairs(G.playing_cards) do
+							if card.config.center.key == 'm_Bakery_Curse' and not card.getting_sliced then
+								card.getting_sliced = true
+								G.E_MANAGER:add_event(Event {
+									func = function()
+										card:start_dissolve()
+										return true
+									end,
+								})
+								done[#done + 1] = card
+								if #done >= G.GAME.round_resets.ante then
+									break
+								end
+							end
 						end
-					end
-				end
-				if #done > 0 then
-					SMODS.calculate_context { remove_playing_cards = true, removed = done }
-				end
+						if #done > 0 then
+							SMODS.calculate_context { remove_playing_cards = true, removed = done }
+						end
+						return true
+					end,
+				})
 				return true
 			end,
 		})

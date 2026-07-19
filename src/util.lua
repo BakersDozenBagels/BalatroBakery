@@ -1142,6 +1142,7 @@ Bakery_API.guard(function()
 	end
 
 	function Bakery_API.Balatest_equip(key)
+		Balatest.wait_for_input()
 		Balatest.q(function()
 			G.FUNCS.Bakery_equip_from_shop {
 				config = {
@@ -1160,15 +1161,18 @@ Bakery_API.guard(function()
 				},
 			}
 		end)
+		Balatest.wait_for_input()
 	end
 
 	function Bakery_API.Balatest_use_joker(joker)
+		Balatest.wait_for_input()
 		Balatest.q(function()
 			if type(joker) == 'function' then
 				joker = joker()
 			end
 			G.FUNCS.Bakery_use_joker { config = { ref_table = joker } }
 		end)
+		Balatest.wait_for_input()
 	end
 
 	if AltTextures_Utils then

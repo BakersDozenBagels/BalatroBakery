@@ -1428,7 +1428,7 @@ Balatest.TestPlay {
 		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_MementoMori'
 		Balatest.end_round()
 		Balatest.cash_out()
-		Balatest.use(function()
+		Balatest.open(function()
 			return G.shop_booster.cards[1]
 		end)
 	end,
@@ -1658,7 +1658,7 @@ Balatest.TestPlay {
 		end)
 		Balatest.end_round()
 		Balatest.cash_out()
-		Balatest.use(function()
+		Balatest.open(function()
 			return G.shop_booster.cards[2]
 		end)
 	end,
@@ -2190,6 +2190,7 @@ Balatest.TestPlay {
 		Balatest.use(function()
 			return G.pack_cards.cards[1]
 		end)
+		Balatest.wait()
 		Balatest.skip_booster()
 	end,
 	assert = function()
