@@ -2198,3 +2198,83 @@ Balatest.TestPlay {
 	end,
 }
 --#endregion
+
+--#region Toadem
+Balatest.TestPlay {
+	name = 'toadem_pair',
+	category = { 'charms', 'toadem' },
+
+	deck = { cards = { { s = 'S', r = '2' }, { s = 'S', r = '2' }, { s = 'S', r = '2' } } },
+	execute = function()
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Toadem'
+		Balatest.play_hand { '2S', '2S' }
+		Balatest.end_round()
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.deck.cards, 3)
+	end,
+}
+Balatest.TestPlay {
+	name = 'toadem_3oak',
+	category = { 'charms', 'toadem' },
+
+	deck = { cards = { { s = 'S', r = '2' }, { s = 'S', r = '2' }, { s = 'S', r = '2' }, { s = 'S', r = '2' } } },
+	execute = function()
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Toadem'
+		Balatest.play_hand { '2S', '2S', '2S' }
+		Balatest.end_round()
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.deck.cards, 1)
+	end,
+}
+Balatest.TestPlay {
+	name = 'toadem_3oak_off_suit',
+	category = { 'charms', 'toadem' },
+
+	execute = function()
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Toadem'
+		Balatest.play_hand { '2S', '2H', '2C' }
+		Balatest.end_round()
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.deck.cards, 52)
+	end,
+}
+Balatest.TestPlay {
+	name = 'toadem_straight',
+	category = { 'charms', 'toadem' },
+
+	execute = function()
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Toadem'
+		Balatest.play_hand { '2S', '3H', '4S', '5H', '6S' }
+		Balatest.end_round()
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.deck.cards, 49)
+	end,
+}
+Balatest.TestPlay {
+	name = 'toadem_straight_wild',
+	category = { 'charms', 'toadem' },
+
+	deck = {
+		cards = {
+			{ r = '2', s = 'S' },
+			{ r = '3', s = 'H' },
+			{ r = '4', s = 'S' },
+			{ r = '5', s = 'H' },
+			{ r = '6', s = 'S', e = 'm_wild' },
+			{ r = '2', s = 'S' },
+		},
+	},
+	execute = function()
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Toadem'
+		Balatest.play_hand { '2S', '3H', '4S', '5H', '6S' }
+		Balatest.end_round()
+	end,
+	assert = function()
+		Balatest.assert_eq(#G.deck.cards, 1)
+	end,
+}
+--#endregion

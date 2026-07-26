@@ -2094,6 +2094,47 @@ Bakery_API.Charm {
 	end,
 }
 
+Bakery_API.Charm {
+	key = 'Toadem',
+	pos = { x = 0, y = 6 },
+	atlas = 'Charms',
+	unlocked = false,
+	config = { extra = 3 },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra } }
+	end,
+	locked_loc_vars = function()
+		return { vars = { 3 } }
+	end,
+	check_for_unlock = function(self, context)
+		if context.type == 'hand' and #context.full_hand == 3 then
+			---@param a Card
+			---@param b Card
+			local function matches(a, b)
+				return not SMODS.has_no_rank(a)
+					and not SMODS.has_no_rank(b)
+					and a.base.value == b.base.value
+					and (a:is_suit(b.base.suit) or b:is_suit(a.base.suit))
+			end
+			return matches(context.full_hand[1], context.full_hand[2])
+				and matches(context.full_hand[2], context.full_hand[3])
+				and matches(context.full_hand[3], context.full_hand[1])
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.destroy_card and context.cardarea == G.play then
+			local threes = all_suits(card.ability.extra, context.scoring_hand)
+			for _, t in pairs(threes) do
+				for _, c in pairs(t) do
+					if c == context.destroy_card then
+						return { remove = true }
+					end
+				end
+			end
+		end
+	end,
+}
+
 if next(SMODS.find_mod 'RevosVault') then
 	Bakery_API.Charm {
 		key = 'PrintError',

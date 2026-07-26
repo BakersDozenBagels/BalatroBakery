@@ -786,6 +786,18 @@ return {
 				name = 'Revolve',
 				text = { '{C:attention}Skipping{} a {C:attention}Booster', '{C:money}refunds{} it' },
 			},
+			BakeryCharm_Bakery_Toadem = {
+				name = 'Toadem',
+				text = {
+					'If {C:attention}#1#{} or more cards',
+					'of the {C:attention}same suit{} are',
+					'scored, {C:red}destroy{} them',
+				},
+				unlock = {
+					'Play {C:attention}exactly #1#{} cards with',
+					'the same {C:attention}rank{} and {C:attention}suit',
+				},
+			},
 			-- KEEP_LITE
 		},
 		Other = {
