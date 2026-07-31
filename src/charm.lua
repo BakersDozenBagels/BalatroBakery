@@ -1368,6 +1368,11 @@ local raw_Card_set_ability = Card.set_ability
 function Card:set_ability(center, initial, ...)
 	raw_Card_set_ability(self, center, initial, ...)
 
+	if center.set == "BakeryCharm" then
+		self.T.w = G.CARD_W
+		self.T.h = G.CARD_W
+	end
+
 	if
 		G.GAME.Bakery_charm == 'BakeryCharm_Bakery_FullMoon'
 		and (center.attributes or {}).bakery_werewolf
