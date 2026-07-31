@@ -48,7 +48,7 @@ Balatest.TestPlay {
 --#region Curse
 Balatest.TestPlay {
 	name = 'curse_high_card',
-	category = { 'enhancements', 'time_walk' },
+	category = { 'enhancements', 'curse' },
 
 	deck = { cards = { { r = '2', s = 'S', e = 'm_Bakery_Curse' }, { r = '3', s = 'S' } } },
 	execute = function()
@@ -60,7 +60,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
 	name = 'curse_high_card_gold_seal',
-	category = { 'enhancements', 'time_walk' },
+	category = { 'enhancements', 'curse' },
 
 	deck = { cards = { { r = '2', s = 'S', e = 'm_Bakery_Curse', g = 'Gold' }, { r = '3', s = 'S' } } },
 	dollars = 0,
@@ -74,7 +74,7 @@ Balatest.TestPlay {
 }
 Balatest.TestPlay {
 	name = 'curse_high_card_gold_seal_with_other',
-	category = { 'enhancements', 'time_walk' },
+	category = { 'enhancements', 'curse' },
 
 	deck = {
 		cards = { { r = '2', s = 'S', e = 'm_Bakery_Curse', g = 'Gold' }, { r = '3', s = 'S' }, { r = '4', s = 'S' } },
