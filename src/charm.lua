@@ -1368,9 +1368,8 @@ local raw_Card_set_ability = Card.set_ability
 function Card:set_ability(center, initial, ...)
 	raw_Card_set_ability(self, center, initial, ...)
 
-	if center.set == "BakeryCharm" then
-		self.T.w = G.CARD_W
-		self.T.h = G.CARD_W
+	if center.set == 'BakeryCharm' then
+		self.T.h = self.T.w
 	end
 
 	if
