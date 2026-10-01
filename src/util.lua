@@ -909,7 +909,7 @@ Bakery_API.guard(function()
 	local raw_create_UIBox_blind_popup = create_UIBox_blind_popup
 	function create_UIBox_blind_popup(blind, discovered, vars, ...)
 		local ret = raw_create_UIBox_blind_popup(blind, discovered, vars, ...)
-		local txt = ret.nodes[2].nodes[1].nodes[4]
+		local txt = ((((((ret or {}).nodes or {})[2] or {}).nodes or {})[1] or {}).nodes or {})[4]
 		if txt and (blind.artist or blind.coder or blind.idea) then
 			local function make(kind, contrib)
 				txt.nodes[#txt.nodes + 1] = {
