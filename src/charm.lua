@@ -1689,7 +1689,7 @@ end
 local raw_create_UIBox_HUD = create_UIBox_HUD
 function create_UIBox_HUD(...)
 	local ret = raw_create_UIBox_HUD(...)
-	local round = ret.nodes[1].nodes[1].nodes[5].nodes[2].nodes
+	local round = (((((((((ret or {}).nodes or {})[1] or {}).nodes or {})[1] or {}).nodes or {})[5] or {}).nodes or {})[2] or {}).nodes or {}
 	table.insert(round, 2, {
 		n = G.UIT.R,
 		config = { align = 'cm' },
