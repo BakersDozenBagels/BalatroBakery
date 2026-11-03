@@ -665,12 +665,11 @@ Bakery_API.Joker {
 			and Bakery_API.big(G.GAME.hands[context.scoring_name].level) == Bakery_API.big(1)
 			and not context.blueprint
 		then
-			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-			return {
-				message = 'Upgraded!',
-				colour = G.C.CHIPS,
-				card = card,
-			}
+			SMODS.scale_card(card, {
+				ref_value = 'mult',
+				scalar_value = 'mult_gain',
+				message_colour = G.C.CHIPS,
+			})
 		end
 	end,
 	set_sprites = function(self, card, front)
