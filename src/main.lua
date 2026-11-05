@@ -35,7 +35,11 @@ Bakery_API.load 'edition'
 Bakery_API.load 'charm'
 
 if Balatest then
-	assert(SMODS.load_file 'test/joker_tests.lua')()
+	local f = SMODS.load_file 'test/joker_tests.lua'
+	if not f then
+		return
+	end
+	assert(f)()
 	assert(SMODS.load_file 'test/blind_tests.lua')()
 	assert(SMODS.load_file 'test/back_tests.lua')()
 	assert(SMODS.load_file 'test/edition_tests.lua')()
