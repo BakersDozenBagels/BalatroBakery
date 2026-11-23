@@ -1689,7 +1689,9 @@ end
 local raw_create_UIBox_HUD = create_UIBox_HUD
 function create_UIBox_HUD(...)
 	local ret = raw_create_UIBox_HUD(...)
-	local round = (((((((((ret or {}).nodes or {})[1] or {}).nodes or {})[1] or {}).nodes or {})[5] or {}).nodes or {})[2] or {}).nodes or {}
+	local round = (
+		((((((((ret or {}).nodes or {})[1] or {}).nodes or {})[1] or {}).nodes or {})[5] or {}).nodes or {})[2] or {}
+	).nodes or {}
 	table.insert(round, 2, {
 		n = G.UIT.R,
 		config = { align = 'cm' },
@@ -2092,8 +2094,8 @@ Bakery_API.Charm {
 	atlas = 'Charms',
 	unlocked = true,
 	calculate = function(self, card, context)
-		if context.skipping_booster then
-			return { dollars = context.booster.cost }
+		if context.skipping_booster and SMODS.OPENED_BOOSTER.cost > 0 then
+			return { dollars = SMODS.OPENED_BOOSTER.cost }
 		end
 	end,
 }

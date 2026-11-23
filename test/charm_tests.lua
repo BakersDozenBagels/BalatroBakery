@@ -2197,6 +2197,46 @@ Balatest.TestPlay {
 		Balatest.assert_dollars(8)
 	end,
 }
+Balatest.TestPlay {
+	name = 'revolve_coupon',
+	category = { 'charms', 'revolve' },
+
+	dollars = 16,
+	no_auto_start = true,
+	execute = function()
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Revolve'
+		Balatest.skip_blind 'tag_coupon'
+		Balatest.start_round()
+		Balatest.end_round()
+		Balatest.cash_out()
+		Balatest.open(function()
+			return G.shop_booster.cards[1]
+		end)
+		Balatest.skip_booster()
+	end,
+	assert = function()
+		Balatest.assert_dollars(8)
+	end,
+}
+Balatest.TestPlay {
+	name = 'revolve_inflation',
+	category = { 'charms', 'revolve' },
+
+	dollars = 20,
+	execute = function()
+		G.GAME.inflation = 4
+		Bakery_API.Balatest_equip 'BakeryCharm_Bakery_Revolve'
+		Balatest.end_round()
+		Balatest.cash_out()
+		Balatest.open(function()
+			return G.shop_booster.cards[1]
+		end)
+		Balatest.skip_booster()
+	end,
+	assert = function()
+		Balatest.assert_dollars(8)
+	end,
+}
 --#endregion
 
 --#region Toadem
